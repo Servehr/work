@@ -1,0 +1,11 @@
+@if(control.touched && control.value === "-1")
+{
+  <ul
+    class="text-red-400 font-bold text-sm mt-2"
+  >  
+    @for (error of errors | keyvalue; track error.key)
+    { 
+       {{ errorMessages[error.key] }}
+    }
+  </ul>
+}

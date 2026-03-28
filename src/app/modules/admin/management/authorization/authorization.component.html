@@ -1,0 +1,73 @@
+<div 
+    class="w-full mx-auto bg-white shadow-lg rounded-sm border border-gray-200 px-1 md:px-0"
+>
+    <div 
+        class=""
+    >
+           <div 
+              class="flex-col md:flex  w-full h-full gap-0 md:gap-3"
+           >
+
+             <div 
+               class="flex md:block md:w-full border-y-2 bg-red-600 h-fit max-h-[20rem] overflow-y-scroll shadow-md bg-white mt-1"
+             >
+                <div 
+                  class='md:flex flex bg-gray-20 w-full min-h-1 h-fit pt-2 md:pb-1 bg-white'
+                >
+                 @for(resource of resources; track resource.id)
+                 {
+                   <div 
+                     class="rounded-none hover:bg-red-200 py-5 pl-2 md:pl-5 px-0 m-auto w-full text-center font-semibold transition-colors cursor-pointer duration-300 text-sm"
+                     [ngClass]="'border-b-w-2'"
+                     (click)="GoToPage(resource.id)"
+                     style="font-size: 12; padding-top: 15;"
+                   >
+                     {{ resource.name }}
+                   </div>
+                 }
+                </div>
+            </div>
+
+            <div 
+              class="w-full md:w-full px-0 flex flex-col bg-white h-[35rem] overflow-y-scroll mt-6 md:mt-0 p-3"
+            >
+               @if(page === -1)
+               {
+                 <div
+                    class="w-full h-full flex justify-center items-center mx-auto border-2 border-gray-200"
+                 >
+                   Select a page
+                 </div>
+               }
+
+               @if(page === 0)
+               {
+                 <div 
+                    class="overflow-x-auto"
+                 >
+                   <app-rexource></app-rexource>
+                 </div>
+               }
+
+               @if(page === 1)
+               {
+                 <div 
+                    class="overflow-x-auto"
+                 >
+                   <app-pages></app-pages>
+                 </div>
+               }
+
+               @if(page === 2)
+               {
+                 <div 
+                    class="overflow-x-auto"
+                 >
+                   <app-actions></app-actions>
+                 </div>
+               }
+               
+            </div>
+          </div>
+
+</div>

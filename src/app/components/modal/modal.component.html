@@ -1,0 +1,58 @@
+@if(isOpen)
+{
+  <div 
+    class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true"
+  >
+     <div 
+        class="flex justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0"
+     >
+        <!-- Background overlay -->
+        <div 
+          class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" 
+          (click)="close()"
+        >
+       </div>
+
+       <!-- Modal panel -->
+       <div 
+         class="inline-block overflow-hidden text-left align-center transition-all transform bg-white rounded-lg sm:-mt-50 mt-50 shadow-xl my-40 align-top {{modalWidth}} max-w-full"
+       >
+         <div 
+           class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4"
+         >
+           <h3 
+             class="text-lg font-medium leading-6 text-gray-900 mb-4" 
+             id="modal-title"
+           >
+             <!-- {{ title }} -->
+           </h3>
+           <div 
+             class="mt-2"
+           >
+             <ng-content></ng-content> <!-- Project content here -->
+           </div>
+         </div>
+         
+         <div 
+            class="bg-gray-50 px-5 pt-5 pb-7 sm:px-6 mb-3 w-full flex justify-center gap-3"
+         >
+           <button 
+              type="button" 
+              class="w-fit rounded-md border border-gray-300 shadow-sm px-4 py-4 bg-gray-600 text-white text-base font-medium hover:bg-black sm:ml-3 sm:text-sm" 
+              (click)="close()"
+           >
+             Cancel
+           </button>
+           <button 
+             type="button" 
+             class="w-fit rounded-md border border-transparent shadow-sm px-4 py-4 bg-[#181a5d] text-base font-medium text-white hover:bg-blue-700 sm:ml-3 sm:text-sm" 
+             (click)="confirm()"
+           >
+             Confirm
+           </button>
+         </div>
+       </div>
+
+      </div>
+  </div>
+}

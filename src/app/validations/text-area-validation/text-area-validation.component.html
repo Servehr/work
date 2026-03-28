@@ -1,0 +1,14 @@
+@if(control?.touched)
+{
+  <ul
+    class="text-red-400 font-bold text-sm mt-2"
+  >  
+    @for (error of errors | keyvalue; track error.key)
+    { 
+       @if(control?.value?.length === 0)
+       {
+          {{ errorMessages[error.key] }}
+       }
+    }
+  </ul>
+}

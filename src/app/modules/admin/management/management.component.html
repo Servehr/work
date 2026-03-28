@@ -1,0 +1,85 @@
+<div 
+  class="px-1 md:px-1"
+> 
+            
+            <div 
+                class="grid md:grid-cols-12 grid-cols-1 gap-5 mt-7 mb-10 justify-center items-center md:px-3"
+            >
+
+                <section 
+                    class="col-span-12 justify-center antialiased text-gray-600 py-2 -mt-4"
+                >
+                    <div 
+                        class="h-full"
+                    >                        
+                        <div 
+                            class="w-full mx-auto bg-white shadow-lg rounded-sm border border-gray-200"
+                        >                            
+                            <header 
+                                class="px-5 py-4 border-b border-gray-100"
+                            >
+                                <h1 class="font-bold text-red-600 text-md font-bold">{{title}} </h1>
+                            </header>
+
+                            <app-tabs (CurrentPage)="setPage($event)" [TabPages]="TabPages"></app-tabs>
+
+                            @if(page === 0)
+                            {
+                              <div
+                                class="overflow-x-auto"
+                              >
+                                <app-category></app-category>
+                              </div>
+                            }
+
+                            @if(page === 1)
+                            {
+                              <div 
+                               class="overflow-x-auto"
+                              >
+                                <app-department></app-department>
+                              </div>
+                            }
+
+                            @if(page === 2)
+                            {
+                               <div
+                                class="overflow-x-auto"
+                               >
+                                 <app-role></app-role>
+                               </div>
+                            }
+
+                            @if(page === 3)
+                            {
+                              <div
+                               class="overflow-x-auto"
+                              >
+                                <app-authorization></app-authorization>
+                              </div>
+                            }
+
+                            @if(page === 4)
+                            {
+                              <div
+                               class="overflow-x-auto"
+                              >
+                                <app-actions></app-actions>
+                              </div>
+                            }
+                            
+                            @if(page === 5)
+                            {
+                              <div 
+                               class="overflow-x-auto"
+                              >
+                                <app-location></app-location>
+                              </div>
+                            }
+
+                        </div>
+
+                    </div>
+                </section>
+            </div>
+</div>            

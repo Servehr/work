@@ -1,0 +1,23 @@
+@if(control.touched && control.value === "")
+{
+  <ul
+    class="text-red-400 font-bold text-sm mt-2"
+  >  
+    @for (error of errors | keyvalue; track error.key)
+    { 
+       <!-- @if(error.value?.toString() == 'radioBoxRequired')
+       {
+          {{ errorMessages[error.key] }}
+       } -->        
+        <br />
+       <p 
+         style='margin-left: -30px'
+       >
+        {{ errorMessages[error.key] }}
+       </p>
+    }
+  </ul>
+}
+
+
+

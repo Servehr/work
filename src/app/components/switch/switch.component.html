@@ -1,0 +1,21 @@
+<div 
+    [ngClass]="label"
+>
+    <div 
+        class="flex flex-col"
+    >        
+        <span 
+            class='text-gray-800 m-3 font-bold text-[5]'
+        >
+            {{label}}
+        </span>
+        <div 
+            [class]="switchState" 
+            (click)="onSwitchChanged()"
+        >
+            <span 
+                [class]="switchingState">
+            </span>
+        </div>
+    </div>
+</div>

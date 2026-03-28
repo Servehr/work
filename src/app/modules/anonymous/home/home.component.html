@@ -1,0 +1,280 @@
+<div
+  class="bg-blue-100 px-5 pt-3 pb-3 md:py-10 mb-3"
+>
+  <div 
+    class='container mx-auto p-3 py-4  md:p-10 flex-cols justify-center items-center'
+  >
+      <div 
+        class="w-full d-flex justify-content-between md:flex md:w-11/12 md:gap-0 mx-auto border-1 md:shadow-lg md:border-gray-200 md:rounded-full md:overflow-hidden"
+      >
+        <div 
+          class="w-12/12 md:w-5/12 mb-2 md:mb-0"
+        >
+          <input-field
+            [id]="'search'"
+            #search
+            [name]="'search'"
+            [placeholder]="'e.g plumber'"
+            [type]="'text'"
+            [value]="'value'"
+          >
+          </input-field>
+        </div>
+        <div 
+          class="w-12/12 md:w-3/12 mb-2 md:mb-0"
+        >
+          <input-field
+            [id]="'search'"
+            #search
+            [name]="'search'"
+            [placeholder]="'e.g lagos'"
+            [type]="'text'"
+            [value]="'value'"
+          >
+          </input-field>
+        </div>
+        <div 
+          class="w-12/12 md:w-3/ mb-3 md:mb-0"
+        >
+          <input-field
+            [id]="'search'"
+            #search
+            [name]="'search'"
+            [placeholder]="'e.g 10,000 - 50,000'"
+            [type]="'text'"
+            [value]="'value'"
+          >
+          </input-field>
+        </div>
+        <div 
+          class="w-12/12 md:w-2/12 mb-2 md:mb-0 mt-3 md:mt-0"
+        >
+          <app-botin
+            (ChangeOnButtonHoverIn)="ChangeOnButtonHoverIn()" 
+            (ChangeOnButtonHoverOut)="ChangeOnButtonHoverOut()"
+            [disabled]="disabled"
+            [style]="style"
+          >
+            <div
+              class="flex flex-col space-y-1 items-center justify-between"
+            >
+              <h3>Search</h3>
+            </div>
+          </app-botin>
+        </div>        
+      </div>
+
+      <!-- <div 
+        class="flex justify-center items-center mt-5 gap-2"
+      >
+          <p 
+            class="text-white text-[11px] font-semi-bold bg-blue-800 rounded-md flex justify-center items-center cursor-pointer px-2 py-1 hover:rounded-md hover:text-white hover:bg-yellow-600"
+          >
+            Location
+          </p>
+          <p 
+            class="text-white text-[11px] font-semi-bold bg-blue-800 rounded-md flex justify-center items-center cursor-pointer px-2 py-1 hover:rounded-md hover:text-white hover:bg-yellow-600"
+          >
+            Skill
+          </p>
+          <p 
+            class="text-white text-[11px] font-semi-bold bg-blue-800 rounded-md flex justify-center items-center cursor-pointer px-2 py-1 hover:rounded-md hover:text-white hover:bg-yellow-600"
+          >
+            Payment Range
+          </p>
+      </div> -->
+
+  </div>
+</div>
+
+<div 
+   class='container mx-auto p-3'
+>
+   <div 
+     class="w-full flex-cols md:flex gap-2"
+   >
+     <div 
+       class="w-12/12 md:w-7/12 shadow-lg h-[350px] pl-3"
+     >
+        <p 
+          class="w-full flex justify-left text-[15px] mt-5 text-gray-500"
+        >
+          <!-- Sliders - {{ (users$ | async) as user }} -->
+        </p> 
+        
+        <ul>
+          <li 
+            *ngFor="let user of users$ | async"
+          >
+            ({{ user.firstname }} -> {{ user.surname }} -> {{ user.token }} -> {{ user.id }})
+          </li>
+        </ul>
+     </div>
+
+     <div 
+       class="w-12/12 md:w-5/12 shadow-lg h-[350px] pl-3"
+     >
+        <p 
+          class="w-full flex justify-left text-[15px] mt-5 text-gray-500"
+        >
+          Workflow
+        </p> 
+     </div>
+
+   </div>
+</div>
+
+<div 
+   class='container mx-auto px-0 py-3 h-[300px] shadow-lg pb-10'
+>
+    <p 
+      class="w-full flex justify-center text-[18px] mt-5 text-gray-500"
+    >
+      Partners
+    </p>
+    <div 
+      class="flex justify-center item-center"
+    >
+
+    </div>
+</div>
+
+
+<!-- Newsletter -->
+<div
+  class="bg-[#3e4095] px-5 py-10 md:py-16 mb-3"
+>
+  <div 
+    class='container gap-2 mx-auto md:p-3 py-7 md:p-10 flex justify-center items-center'
+  >
+      <div 
+        class="w-9/12 md:w-6/12"
+      >
+        <input-field
+          [id]="'email'"
+          #email
+          [name]="'email'"
+          [placeholder]="'Enter email'"
+          [type]="'text'"
+          [value]="'value'"
+        >
+        </input-field>
+      </div>
+      <div 
+        class="w-3/12 md:w-2/12"
+      >
+        <app-botin
+          (ChangeOnButtonHoverIn)="ChangeOnButtonHoverIn()" 
+          (ChangeOnButtonHoverOut)="ChangeOnButtonHoverOut()"
+          (sendData)="''"
+          [disabled]="disabled"
+          [style]="style"
+        >
+          <div
+            class="flex flex-col space-y-1 items-center justify-between"
+          >
+            <h3>Subscribe</h3>
+          </div>
+        </app-botin>
+      </div>
+  </div>
+</div>
+
+<div 
+   class='container mx-auto px-3 pb-10'
+>
+    <p 
+      class="w-full flex justify-center text-[18px] mt-10 mb-5 text-gray-500"
+    >
+      Testimonials
+    </p>
+
+    <div 
+      class="flex-cols md:flex justify-center item-center gap-5"
+    >
+
+      <div 
+        class="w-full md:w-4/12 shadow-lg h-[300px] my-2"
+      >
+        
+      </div>
+      <div 
+        class="w-full md:w-4/12 shadow-lg h-[300px] my-2"
+      >
+       
+      </div>
+      <div 
+        class="w-full md:w-4/12 shadow-lg h-[300px] my-2"
+      >
+       
+      </div>
+
+    </div>
+</div>
+
+<div 
+   class='container mx-auto p-3 h-[300px] shadow-lg mb-14'
+>
+
+</div>
+
+
+
+<div 
+   class='container mx-auto mb-20'
+>
+   <div 
+     class="w-full flex-cols md:flex gap-2"
+   >
+     <div 
+       class="w-12/12 md:w-6/12 shadow-lg h-[350px] pl-3"
+     >
+        <p 
+          class="w-full flex justify-left text-[15px] mt-5 text-gray-500"
+        >
+          +++++
+        </p> 
+     </div>
+
+     <div 
+       class="w-12/12 md:w-6/12 shadow-lg h-[350px] pl-3"
+     >
+        <p 
+          class="w-full flex justify-left text-[15px] mt-5 text-gray-500"
+        >
+          *****
+        </p> 
+     </div>
+
+   </div>
+</div>
+
+
+<!-- <div 
+  class="container mx-auto p-4 z-50"
+>
+    <div 
+      class="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center"
+    >
+        <div 
+          class="bg-white -mt-20 dark:bg-gray-900 dark:text-gray-100 p-8 rounded-lg shadow-lg max-w-md w-full relative"
+        >
+            <p
+              class="mb-6"
+            >
+                This is great
+            </p>
+            <ng-icon 
+              [svg]="close" 
+              [size]="'30'" 
+              [color]="'red'"
+              class="cursor-pointer text-xl"
+            />
+            <button 
+              class="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+            >
+              +++++
+            </button>
+        </div>
+    </div>
+</div> -->

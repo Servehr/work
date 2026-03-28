@@ -1,1 +1,31 @@
+@import 'quill/dist/quill.core.css';
+@import 'quill/dist/quill.snow.css';
+
+
+.table-row {
+   padding: 4px 0px 4px 0px;
+}
+
+.table-row-hover:hover {
+  background-color: #e6f7a8;
+  cursor: pointer;
+}
+
+.tanstack-table {
+   table-layout: auto;
+   width: 100%;
+}
+
+
+
 /* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities
+
+
+
+
+
+
+

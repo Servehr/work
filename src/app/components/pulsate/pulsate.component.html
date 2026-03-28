@@ -1,0 +1,54 @@
+<!-- <div class="col-span-3" style="background-color: #f3f2ff"> -->
+    <div 
+        class="p-4 transition-shadow border rounded-lg shadow-sm hover:shadow-lg"
+    >
+        <div 
+            class="flex items-start justify-between"
+        >
+            <div 
+                class="flex flex-col space-y-2"
+            >
+                <span 
+                    class="text-sm text-[#3e4095] font-semibold"
+                >
+                    {{summaries.text}}
+                </span>
+                <span 
+                    class="text-lg font-semibold"
+                >
+                    {{summaries.nos}}
+                </span>
+            </div>
+            @if(box)
+            {
+               <div 
+                 class="p-5 bg-CompanyRed rounded-md"
+               >
+               </div>
+            }
+        </div>
+        <div 
+          class="flex flex-row col-span-12 justify-between mt-3"
+        >
+           <span 
+             class="col-span-6 w-fit px-1 py-1 inline-block text-black rounded-lg text-[10px] text-black bg-[#ffca0a] text-left"
+           >
+            14%
+           </span>
+           <span 
+             class="col-span-6 gap-1 w-fit px-2 py-1 text-[9px] flex justify-center items-center text-white rounded-lg text-right bg-gray-200"
+           >
+             <p 
+                class="text-[10px] mr-7 text-black"
+             >
+                Last Updated: 
+             </p> 
+             <span
+                class="text-black font-bold"
+             >
+                {{ summaries?.updated }}
+             </span>
+           </span>
+        </div>
+    </div>
+<!-- </div> -->

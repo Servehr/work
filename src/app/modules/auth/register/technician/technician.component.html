@@ -1,0 +1,340 @@
+<form 
+  [formGroup]="registerForm"
+  class="flex flex-col"
+>
+  <div 
+    class="md:flex mb-3 gap-5"
+  >
+    <div 
+      class="md:w-1/2 mb-4"
+    >
+      <input-field
+        [id]="'firstname'"
+        #firstname
+                    [name]="'firstname'"
+                    [placeholder]="'Enter firstname'"
+                    [type]="'text'"
+                    [value]="value"
+                    formControlName="firstname"
+                    [customErrorMessages]="errorMessages"
+                >
+                </input-field>
+            </div>
+            <div 
+                class="md:w-1/2 mb-2"
+            >
+                <input-field
+                    [id]="'surname'"
+                    #surname
+                    [name]="'surname'"
+                    [placeholder]="'Enter surname'"
+                    [type]="'text'"
+                    [value]="value"
+                    formControlName="surname"
+                    [customErrorMessages]="errorMessages"
+                >
+                </input-field>
+            </div>
+        </div>
+
+        <div 
+            class="md:flex mb-3 gap-5"
+        >
+            <div 
+                class="md:w-1/2 mb-4"
+            >
+                <input-field
+                    [id]="'phone'"
+                    #phone
+                    [name]="'phone'"
+                    [placeholder]="'Enter phone'"
+                    [type]="'text'"
+                    [value]="value"
+                    formControlName="phone"
+                    [customErrorMessages]="errorMessages"
+                >
+                </input-field>
+            </div>
+            <div 
+                class="md:w-1/2 mb-2"
+            >
+                <input-field
+                    [id]="'email'"
+                    #email
+                    [name]="'email'"
+                    [placeholder]="'Enter email'"
+                    [type]="'text'"
+                    [value]="value"
+                    formControlName="email"
+                    [customErrorMessages]="errorMessages"
+                >
+                </input-field>
+            </div>
+        </div>
+
+        <!-- <div 
+          class="w-full"
+        >
+            <input-field
+               [id]="'nin'"
+               #nin
+               [name]="'nin'"
+               [placeholder]="'Enter NIN'"
+               [type]="'text'"
+               [value]="''"
+               formControlName="nin"
+               [customErrorMessages]="errorMessages"
+            >
+            </input-field>
+        </div> -->
+
+        <div class="pt-1"></div>
+
+        <!-- Media upload  -->
+        <div 
+          class="flex md:flex-cols gap-5 md:gap-0 md:justify-between"
+        >
+          <div 
+            class="w-full md:w-4/12 flex-col mb-3 gap-5"
+          >
+            <p 
+              class="text-gray-500 text-sm"
+            >
+              Upload NIN
+            </p>
+
+            <div 
+              class="relative flex-col border-2 w-full rounded-lg shadow-lg bg-cover bg-top object-cover mb-4 object-fit mt-1 justify-center items-center cursor-pointer hover:text-green-300 uploader"
+            >  
+              @if(NIN.length === 0)
+              {
+                <div 
+                  appDragDrop
+                  (dropFile)="dropFile($event, 'nin')"
+                  class="dropzone flex p-3"
+                >
+                  <div 
+                    class="w-full flex flex-col justify-center items-center text-sm"
+                  >
+                      <div 
+                        class="text-[12px] w-12/12 mx-auto mt-7"
+                      >
+                        Drag and drop a file or 
+                        <a 
+                          class="cursor-pointer text-blue-700 font-bold"
+                          (click)="selectFile.click()"
+                        >
+                          Browse
+                        </a>
+                        for a file
+                        <br >
+                      </div>
+                      
+                      <div 
+                        class="w-full text-center"
+                      >
+                        <ng-icon 
+                          [svg]="cloudArrow" 
+                          [size]="'60'" 
+                          [color]="'#3e4095'"
+                          (click)="removeImages('nin')"
+                        />
+                      </div>
+
+                    </div>
+                  </div>
+              }
+              <input 
+                multiple
+                #selectFile
+                (change)="onFileSelectedChange($event, 'nin')"
+                type='file' 
+                id='passport' 
+                name='passport' 
+                class='hidden'
+              />
+
+              <div 
+                appDragDrop
+                class="relative object-cover p-3 z-40 mx-auto flex justify-center items-center "
+                (click)="selectFile.click()"
+                (dropFile)="dropFile($event, 'nin')"
+              >
+                @if(NIN.length > 0)
+                { 
+                  @for(image of NIN; track image.key)
+                  {
+                    <app-image
+                      [src]="NIN[0]"
+                      [alt]="'alt'"
+                      [height]="280"
+                      [width]="280"
+                    >
+                    </app-image>
+                  }
+                  <div 
+                    class="absolute rounded-full text-blue-800 bg:text-gray-400 text-[10px] font-bold py-1 px-3 m-3 bg-yellow-300"
+                  >
+                    Click to change image
+                  </div>
+                }            
+              </div>
+
+              @if(NIN.length > 0)
+              {
+                <div 
+                  class="mt-3 w-fit text-right text-red-600 z-50 bg-white py-1 px-2 hover:bg-yellow-100 rounded-full"
+                >
+                  <ng-icon 
+                    [svg]="deleteIcon" 
+                    [size]="'15'" 
+                    [color]="'red'"
+                    (click)="removeImages('nin')"
+                  />
+                </div>
+              } 
+              </div>
+          </div>            
+
+          <div 
+            class="w-full md:w-4/12 flex-col mb-3 gap-5"
+          >
+            <p 
+              class="text-gray-500 text-sm"
+            >
+              Upload Passport
+            </p>
+
+              <div 
+                class="relative flex-col border-2 w-full rounded-lg shadow-lg bg-cover bg-top object-cover mb-4 object-fit mt-1 justify-center items-center cursor-pointer hover:text-green-300 uploader"
+              >  
+                @if(passportPhotograph.length === 0)
+                {
+                  <div 
+                    appDragDrop
+                    (dropFile)="dropFile($event, 'passport')"
+                    class="dropzone flex p-3"
+                  >
+                    <div 
+                      class="w-full flex flex-col justify-center items-center text-sm"
+                    >
+                        <div 
+                          class="text-[12px] w-12/12 mx-auto mt-7"
+                        >
+                          Drag and drop a file or 
+                          <a 
+                            class="cursor-pointer text-blue-700 font-bold"
+                            (click)="selectFile.click()"
+                          >
+                            Browse
+                          </a>
+                          for a file
+                          <br >
+                        </div>
+                        
+                        <div 
+                          class="w-full text-center"
+                        >
+                          <ng-icon 
+                            [svg]="cloudArrow" 
+                            [size]="'60'" 
+                            [color]="'#3e4095'"
+                            (click)="removeImages('passport')"
+                          />
+                        </div>
+
+                      </div>
+                   </div>
+                }
+                <input 
+                  multiple
+                  #selectFile
+                  (change)="onFileSelectedChange($event, 'passport')"
+                  type='file' 
+                  id='passport' 
+                  name='passport' 
+                  class='hidden'
+                />
+
+                <div 
+                  appDragDrop
+                  class="relative object-cover p-3 z-40 mx-auto flex justify-center items-center "
+                  (click)="selectFile.click()"
+                  (dropFile)="dropFile($event, 'passport')"
+                >
+                  @if(passportPhotograph.length > 0)
+                  { 
+                    @for(image of passportPhotograph; track image.key)
+                    {
+                      <app-image
+                        [src]="passportPhotograph[0]"
+                        [alt]="'alt'"
+                        [height]="280"
+                        [width]="280"
+                      >
+                      </app-image>
+                    }
+                    <div 
+                      class="absolute rounded-full text-blue-800 bg:text-gray-400 text-[10px] font-bold py-1 px-3 m-3 bg-yellow-300"
+                    >
+                      Click to change image
+                    </div>
+                  }            
+                </div>
+
+              @if(passportPhotograph.length > 0)
+              {
+                <div 
+                  class="mt-3 w-fit text-right text-red-600 z-50 bg-white py-1 px-2 hover:bg-yellow-100 rounded-full"
+                >
+                  <ng-icon 
+                    [svg]="deleteIcon" 
+                    [size]="'15'" 
+                    [color]="'red'"
+                    (click)="removeImages('passport')"
+                  />
+                </div>
+              } 
+              </div>
+          </div>
+        </div>
+
+        <!-- Plan -->
+        <!-- <div 
+          class="w-full"
+        >                
+           <app-select 
+             #plan
+             [id]="'plan'"  
+             [name]="'plan'"  
+             [title]="'- Select Plan -'"
+             [options]="plans"
+             formControlName="plan" 
+             [value]="value"
+             [customErrorMessages]="errorMessages"
+           >         
+           </app-select>
+        </div> -->
+
+        <div class="pt-1"></div>
+        
+        <div
+           class="md:flex z-30 mb-5"
+        >
+          <app-botin
+            (ChangeOnButtonHoverIn)="ChangeOnButtonHoverIn()" 
+            (ChangeOnButtonHoverOut)="ChangeOnButtonHoverOut()"
+            (sendData)="register()"
+            [disabled]="disabled"
+            [style]="style"
+          >
+            <div
+              class="flex flex-col space-y-1 items-center justify-between"
+            >
+              <h3>Register</h3>
+            </div>
+          </app-botin>
+        </div>
+        
+        
+      </form>

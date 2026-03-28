@@ -1,0 +1,40 @@
+<div 
+  class="container px-5 min-h-700 max-h-screen"
+>
+
+  <div 
+    class="mt-5 mb-5 text-sm font-bold"
+  >
+   {{ sectionTitle }}
+  </div>
+
+  
+  <app-wysiwyg 
+    [content]="content"
+  >
+  </app-wysiwyg>
+
+  <div class="p-5"></div>
+
+  <div
+    class="md:flex z-30 mb-5"
+  >
+    <app-botin
+      (ChangeOnButtonHoverIn)="ChangeOnButtonHoverIn()" 
+      (ChangeOnButtonHoverOut)="ChangeOnButtonHoverOut()"
+      (sendData)="register()"
+      [disabled]="disabled"
+      [style]="style"
+    >
+      <div
+        class="flex flex-col space-y-1 items-center justify-between"
+      >
+        <h3>Save</h3>
+      </div>
+     </app-botin>
+  </div>
+
+  <div class="p-5"></div>
+
+</div>
+

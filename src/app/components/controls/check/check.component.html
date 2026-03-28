@@ -1,0 +1,26 @@
+<div 
+  class="flex items-center"
+>
+  <input
+    #checkBox
+    type="checkbox"
+    [id]="id"
+    [disabled]="disabled"
+    [checked]="value ? true : false"
+    class="appearance-none w-7 h-7 checked:ring-offset-4 checked:ring-red-200 checked:ring-2 border-2 border-red-800 rounded-lg bg-white checked: checked:bg-red-800 checked:rounded-lg checked:after:text-white checked:after:flex checked:after:justify-center checked:after:items-center"
+    [(ngModel)]="value"
+    (ngModelChange)="onModelChange($event)"
+  />
+  <label 
+    for="name" 
+    class="ml-2 text-gray-700"
+  >
+    <ng-content></ng-content>
+  </label>
+
+  <app-check-box-validation 
+    [customErrorMessages]="customErrorMessages" 
+    [errors]="control.errors"
+  >
+  </app-check-box-validation>
+</div>
