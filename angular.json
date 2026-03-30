@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "eighteen": {
+    "technicianswork": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -40,6 +40,12 @@
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "srcc/environments/environment.development.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
               "budgets": [
                 {
                   "type": "initial",
@@ -69,10 +75,10 @@
           },
           "configurations": {
             "production": {
-              "buildTarget": "eighteen:build:production"
+              "buildTarget": "technicianswork:build:production"
             },
             "development": {
-              "buildTarget": "eighteen:build:development"
+              "buildTarget": "technicianswork:build:development"
             }
           },
           "defaultConfiguration": "development"

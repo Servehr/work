@@ -29,11 +29,11 @@ export class AuthService {
 
     register(firstname: string, surname: string, phone: string, email: string, category: string, password: string, cPassword: string, ninImage: string, passportImage: string) : Observable<IAppResponse> {
         // const { firstname, surname, phone, email, category} = user
-        return this._http.post<IAppResponse>(`${environment.local}auth/register`, { firstname, surname, phone, email, category, password, cPassword, ninImage, passportImage });
+        return this._http.post<IAppResponse>(`${environment.url}auth/register`, { firstname, surname, phone, email, category, password, cPassword, ninImage, passportImage });
     }
 
     login(email: string, password: string) : Observable<IAppResponse> {
-        return this._http.post<IAppResponse>(`${environment.local}auth/login`, { email, password });
+        return this._http.post<IAppResponse>(`${environment.url}auth/login`, { email, password });
     }
 
     formatUserResponse(message: string, user: { id: string, firstname: string, surname: string, token: string})
@@ -78,11 +78,11 @@ export class AuthService {
     }
 
     forgot(email: string) : Observable<IAppResponse> {
-        return this._http.post<IAppResponse>(`${environment.local}auth/forgot`, { email });
+        return this._http.post<IAppResponse>(`${environment.url}auth/forgot`, { email });
     }
 
     resetPassword(user: string, password: string, cPassword: string) : Observable<IAppResponse> {
-        return this._http.post<IAppResponse>(`${environment.local}auth/reset-password`, { user, password, cPassword });
+        return this._http.post<IAppResponse>(`${environment.url}auth/reset-password`, { user, password, cPassword });
     }
 
     signOut = async () => 
@@ -92,7 +92,7 @@ export class AuthService {
     }
 
     logOut() : Observable<string>{
-        return this._http.post<string>(`${environment.local}auth/logout`, {  })
+        return this._http.post<string>(`${environment.url}auth/logout`, {  })
     }
 
 }

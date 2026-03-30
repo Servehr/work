@@ -14,7 +14,7 @@ export class UserService {
     profile(user: string) : Observable<any> 
     {
       // const { firstname, surname, phone, email, category} = user
-      return this._http.get<any>(`${environment.local}profile/${user}`);
+      return this._http.get<any>(`${environment.url}profile/${user}`);
     }
 
 }
