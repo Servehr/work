@@ -42,7 +42,7 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "srcc/environments/environment.development.ts",
+                  "replace": "src/environments/environment.development.ts",
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
