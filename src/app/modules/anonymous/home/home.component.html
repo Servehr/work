@@ -106,7 +106,8 @@
           <li 
             *ngFor="let user of users$ | async"
           >
-            ({{ user.firstname }} -> {{ user.surname }} -> {{ user.token }} -> {{ user.id }})
+            <!-- ({{ user.firstname }} -> {{ user.surname }} -> {{ user.token }} -> {{ user.id }}) -->
+              ({{ user.firstname }} -> {{ user.surname }})
           </li>
         </ul>
      </div>
