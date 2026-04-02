@@ -9,36 +9,41 @@ import {
 } from '@tanstack/angular-table';
 import { EditComponent } from '../../../../util/icons/edit/edit.component';
 import { DeleteComponent } from '../../../../util/icons/delete/delete.component';
-import { ViewComponent } from '../../../../util/icons/view/view.component';
 import { ModalComponent } from '../../../../components/modal/modal.component';
+import { bootstrapPlusCircleFill } from '@ng-icons/bootstrap-icons';
+import { WriteRoleComponent } from './write-role/write-role.component';
+import { NgIcon } from '@ng-icons/core';
+import { RemoveComponent } from '../../../../shared/remove/remove.component';
 
 // 1. Define your data structure
-type Person = { firstName: string; lastName: string; age: number, gender: string };
+type Person = { name: string; description: string; };
 
 const columnHelper = createColumnHelper<any>();
 
 @Component({
   selector: 'app-role',
   standalone: true,
-  imports: [FlexRenderDirective, ModalComponent],
+  imports: [FlexRenderDirective, ModalComponent, NgIcon, WriteRoleComponent, RemoveComponent],
   templateUrl: './role.component.html',
   styleUrl: './role.component.scss'
 })
 export class RoleComponent {
 
-  PateTitle: string = 'Roles'
+  PageTitle: string = 'Roles'
+  buttonName: string = ''
+  writeRole: boolean = false
+  addIcon: any = bootstrapPlusCircleFill
 
   isModalOpen: boolean = false
-  title: string = 'Delete Item'
-  modalWidth: string = 'w-[1000px]'
+  title: string = ''
+  modalWidth: string = 'w-[700px]'
 
   // 2. Define data
   data = signal<Person[]>([
-    { firstName: 'Tanner', lastName: 'Linsley', age: 30, gender: 'Female' },
-    { firstName: 'Stephen', lastName: 'Fresh', age: 30, gender: 'Male' },
-    { firstName: 'Bimbo', lastName: 'Awomasun', age: 19, gender: 'Male' },
-    { firstName: 'Bright', lastName: 'Ben', age: 20, gender: 'Female' },
-    { firstName: 'Wasiu', lastName: 'Kehinde', age: 28, gender: 'Female' },
+    { name: 'Manager', description: 'Linsley' },
+    { name: 'Human Resource', description: 'Fresh' },
+    { name: 'Sales Manager', description: 'Awomasun' },
+    { name: 'Digital Expert', description: 'Ben' }
   ]);
 
   onConfirm = () => 
@@ -46,20 +51,33 @@ export class RoleComponent {
      
   }
 
-
-  handleClick(value: number): void 
+  ToggleWithTitle = (status: string) => 
   {
-     this.isModalOpen = true
+    this.title = status
+    this.buttonName = 'Save'
+    this.writeRole = true
+  }
+
+  handleClick(value: number, action: string): void 
+  {
+     if(action === 'update')
+     {
+        this.title = 'Update Role'
+        this.buttonName = 'Update'
+        this.ToggleWithTitle(this.title)
+     } else {
+        this.isModalOpen = true
+     }
   }  
 
   columns: ColumnDef<any>[] = [
     {
-       accessorKey: 'firstName',
-       header: 'First Name'
+       accessorKey: 'name',
+       header: 'Role'
     },
     {
-       accessorKey: 'lastName',
-       header: 'Last Name'
+       accessorKey: 'description',
+       header: 'About Role'
     },
     {
        accessorKey: '...',
@@ -71,7 +89,9 @@ export class RoleComponent {
                 value: context.getValue<number>()
               },
               outputs: {
-                clickEvent: (value) => this.handleClick(value)
+                clickEvent: (value) => { 
+                  this.handleClick(value, 'update')
+                }
               }
             }
          )
@@ -87,7 +107,7 @@ export class RoleComponent {
                 value: context.getValue<number>()
               },
               outputs: {
-                clickEvent: (value) => this.handleClick(value)
+                clickEvent: (value) => this.handleClick(value, 'delete')
               }
             }
          )
@@ -109,5 +129,7 @@ export class RoleComponent {
 
 
 }
+
+
 
 

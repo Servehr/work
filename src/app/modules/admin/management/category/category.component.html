@@ -1,11 +1,26 @@
 <div 
     class="container gap-1 md:p-0 mb-5 -mt-3 px-5"
 >
-  <p 
-   class="font-bold text-md text-gray-500 mb-3"
+  <div 
+    class="flex space-between-10 items-center"
   >
-    {{ PageTitle }}
-  </p>
+    <p 
+      class="font-bold text-md text-gray-500 mb-3"
+    >
+      {{ PageTitle }}
+    </p>
+
+    <div 
+      class="rounded-full flex justify-center ml-5 -mt-1 items-center w-fit py-1 px-1 hover:border-2 hover:border-[#3e4095] hover:py-1 hover:px-1 cursor-pointer"
+      (click)="ToggleWithTitle('Create Cateogry')"
+    >
+      <ng-icon 
+        [svg]="addIcon" 
+        [size]="'20'" 
+        [color]="'black'"
+      />
+    </div>
+  </div>
 
 
   <div 
@@ -63,7 +78,26 @@
   title="title" 
   [modalWidth]="modalWidth"
   (closeModal)="isModalOpen = false"
+  (close)="onConfirm()"
+>
+  <app-remove
+    (close)="isModalOpen = false"
+  >
+     You are about to delete category
+  </app-remove>
+</app-modal>
+
+<app-modal 
+  [isOpen]="writeCategory" 
+  title="title" 
+  [modalWidth]="modalWidth"
+  (closeModal)="writeCategory = false"
   (confirmAction)="onConfirm()"
 >
-  <p class="text-sm text-gray-500">Are you sure you want to delete this? Are you sure you want to delete this? Are you sure you want to delete this? </p>
+  <app-write-category 
+      [title]="title" 
+      [buttonName]="buttonName" 
+      (close)="writeCategory = false"
+  >
+  </app-write-category>
 </app-modal>

@@ -36,7 +36,7 @@ export const PhoneRequired = (control: AbstractControl): ValidationErrors | null
    return control.value?.length === 0 || control.value === null ? { phoneNumberRequired : 'phoneNumberRequired' } :  null
 }
 
-const MakeSelection = (control: AbstractControl): ValidationErrors | null => 
+export const MakeSelection = (control: AbstractControl): ValidationErrors | null => 
 {
    return control.value?.length === 0 || control.value === null ? { selectionRequired : 'selectionRequired' } :  null
 }
@@ -76,7 +76,17 @@ export const PasswordRequired = (control: AbstractControl): ValidationErrors | n
 //    strengthbar.value = (strength / validations.length) * 100; // Update progress bar
 // }
 
-return control.value?.length === 0 || control.value === null ? { phoneNumberRequired : 'phoneNumberRequired' } :  null
+   return control.value?.length === 0 || control.value === null ? { passwordRequired : 'passwordRequired' } :  null
+}
+
+export const ConfirmPasswordRequired = (control: AbstractControl): ValidationErrors | null => 
+{
+   const pswd = control?.parent?.get('password')?.value
+   const cPswd = control?.parent?.get('cPassword')?.value
+
+   return control.value.length >  0 ? 
+                                      control.value.length < 8 ? { passwordLength : 'passwordLength' } : pswd !== cPswd ? { confirmPasswordRequired: 'confirmPasswordRequired' } : null
+                                    : { passwordRequired : "Enter Password" }
 }
 
 @Component({
@@ -138,9 +148,12 @@ export class RegisterComponent
       firstNameRequired: 'Enter firstname', 
       surnameRequired: 'Enter surname', 
       phoneNumberRequired: 'Enter phone number',
+      passwordLength: 'Minimum password length is 8',
       required: 'Enter email',
       email: 'Enter a valid email',
-      selectionRequired: 'Make Selection'
+      selectionRequired: 'Make Selection',
+      passwordRequired: 'Enter Pasword',
+      confirmPasswordRequired: 'Password do not match'
    } 
 
    // errorMessages = 
@@ -170,8 +183,8 @@ export class RegisterComponent
           surname: new FormControl('', [SurnameRequired]),
           phone: new FormControl('', [PhoneRequired]),
           email: new FormControl('', [Validators.required, Validators.email]),
-          password: new FormControl(''),
-          cPassword: new FormControl(''),
+          password: new FormControl('', [PasswordRequired]),
+          cPassword: new FormControl('', [ConfirmPasswordRequired]),
          //  nin: new FormControl('', [Validators.required]),
          //  plan: new FormControl('', [Validators.required]),
         }

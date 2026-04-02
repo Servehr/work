@@ -15,6 +15,7 @@ import { delay, of } from 'rxjs';
 import { START_LOGIN } from '../../../state/actions/auth.actions';
 import { getResponseMessage, getSpinnerStatus } from '../../../state/selectors/spinner.selector';
 import { AlertComponent } from '../../../components/alert/alert.component';
+import { NgIcon } from '@ng-icons/core';
 
 
 export const PasswordRequiredAndLength = (control: AbstractControl): ValidationErrors | null => {
@@ -30,7 +31,7 @@ export const PasswordRequiredAndLength = (control: AbstractControl): ValidationE
   imports: [
                RouterModule, HeaderComponent, InputFieldValidationComponent, 
                FooterComponent, ReactiveFormsModule, InputFieldComponent,
-               BotinComponent, NgStyle, SelectComponent, AlertComponent
+               BotinComponent, NgStyle, SelectComponent, AlertComponent, NgIcon
            ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
@@ -86,7 +87,7 @@ export class LoginComponent
     ngOnInit()
     {
        this.store.select(getSpinnerStatus).subscribe((status: boolean) => {
-            this.isLoading = status
+          this.isLoading = status
        })
     }
 

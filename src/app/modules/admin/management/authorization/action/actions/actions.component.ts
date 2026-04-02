@@ -12,13 +12,14 @@ import { DeleteComponent } from '../../../../../../util/icons/delete/delete.comp
 import { EditComponent } from '../../../../../../util/icons/edit/edit.component';
 import { BoteenComponent } from '../../../../../../util/icons/boteen/boteen.component';
 import { bootstrapTrash } from '@ng-icons/bootstrap-icons';
+import { LinkUnlinkComponent } from '../link-unlink/link-unlink.component';
 
-type Person = { name: string; description: string; pages: number }
+type Person = { name: string; description: string; }
 
 @Component({
   selector: 'app-actions',
   standalone: true,
-  imports: [FlexRenderDirective, ModalComponent],
+  imports: [FlexRenderDirective, ModalComponent, LinkUnlinkComponent],
   templateUrl: './actions.component.html',
   styleUrl: './actions.component.scss'
 })
@@ -27,6 +28,7 @@ export class ActionsComponent
   pageTitle: string = 'Actions'
 
   isModalOpen: boolean = false
+  linkUnlink: boolean = false
   modalWidth: string = 'w-[600px]'
   icon: any = bootstrapTrash
 
@@ -42,13 +44,12 @@ export class ActionsComponent
   // 2. Define data
   data = signal<Person[]>(
     [ 
-        { name: 'Dashboard', description: 'Dashboard', pages: 30 },
-        { name: 'Management', description: 'Management', pages: 30 },
-        { name: 'Administration', description: 'Administration', pages: 19 },
-        { name: 'Technicians', description: 'Technicians', pages: 20 },
-        { name: 'Vendors', description: 'Vendors', pages: 28 },
+        { name: 'Create-Merchant', description: 'Dashboard' },
+        { name: 'Update-Merchant', description: 'Management' },
+        { name: 'Delete-Merchant', description: 'Administration' },
+        { name: 'Read-Merchant', description: 'Technicians' }
     ]
-  ) 
+  )
 
   columns: ColumnDef<any>[] = [
     {
@@ -58,10 +59,6 @@ export class ActionsComponent
     {
        accessorKey: 'description',
        header: 'Description'
-    },
-    {
-       accessorKey: 'pages',
-       header: 'No Of Pages'
     },
     {
        accessorKey: '...',
@@ -81,27 +78,7 @@ export class ActionsComponent
             }
          )
        }       
-    },
-    {
-       accessorKey: '...',
-       header: '',
-       cell: (context) => {
-         return flexRenderComponent(
-             BoteenComponent, {
-              inputs: {
-                value: context.getValue<number>(),
-                boteenStyle: this.boteenStyle,
-                boteeName: 'Unlink',
-                boteenCssClass: this.unLinkCss,
-                icon:   bootstrapTrash  //\\ "<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"currentColor\" viewBox=\"0 0 16 16\"><path d=\"M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z\"/><path d=\"M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z\"/></svg>" //bootstrapTrash
-              },
-              outputs: {
-                clickEvent: (value) => this.handleClick(value)
-              }
-            }
-         )
-       }       
-    },
+    }
   ]
 
   onConfirm = () => 
@@ -111,7 +88,7 @@ export class ActionsComponent
 
   handleClick(value: number): void 
   {
-    this.isModalOpen = true
+    this.linkUnlink = true
   } 
 
   // 4. Create the table instance

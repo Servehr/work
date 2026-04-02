@@ -1,0 +1,110 @@
+<div 
+   class='container mx-auto mt-1 md:mt-1 mb-7 flex-col md:flex'
+>
+    <div 
+      class="w-12/12 md:w-12/12 px-2 py-1 md:p-5"
+    >
+      <p 
+        class="text-gray-500 font-bold mb-5 -pl-2"
+      >
+        {{ title }}
+      </p>
+      
+
+    <div
+    >
+    <!-- <app-alert 
+      [statusCode]="statusCode" 
+      [message]="message"
+    >
+    </app-alert> -->
+    
+    </div>
+      <form 
+          [formGroup]="administerForm"
+          class="flex flex-col space-y-5"
+      >
+          <div 
+            class="w-full md:d-flex text-gray-200 mb-30 space-y-5"
+          >
+            <div 
+              class="w-2/2 md:w-full mb-4 flex justify-center items-center border-2 mx-auto"
+            >
+               <app-image
+                  [src]="src"
+                  [alt]="alt"
+                  [height]="height"
+                  [width]="width"
+                  [ngClass]="'imageClass'"
+                  [style]="imageStyle"
+               >
+               </app-image>
+            </div>
+            <div 
+              class="w-2/2 md:w-full"
+            >
+              <app-select 
+                #department
+                [id]="'department'"  
+                [name]="'department'"  
+                [title]="'- Select department -'"
+                [options]="departments"
+                formControlName="department" 
+                [value]="value"
+                [customErrorMessages]="errorMessages"
+              >         
+              </app-select>
+            </div>
+            <div 
+              class="w-2/2 md:w-full"
+            >
+              <app-select 
+                #department
+                [id]="'actions'"  
+                [name]="'actions'"  
+                [title]="'- Select actions -'"
+                [options]="actions"
+                formControlName="actions" 
+                [value]="value"
+                [customErrorMessages]="errorMessages"
+              >         
+              </app-select>
+            </div>
+          </div>
+
+          <div 
+             class="flex gap-5 justify-center items-center mt-10"
+          >
+            <app-botin
+              (sendData)="closeModal()"
+              class="bg-black p-2 rounded-md text-gray-200 hover:bg-gray-700"
+            >
+              <h3>Cancel </h3>
+            </app-botin>
+            <app-botin
+              (ChangeOnButtonHoverIn)="ChangeOnButtonHoverIn()" 
+              (ChangeOnButtonHoverOut)="ChangeOnButtonHoverOut()"
+              (sendData)="wrteCategory()"
+              [style]="style"
+              (click)="write()"
+            >
+              <div
+                class="flex flex-col space-y-1 items-center justify-between px-7"
+              >
+                @if(isLoading)
+                {
+                   <p class="font-bold text-white"> ... saving </p>
+                }
+                @if(!isLoading)
+                {
+                  <h3>Act</h3>
+                }
+              </div>
+            </app-botin>
+          </div>
+          
+
+      </form>
+   </div>
+
+</div>

@@ -17,7 +17,8 @@ export class ModalComponent {
   @Output() closeModal = new EventEmitter<void>();
   @Output() confirmAction = new EventEmitter<void>();
 
-  close() {
+  close() 
+  {
     this.isOpen = false;
     this.closeModal.emit();
   }

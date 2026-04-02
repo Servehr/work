@@ -14,22 +14,43 @@ import { ArrowLeftComponent } from '../../../../../../util/icons/arrow-left/arro
 import { ArrowRightComponent } from '../../../../../../util/icons/arrow-right/arrow-right.component';
 import { BoteenComponent } from '../../../../../../util/icons/boteen/boteen.component';
 import { AddComponent } from '../../../../../../util/icons/add/add.component';
+import { bootstrapPlusCircleFill } from '@ng-icons/bootstrap-icons';
+import { WritePageComponent } from '../write-page/write-page.component';
+import { NgIcon } from '@ng-icons/core';
+import { RemoveComponent } from '../../../../../../shared/remove/remove.component';
+import { ConnectRexourceComponent } from '../connect-rexource/connect-rexource.component';
+import { DisconnectRexourceComponent } from '../disconnect-rexource/disconnect-rexource.component';
+import { LabelComponent } from '../../../../../../components/controls/label/label.component';
+import { WriteActionComponent } from '../write-action/write-action.component';
+import { ActionComponent } from '../action/action.component';
 
 type Person = { name: string; description: string; resources: number }
 
 @Component({
   selector: 'app-pages',
   standalone: true,
-  imports: [FlexRenderDirective, ModalComponent],
+  imports: [ 
+              FlexRenderDirective, ModalComponent, NgIcon, 
+              WriteActionComponent, WritePageComponent, LabelComponent, RemoveComponent, ConnectRexourceComponent, DisconnectRexourceComponent, ActionComponent
+           ],
   templateUrl: './pages.component.html',
   styleUrl: './pages.component.scss'
 })
 export class PagesComponent 
 {
-  title: string = 'Pages'
+  PageTitle: string = 'Pages'
+  buttonName: string = ''
+  writePage: boolean = false
+  connectPage: boolean = false
+  disconnectPage: boolean = false
+  pageAction: boolean = false
+  actions: boolean = false
+  addIcon: any = bootstrapPlusCircleFill
+
+  title: string = ''
 
   isModalOpen: boolean = false
-  modalWidth: string = 'w-[600px]'
+  modalWidth: string = 'w-[750px]'
 
   boteenStyle: any = {
     'color': 'black',
@@ -66,7 +87,7 @@ export class PagesComponent
     },
     {
        accessorKey: '...',
-       header: '',
+       header: 'Disconnect',
        cell: (context) => {
          return flexRenderComponent(
             ArrowLeftComponent, {
@@ -74,7 +95,7 @@ export class PagesComponent
                 value: context.getValue<number>()
               },
               outputs: {
-                clickEvent: (value) => this.handleClick(value)
+                clickEvent: (value) => this.disconnectPageToResource(value)
               }
             }
          )
@@ -82,7 +103,7 @@ export class PagesComponent
     },
     {
        accessorKey: '...',
-       header: '',
+       header: 'Connect',
        cell: (context) => {
          return flexRenderComponent(
             ArrowRightComponent, {
@@ -90,7 +111,7 @@ export class PagesComponent
                 value: context.getValue<number>()
               },
               outputs: {
-                clickEvent: (value) => this.handleClick(value)
+                clickEvent: (value) => this.connectPageToResource(value)
               }
             }
          )
@@ -98,7 +119,7 @@ export class PagesComponent
     },
     {
        accessorKey: '...',
-       header: '',
+       header: 'Create Action',
        cell: (context) => {
          return flexRenderComponent(
             AddComponent, {
@@ -106,7 +127,7 @@ export class PagesComponent
                 value: context.getValue<number>()
               },
               outputs: {
-                clickEvent: (value) => this.handleClick(value)
+                clickEvent: (value) => this.action(value)
               }
             }
          )
@@ -114,7 +135,7 @@ export class PagesComponent
     },
     {
        accessorKey: '...',
-       header: '',
+       header: 'Modify Action',
        cell: (context) => {
          return flexRenderComponent(
             BoteenComponent, {
@@ -125,7 +146,7 @@ export class PagesComponent
                 boteenCssClass: this.unLinkCss,
               },
               outputs: {
-                clickEvent: (value) => this.handleClick(value)
+                clickEvent: (value) => this.pageActions(value)
               }
             }
           )
@@ -133,7 +154,7 @@ export class PagesComponent
     },
     {
        accessorKey: '...',
-       header: '',
+       header: 'Update Page',
        cell: (context) => {
          return flexRenderComponent(
             EditComponent, {
@@ -141,7 +162,7 @@ export class PagesComponent
                 value: context.getValue<number>()
               },
               outputs: {
-                clickEvent: (value) => this.handleClick(value)
+                clickEvent: (value) => this.handleClick(value, 'update')
               }
             }
          )
@@ -149,7 +170,7 @@ export class PagesComponent
     },
     {
        accessorKey: 'firstName',
-       header: '',
+       header: 'Remove Page',
        cell: (context) => {
          return flexRenderComponent(
             DeleteComponent, {
@@ -157,7 +178,7 @@ export class PagesComponent
                 value: context.getValue<number>()
               },
               outputs: {
-                clickEvent: (value) => this.handleClick(value)
+                clickEvent: (value) => this.handleClick(value, 'delete')
               }
             }
          )
@@ -170,10 +191,52 @@ export class PagesComponent
      
   }
 
-  handleClick(value: number): void 
+  ToggleWithTitle = (status: string) => 
   {
-    this.isModalOpen = true
-  } 
+    this.title = status
+    this.buttonName = 'Save'
+    this.writePage = true
+  }
+
+  handleClick(value: number, action: string): void 
+  {
+     if(action === 'update')
+     {
+        this.title = 'Update Page'
+        this.buttonName = 'Update'
+        this.ToggleWithTitle(this.title)
+     } else {
+        this.isModalOpen = true
+     }
+  }
+
+  connectPageToResource(status: number): void
+  {
+    this.title = 'connect Page To Resource'
+    this.buttonName = 'Save'
+    this.connectPage = true     
+  }
+
+  disconnectPageToResource(status: number): void
+  {
+    this.title = 'Disconnect Page From Resource'
+    this.buttonName = 'Save'
+    this.disconnectPage = true     
+  }
+
+  action(status: number): void
+  {
+    this.title = 'Create Action'
+    this.buttonName = 'Save'
+    this.pageAction = true     
+  }
+
+  pageActions(status: number): void
+  {
+    this.title = 'Page Action'
+    this.buttonName = 'Save'
+    this.actions = true     
+  }
 
   // 4. Create the table instance
   table = createAngularTable(() => ({

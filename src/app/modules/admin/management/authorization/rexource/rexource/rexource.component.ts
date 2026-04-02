@@ -10,22 +10,31 @@ import {
 import { ModalComponent } from '../../../../../../components/modal/modal.component';
 import { DeleteComponent } from '../../../../../../util/icons/delete/delete.component';
 import { EditComponent } from '../../../../../../util/icons/edit/edit.component';
+import { bootstrapPlusCircleFill } from '@ng-icons/bootstrap-icons';
+import { NgIcon } from '@ng-icons/core';
+import { WriteRexourceComponent } from '../write-rexource/write-rexource.component';
+import { RemoveComponent } from '../../../../../../shared/remove/remove.component';
 
 type Person = { name: string; description: string; pages: number }
 
 @Component({
   selector: 'app-rexource',
   standalone: true,
-  imports: [FlexRenderDirective, ModalComponent],
+  imports: [FlexRenderDirective, ModalComponent, NgIcon, WriteRexourceComponent, RemoveComponent],
   templateUrl: './rexource.component.html',
   styleUrl: './rexource.component.scss'
 })
 export class RexourceComponent 
 {
-    title: string = 'Resources'
-
+  PageTitle: string = 'Resources'
+  title: string = ''
+  @Input() buttonName: string = ''
+  writeRexource: boolean = false
+  addIcon: any = bootstrapPlusCircleFill
+   
   isModalOpen: boolean = false
-  modalWidth: string = 'w-[600px]'
+  modalWidth: string = 'w-[700px]'
+
 
   // 2. Define data
   data = signal<Person[]>(
@@ -61,7 +70,9 @@ export class RexourceComponent
                 value: context.getValue<number>()
               },
               outputs: {
-                clickEvent: (value) => this.handleClick(value)
+                clickEvent: (value) => { 
+                  this.handleClick(value, 'update')
+                }
               }
             }
          )
@@ -77,7 +88,7 @@ export class RexourceComponent
                 value: context.getValue<number>()
               },
               outputs: {
-                clickEvent: (value) => this.handleClick(value)
+                clickEvent: (value) => this.handleClick(value, 'delete')
               }
             }
          )
@@ -90,10 +101,24 @@ export class RexourceComponent
      
   }
 
-  handleClick(value: number): void 
+  ToggleWithTitle = (status: string) => 
   {
-    this.isModalOpen = true
-  } 
+    this.title = status
+    this.buttonName = 'Save'
+    this.writeRexource = true
+  }
+
+  handleClick(value: number, action: string): void 
+  {
+     if(action === 'update')
+     {
+        this.title = 'Update Role'
+        this.buttonName = 'Update'
+        this.ToggleWithTitle(this.title)
+     } else {
+        this.isModalOpen = true
+     }
+  }
 
   // 4. Create the table instance
   table = createAngularTable(() => ({

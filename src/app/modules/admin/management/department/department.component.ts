@@ -9,36 +9,42 @@ import {
 } from '@tanstack/angular-table';
 import { EditComponent } from '../../../../util/icons/edit/edit.component';
 import { DeleteComponent } from '../../../../util/icons/delete/delete.component';
-import { ViewComponent } from '../../../../util/icons/view/view.component';
 import { ModalComponent } from '../../../../components/modal/modal.component';
+import { bootstrapPlusCircleFill } from '@ng-icons/bootstrap-icons';
+import { WriteDepartmentComponent } from './write-department/write-department.component';
+import { NgIcon } from '@ng-icons/core';
+import { RemoveComponent } from '../../../../shared/remove/remove.component';
 
 // 1. Define your data structure
-type Person = { firstName: string; lastName: string; age: number, gender: string };
+type Person = { name: string; description: string; };
 
 const columnHelper = createColumnHelper<any>();
 
 @Component({
   selector: 'app-department',
   standalone: true,
-  imports: [FlexRenderDirective, ModalComponent],
+  imports: [FlexRenderDirective, ModalComponent, NgIcon, WriteDepartmentComponent, RemoveComponent],
   templateUrl: './department.component.html',
   styleUrl: './department.component.scss'
 })
 export class DepartmentComponent {
 
-  PateTitle: string = 'Department'
+  PageTitle: string = 'Departments'
+  buttonName: string = ''
+  writeDepartment: boolean = false
+  addIcon: any = bootstrapPlusCircleFill
 
   isModalOpen: boolean = false
-  title: string = 'Delete Item'
-  modalWidth: string = 'w-[1000px]'
+  title: string = ''
+  modalWidth: string = 'w-[700px]'
 
   // 2. Define data
   data = signal<Person[]>([
-    { firstName: 'Tanner', lastName: 'Linsley', age: 30, gender: 'Female' },
-    { firstName: 'Stephen', lastName: 'Fresh', age: 30, gender: 'Male' },
-    { firstName: 'Bimbo', lastName: 'Awomasun', age: 19, gender: 'Male' },
-    { firstName: 'Bright', lastName: 'Ben', age: 20, gender: 'Female' },
-    { firstName: 'Wasiu', lastName: 'Kehinde', age: 28, gender: 'Female' },
+    { name: 'Human Resource', description: 'Linsley' },
+    { name: 'Sales', description: 'Fresh' },
+    { name: 'Finance', description: 'Awomasun' },
+    { name: 'Fleet', description: 'Ben' },
+    { name: 'Recruitment', description: 'Kehinde' },
   ]);
 
   onConfirm = () => 
@@ -46,20 +52,33 @@ export class DepartmentComponent {
      
   }
 
-
-  handleClick(value: number): void 
+  ToggleWithTitle = (status: string) => 
   {
-     this.isModalOpen = true
+    this.title = status
+    this.buttonName = 'Save'
+    this.writeDepartment = true
+  }
+
+  handleClick(value: number, action: string): void 
+  {
+     if(action === 'update')
+     {
+        this.title = 'Update Department'
+        this.buttonName = 'Update'
+        this.ToggleWithTitle(this.title)
+     } else {
+        this.isModalOpen = true
+     }
   }  
 
   columns: ColumnDef<any>[] = [
     {
-       accessorKey: 'firstName',
-       header: 'First Name'
+       accessorKey: 'name',
+       header: 'department'
     },
     {
-       accessorKey: 'lastName',
-       header: 'Last Name'
+       accessorKey: 'description',
+       header: 'About Department'
     },
     {
        accessorKey: '...',
@@ -71,7 +90,9 @@ export class DepartmentComponent {
                 value: context.getValue<number>()
               },
               outputs: {
-                clickEvent: (value) => this.handleClick(value)
+                clickEvent: (value) => { 
+                  this.handleClick(value, 'update')
+                }
               }
             }
          )
@@ -87,7 +108,7 @@ export class DepartmentComponent {
                 value: context.getValue<number>()
               },
               outputs: {
-                clickEvent: (value) => this.handleClick(value)
+                clickEvent: (value) => this.handleClick(value, 'delete')
               }
             }
          )

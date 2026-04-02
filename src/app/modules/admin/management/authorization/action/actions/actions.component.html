@@ -59,11 +59,15 @@
 
 
 <app-modal 
-  [isOpen]="isModalOpen" 
+  [isOpen]="linkUnlink" 
   title="title" 
   [modalWidth]="modalWidth"
-  (closeModal)="isModalOpen = false"
+  (closeModal)="linkUnlink = false"
   (confirmAction)="onConfirm()"
->
-  <p class="text-sm text-gray-500">Are you sure you want to delete this? Are you sure you want to delete this? Are you sure you want to delete this? </p>
+>  
+  <app-link-unlink
+    (close)="linkUnlink = false"
+  >
+    Llink and Unlink
+  </app-link-unlink>
 </app-modal>

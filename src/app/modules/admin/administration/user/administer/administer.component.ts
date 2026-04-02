@@ -1,0 +1,303 @@
+import { Component, computed, EventEmitter, inject, Input, OnInit, Output, signal, TemplateRef } from '@angular/core';
+import {
+  createAngularTable,
+  getCoreRowModel,
+  ColumnDef,
+  FlexRenderDirective,
+  createColumnHelper,
+  flexRenderComponent
+} from '@tanstack/angular-table';
+import { ModalComponent } from '../../../../../components/modal/modal.component';
+import { DeleteComponent } from '../../../../../util/icons/delete/delete.component';
+import { EditComponent } from '../../../../../util/icons/edit/edit.component';
+import { bootstrapPlusCircleFill } from '@ng-icons/bootstrap-icons';
+import { NgIcon } from '@ng-icons/core';
+import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { getResponseMessage, getSpinnerStatus } from '../../../../../state/selectors/spinner.selector';
+import { categoryNameRequired, categoryDescriptionRequired } from '../../../management/category/write-category/write-category.component';
+import { Store } from '@ngrx/store';
+import AppState from '../../../../../state/app.state';
+import { InputFieldComponent } from '../../../../../components/controls/input-field/input-field.component';
+import { BotinComponent } from '../../../../../components/controls/botin/botin.component';
+import { RemoveComponent } from '../../../../../shared/remove/remove.component';
+import { WriteStaffComponent } from '../write-staff/write-staff.component';
+import { TakeActionOnStaffComponent } from '../../../../../shared/take-action-on-staff/take-action-on-staff.component';
+import { ImageComponent } from '../../../../../components/controls/image/image.component';
+import { NgClass } from '@angular/common';
+import { SelectComponent } from '../../../../../components/controls/select/select.component';
+
+// 1. Define your data structure
+type Person = { firstName: string; lastName: string; role: string, department: string }
+
+const columnHelper = createColumnHelper<any>();
+
+@Component({
+  selector: 'app-administer',
+  standalone: true,
+  imports: [
+              FlexRenderDirective, ModalComponent, NgIcon, ReactiveFormsModule, NgClass, 
+              InputFieldComponent, ImageComponent, BotinComponent, RemoveComponent, WriteStaffComponent, TakeActionOnStaffComponent, SelectComponent
+           ],
+  templateUrl: './administer.component.html',
+  styleUrl: './administer.component.scss'
+})
+export class AdministerComponentmponent  implements OnInit {
+
+  private store = inject(Store<AppState>)
+
+  imageStyle: any = {
+    'border-radius' : '20%'
+  }
+
+  @Input()
+  height: number = 400
+
+  @Input()
+  width: number = 400
+  
+  @Input()
+  alt: string = 'company-logo'
+ 
+  @Input()
+  src: string = '../../../../../man.jpg'
+
+  @Input() title: string = ''
+  @Input() buttonName: string = ''
+  @Output() close: EventEmitter<void> = new EventEmitter()
+
+  PageTitle: string = 'Users'
+
+  isModalOpen: boolean = false
+  isLoading: boolean = false
+  message: string = ''
+  value: string = ''
+  statusCode!: number
+  writeStaff: boolean = false
+  takeActionOnStaff: boolean = false
+  modalWidth: string = 'w-[900px]'
+  addIcon: any = bootstrapPlusCircleFill
+  style: any = {
+   'background-color' : '#be9d18',
+   'color': 'black',
+   'padding': '20px'
+  }
+  
+  errorMessages = 
+  { 
+    categoryNameRequired: 'Enter category name', 
+    categoryDescriptionRequired: 'Write a note about category to be created'
+  }   
+    
+  departments:{ id: string, name: string }[] = 
+  [
+    { id: 'Human Resource', name:'Hr' },
+    { id: 'Sales', name: 'Sales' },
+    { id: 'Finance', name:'finance' },
+    { id: 'agent', name:'agent' },
+  ]
+    
+  actions:{ id: string, name: string }[] = 
+  [
+    { id: 'Human Resource', name:'Hr' },
+    { id: 'Sales', name: 'Sales' },
+    { id: 'Finance', name:'finance' },
+    { id: 'agent', name:'agent' },
+  ]
+
+  administerForm: FormGroup
+
+  constructor()
+  {
+    this.administerForm = new FormGroup(
+     {
+       department: new FormControl('-1', [categoryNameRequired]),
+       actions: new FormControl('-1', [categoryDescriptionRequired])
+      }
+    ) 
+    this.store.select(getResponseMessage).subscribe((data) => 
+    {
+      const { statusCode, msg } = data.response
+      this.message = msg
+      this.statusCode = statusCode
+    })
+  }
+  
+  ngOnInit(): void 
+  {
+    this.store.select(getSpinnerStatus).subscribe((status: boolean) => {
+      this.isLoading = status
+    })
+  }  
+
+  // 2. Define data
+  data = signal<Person[]>([
+    { firstName: 'Tanner', lastName: 'Linsley', role: 'Admin', department: 'Sales' },
+    { firstName: 'Stephen', lastName: 'Fresh', role: 'Super Admin', department: 'Director' },
+    { firstName: 'Bimbo', lastName: 'Awomasun', role: 'Manager', department: 'Sales' },
+    { firstName: 'Bright', lastName: 'Ben', role: 'Human Resource', department: 'Recruitment' },
+    { firstName: 'Wasiu', lastName: 'Kehinde', role: 'Secretary', department: 'Reception' },
+  ]);
+
+  onConfirm = () => 
+  {
+     
+  } 
+
+  columns: ColumnDef<any>[] = [
+    {
+       accessorKey: 'firstName',
+       header: 'First Name'
+    },
+    {
+       accessorKey: 'lastName',
+       header: 'Last Name'
+    },
+    {
+       accessorKey: 'role',
+       header: 'Role'
+    },
+    {
+       accessorKey: 'department',
+       header: 'Department'
+    },
+    {
+       accessorKey: '...',
+       header: 'Administer',
+       cell: (context) => {
+         return flexRenderComponent(
+            EditComponent, {
+              inputs: {
+                value: context.getValue<number>()
+              },
+              outputs: {
+                clickEvent: (value) => this.handleClick(value)
+              }
+            }
+         )
+       }       
+    },
+    // {
+    //    accessorKey: '...',
+    //    header: 'Change',
+    //    cell: (context) => {
+    //      return flexRenderComponent(
+    //         EditComponent, {
+    //           inputs: {
+    //             value: context.getValue<number>()
+    //           },
+    //           outputs: {
+    //             clickEvent: (value) => this.handleClick(value)
+    //           }
+    //         }
+    //      )
+    //    }       
+    // },
+    {
+       accessorKey: '...',
+       header: '',
+       cell: (context) => {
+         return flexRenderComponent(
+            EditComponent, {
+              inputs: {
+                value: context.getValue<number>()
+              },
+              outputs: {
+                clickEvent: (value) => this.handleClick(value)
+              }
+            }
+         )
+       }       
+    },
+    {
+       accessorKey: 'firstName',
+       header: '',
+       cell: (context) => {
+         return flexRenderComponent(
+            DeleteComponent, {
+              inputs: {
+                value: context.getValue<number>()
+              },
+              outputs: {
+                clickEvent: (value) => this.takeAction(value)
+              }
+            }
+         )
+       }       
+    }
+  ]
+
+  // 4. Create the table instance
+  table = createAngularTable(() => ({
+    data: this.data(),
+    columns: this.columns,
+    getCoreRowModel: getCoreRowModel(),
+  }))
+
+  callOut = () => 
+  {
+      alert("Yeah!! Good")
+  }
+
+  takeAction(data: number)
+  {
+     this.takeActionOnStaff = true
+  }
+
+  closeModal()
+  {
+    this.close.emit()    
+  }
+
+  write()
+  {
+
+  }
+
+  wrteCategory()
+  {
+
+  }
+
+  ToggleWithTitle(data: string)
+  {
+
+  }
+
+  ChangeOnButtonHoverIn()
+  {
+    this.style = {
+      'background-color' : '#776005',
+      'color': 'white',
+      'padding': '20px'         
+    }
+  }
+
+  ChangeOnButtonHoverOut()
+  {
+    this.style = {
+      'background-color' : '#be9d18',
+      'color': 'black',
+      'padding': '20px'        
+    } 
+  }
+  
+  userToggle = (status: string) => 
+  {
+    this.title = status
+    this.buttonName = 'Save'
+    this.writeStaff = true
+  }  
+
+  handleClick(value: number): void 
+  {
+    this.title = 'Update Staff'
+    this.buttonName = 'Save'
+    this.writeStaff = true
+  } 
+
+
+}
+
+
+
+

@@ -22,7 +22,7 @@ const columnHelper = createColumnHelper<any>();
 @Component({
   selector: 'app-plans',
   standalone: true,
-  imports: [FlexRenderDirective, ModalComponent, NgIcon, WritePlanComponent],
+  imports: [FlexRenderDirective, ModalComponent, NgIcon, WritePlanComponent, ModalComponent],
   templateUrl: './plans.component.html',
   styleUrl: './plans.component.scss'
 })

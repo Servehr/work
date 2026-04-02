@@ -11,6 +11,10 @@ import { EditComponent } from '../../../../util/icons/edit/edit.component';
 import { DeleteComponent } from '../../../../util/icons/delete/delete.component';
 import { ViewComponent } from '../../../../util/icons/view/view.component';
 import { ModalComponent } from '../../../../components/modal/modal.component';
+import { NgIcon } from '@ng-icons/core';
+import { bootstrapPlusCircleFill } from '@ng-icons/bootstrap-icons';
+import { WriteCategoryComponent } from './write-category/write-category.component';
+import { RemoveComponent } from '../../../../shared/remove/remove.component';
 
 // 1. Define your data structure
 type Person = { firstName: string; lastName: string; age: number, gender: string }
@@ -20,17 +24,20 @@ const columnHelper = createColumnHelper<any>();
 @Component({
   selector: 'app-category',
   standalone: true,
-  imports: [FlexRenderDirective, ModalComponent],
+  imports: [FlexRenderDirective, ModalComponent, NgIcon, WriteCategoryComponent, RemoveComponent],
   templateUrl: './category.component.html',
   styleUrl: './category.component.scss'
 })
 export class CategoryComponent {
 
   PageTitle: string = 'Categories'
+  buttonName: string = ''
+  writeCategory: boolean = false
+  addIcon: any = bootstrapPlusCircleFill
 
   isModalOpen: boolean = false
-  title: string = 'Delete Item'
-  modalWidth: string = 'w-[1000px]'
+  title: string = ''
+  modalWidth: string = 'w-[700px]'
 
   // 2. Define data
   data = signal<Person[]>([
@@ -44,12 +51,25 @@ export class CategoryComponent {
   onConfirm = () => 
   {
      
+  } 
+
+  ToggleWithTitle = (status: string) => 
+  {
+    this.title = status
+    this.buttonName = 'Save'
+    this.writeCategory = true
   }
 
-
-  handleClick(value: number): void 
+  handleClick(value: number, action: string): void 
   {
-     this.isModalOpen = true
+     if(action === 'update')
+     {
+        this.title = 'Update Category'
+        this.buttonName = 'Update'
+        this.ToggleWithTitle(this.title)
+     } else {
+        this.isModalOpen = true
+     }
   }  
 
   columns: ColumnDef<any>[] = [
@@ -71,7 +91,9 @@ export class CategoryComponent {
                 value: context.getValue<number>()
               },
               outputs: {
-                clickEvent: (value) => this.handleClick(value)
+                clickEvent: (value) => { 
+                  this.handleClick(value, 'update')
+                }
               }
             }
          )
@@ -87,7 +109,7 @@ export class CategoryComponent {
                 value: context.getValue<number>()
               },
               outputs: {
-                clickEvent: (value) => this.handleClick(value)
+                clickEvent: (value) => this.handleClick(value, 'delete')
               }
             }
          )
