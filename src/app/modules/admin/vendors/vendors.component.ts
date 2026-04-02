@@ -1,4 +1,4 @@
-import { Component, computed, signal, TemplateRef } from '@angular/core';
+import { Component, computed, EventEmitter, Input, Output, signal, TemplateRef } from '@angular/core';
 import {
   createAngularTable,
   getCoreRowModel,
@@ -11,6 +11,10 @@ import {
 import { EditComponent } from '../../../util/icons/edit/edit.component';
 import { DeleteComponent } from '../../../util/icons/delete/delete.component';
 import { ViewComponent } from '../../../util/icons/view/view.component';
+import { ModalComponent } from '../../../components/modal/modal.component';
+import { TakeActionOnStaffComponent } from '../../../shared/take-action-on-staff/take-action-on-staff.component';
+import { ViewInfoComponent } from '../../../shared/view-info/view-info.component';
+import { LabelComponent } from '../../../components/controls/label/label.component';
 
 // 1. Define your data structure
 type Person = { firstName: string; lastName: string; age: number, gender: string };
@@ -20,13 +24,19 @@ const columnHelper = createColumnHelper<any>();
 @Component({
   selector: 'app-vendors',
   standalone: true,
-  imports: [FlexRenderDirective], // Import necessary modules
+  imports: [FlexRenderDirective, ModalComponent, TakeActionOnStaffComponent, ViewInfoComponent, LabelComponent], // Import necessary modules
   templateUrl: './vendors.component.html',
   styleUrl: './vendors.component.scss'
 })
 export class VendorsComponent {
 
   PateTitle: string = 'Vendors'
+  @Input() title: string = ''
+  @Input() buttonName: string = ''
+  @Output() close: EventEmitter<void> = new EventEmitter()
+
+  takeActionOnStaff: boolean = false
+  viewingInfo: boolean = false
 
   // 2. Define data
   data = signal<Person[]>([
@@ -35,12 +45,7 @@ export class VendorsComponent {
     { firstName: 'Bimbo', lastName: 'Awomasun', age: 19, gender: 'Male' },
     { firstName: 'Bright', lastName: 'Ben', age: 20, gender: 'Female' },
     { firstName: 'Wasiu', lastName: 'Kehinde', age: 28, gender: 'Female' },
-  ]);
-
-
-  handleClick(value: number): void {
-     alert("Grace")
-  }  
+  ]); 
 
   columns: ColumnDef<any>[] = [
     {
@@ -69,23 +74,7 @@ export class VendorsComponent {
                 value: context.getValue<number>()
               },
               outputs: {
-                clickEvent: (value) => this.handleClick(value)
-              }
-            }
-         )
-       }       
-    },
-    {
-       accessorKey: '...',
-       header: '',
-       cell: (context) => {
-         return flexRenderComponent(
-            EditComponent, {
-              inputs: {
-                value: context.getValue<number>()
-              },
-              outputs: {
-                clickEvent: (value) => this.handleClick(value)
+                clickEvent: (value) => this.viewUser(value)
               }
             }
          )
@@ -120,6 +109,21 @@ export class VendorsComponent {
   {
       alert("Yeah!! Good")
   }
+
+  handleClick(value: number): void 
+  {
+     this.takeActionOnStaff = true
+  } 
+
+  viewUser(value: number)
+  {
+    this.viewingInfo = true
+  }
+
+  onConfirm = () => 
+  {
+     
+  } 
 
 
 }

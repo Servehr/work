@@ -57,13 +57,33 @@
 
 </div>
 
-
 <app-modal 
-  [isOpen]="isModalOpen" 
+  [isOpen]="takeActionOnStaff" 
   title="title" 
-  [modalWidth]="modalWidth"
-  (closeModal)="isModalOpen = false"
+  [modalWidth]="'w-[650px]'"
+  (closeModal)="takeActionOnStaff = false"
   (confirmAction)="onConfirm()"
 >
-  <p class="text-sm text-gray-500">Are you sure you want to delete this? Are you sure you want to delete this? Are you sure you want to delete this? </p>
+  <app-take-action-on-staff
+    [title]="title" 
+    [buttonName]="buttonName" 
+    (close)="takeActionOnStaff = false"
+  >
+  </app-take-action-on-staff>
+</app-modal>
+
+
+<app-modal 
+  [isOpen]="viewingInfo" 
+  title="title" 
+  [modalWidth]="'w-[850px]'"
+  (closeModal)="viewingInfo = false"
+  (confirmAction)="onConfirm()"
+>
+  <app-view-info
+    [title]="title" 
+    [buttonName]="buttonName" 
+    (close)="viewingInfo = false"
+  >
+  </app-view-info>
 </app-modal>

@@ -1,4 +1,4 @@
-import { Component, computed, signal, TemplateRef } from '@angular/core';
+import { Component, computed, EventEmitter, Input, Output, signal, TemplateRef } from '@angular/core';
 import {
   createAngularTable,
   getCoreRowModel,
@@ -12,6 +12,9 @@ import { EditComponent } from '../../../util/icons/edit/edit.component';
 import { DeleteComponent } from '../../../util/icons/delete/delete.component';
 import { ViewComponent } from '../../../util/icons/view/view.component';
 import { ModalComponent } from '../../../components/modal/modal.component';
+import { TakeActionOnStaffComponent } from '../../../shared/take-action-on-staff/take-action-on-staff.component';
+import { ViewInfoComponent } from '../../../shared/view-info/view-info.component';
+import { LabelComponent } from '../../../components/controls/label/label.component';
 
 // 1. Define your data structure
 type Person = { firstName: string; lastName: string; age: number, gender: string };
@@ -21,17 +24,19 @@ const columnHelper = createColumnHelper<any>();
 @Component({
   selector: 'app-technicians',
   standalone: true,
-  imports: [FlexRenderDirective, ModalComponent],
+  imports: [FlexRenderDirective, ModalComponent, TakeActionOnStaffComponent, ViewInfoComponent, LabelComponent], // Import necessary modules
   templateUrl: './technicians.component.html',
   styleUrl: './technicians.component.scss'
 })
 export class TechniciansComponent {
 
   PateTitle: string = 'Technicians'
+  @Input() title: string = ''
+  @Input() buttonName: string = ''
+  @Output() close: EventEmitter<void> = new EventEmitter()
 
-  isModalOpen: boolean = false
-  title: string = 'Delete Item'
-  modalWidth: string = 'w-[1000px]'
+  takeActionOnStaff: boolean = false
+  viewingInfo: boolean = false
 
   // 2. Define data
   data = signal<Person[]>([
@@ -41,17 +46,6 @@ export class TechniciansComponent {
     { firstName: 'Bright', lastName: 'Ben', age: 20, gender: 'Female' },
     { firstName: 'Wasiu', lastName: 'Kehinde', age: 28, gender: 'Female' },
   ]);
-
-  onConfirm = () => 
-  {
-     
-  }
-
-
-  handleClick(value: number): void 
-  {
-     this.isModalOpen = true
-  }  
 
   columns: ColumnDef<any>[] = [
     {
@@ -80,7 +74,7 @@ export class TechniciansComponent {
                 value: context.getValue<number>()
               },
               outputs: {
-                clickEvent: (value) => this.handleClick(value)
+                clickEvent: (value) => this.viewUser(value)
               }
             }
          )
@@ -88,22 +82,6 @@ export class TechniciansComponent {
     },
     {
        accessorKey: '...',
-       header: '',
-       cell: (context) => {
-         return flexRenderComponent(
-            EditComponent, {
-              inputs: {
-                value: context.getValue<number>()
-              },
-              outputs: {
-                clickEvent: (value) => this.handleClick(value)
-              }
-            }
-         )
-       }       
-    },
-    {
-       accessorKey: 'firstName',
        header: '',
        cell: (context) => {
          return flexRenderComponent(
@@ -132,6 +110,22 @@ export class TechniciansComponent {
       alert("Yeah!! Good")
   }
 
+  handleClick(value: number): void 
+  {
+     this.takeActionOnStaff = true
+  } 
+
+  viewUser(value: number)
+  {
+    this.viewingInfo = true
+  }
+
+  onConfirm = () => 
+  {
+     
+  } 
+
 
 }
+
 

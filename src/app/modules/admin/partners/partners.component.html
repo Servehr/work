@@ -56,3 +56,34 @@
   </div>
 
 </div>
+
+<app-modal 
+  [isOpen]="takeActionOnStaff" 
+  title="title" 
+  [modalWidth]="'w-[650px]'"
+  (closeModal)="takeActionOnStaff = false"
+  (confirmAction)="onConfirm()"
+>
+  <app-take-action-on-staff
+    [title]="title" 
+    [buttonName]="buttonName" 
+    (close)="takeActionOnStaff = false"
+  >
+  </app-take-action-on-staff>
+</app-modal>
+
+
+<app-modal 
+  [isOpen]="viewingInfo" 
+  title="title" 
+  [modalWidth]="'w-[850px]'"
+  (closeModal)="viewingInfo = false"
+  (confirmAction)="onConfirm()"
+>
+  <app-view-info
+    [title]="title" 
+    [buttonName]="buttonName" 
+    (close)="viewingInfo = false"
+  >
+  </app-view-info>
+</app-modal>
