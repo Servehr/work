@@ -54,6 +54,27 @@
             >
             </input-field>
           </div>
+
+
+        <div 
+            class="w-full flex justify-between mx-auto gap-10"
+        >
+          <div 
+            class="w-full md:w-4/12"
+          >
+            <app-multiple-image-upload
+              (sendFile)="saveFile($event, 'passport')"
+            >
+              <p 
+                class="text-gray-500 text-sm"
+              >
+                Upload Documents
+              </p>
+            </app-multiple-image-upload>
+          </div>
+        </div>
+
+
           <div>
             <app-botin
               (ChangeOnButtonHoverIn)="ChangeOnButtonHoverIn()" 

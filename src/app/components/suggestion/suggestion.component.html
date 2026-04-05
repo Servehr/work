@@ -1,4 +1,42 @@
+<!-- search.component.html -->
 <div 
+   class="search-container"
+>
+  <input 
+    type="text" 
+    [formControl]="searchControl" 
+    placeholder="Search frameworks..." 
+    class="search-input"
+  />
+
+  <ul
+     class="suggestions-list"
+  >
+      @if(suggestions$ | async; as suggestions)
+      {
+         @for(item of suggestions; track item)
+         {
+            <li
+               (click)="selectSuggestion(item)"
+            >
+               {{ item }}
+            </li>
+         }
+      }
+      @if(suggestions$ | async; as suggestions)
+      {         
+         @if(suggestions?.length === 0 && searchControl.value)
+         {
+            <li>
+               No results found.
+            </li>
+         }
+      }
+  </ul>
+</div>
+
+
+<!-- <div 
    class='relative'
 >
    <input  
@@ -60,4 +98,4 @@
      }
    }
 
-</div>
+</div> -->

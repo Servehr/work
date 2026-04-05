@@ -16,6 +16,7 @@ import { START_LOGIN } from '../../../state/actions/auth.actions';
 import { getResponseMessage, getSpinnerStatus } from '../../../state/selectors/spinner.selector';
 import { AlertComponent } from '../../../components/alert/alert.component';
 import { NgIcon } from '@ng-icons/core';
+import { MultipleImageUploadComponent } from '../../../components/multiple-image-upload/multiple-image-upload.component';
 
 
 export const PasswordRequiredAndLength = (control: AbstractControl): ValidationErrors | null => {
@@ -31,7 +32,7 @@ export const PasswordRequiredAndLength = (control: AbstractControl): ValidationE
   imports: [
                RouterModule, HeaderComponent, InputFieldValidationComponent, 
                FooterComponent, ReactiveFormsModule, InputFieldComponent,
-               BotinComponent, NgStyle, SelectComponent, AlertComponent, NgIcon
+               BotinComponent, NgStyle, SelectComponent, AlertComponent, NgIcon, MultipleImageUploadComponent
            ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
@@ -129,7 +130,11 @@ export class LoginComponent
           this.message = "Attend to all fields"
           this.store.dispatch(SetErrorMessage({ msg: this.message, statusCode: 400, operation: "authenticate-user"  }))
        }     
-    }
-    
+   }
+
+   saveFile(fileToSave: string, type: string)
+   {
+      console.log({ fileToSave, type })
+   }
      
 }

@@ -19,6 +19,8 @@ import { of, delay } from 'rxjs';
 import { START_REGISTER } from '../../../state/actions/auth.actions';
 import { getResponseMessage, getSpinnerStatus } from '../../../state/selectors/spinner.selector';
 import { AlertComponent } from '../../../components/alert/alert.component';
+import { ImageUploadComponent } from '../../../components/image-upload/image-upload.component';
+import { reduceImageSize } from '../../../util/image';
 
 
 export const FirstnameRequired = (control: AbstractControl): ValidationErrors | null => 
@@ -94,7 +96,7 @@ export const ConfirmPasswordRequired = (control: AbstractControl): ValidationErr
   standalone: true,
   imports: [
              RouterModule, InputFieldValidationComponent, ReactiveFormsModule, InputFieldComponent,
-             BotinComponent, NgStyle, SelectComponent, DragDropDirective, ImageComponent, NgIcon, AlertComponent
+             BotinComponent, NgStyle, SelectComponent, DragDropDirective, ImageComponent, NgIcon, AlertComponent, ImageUploadComponent
            ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
@@ -265,7 +267,7 @@ export class RegisterComponent
      }        
    }
 
-   onFileSelectedChange = (event: any, type: string) =>
+   onFileSelectedChange = async (event: any, type: string) =>
    {
       const file: any = event?.target?.files[0]
       
@@ -274,6 +276,9 @@ export class RegisterComponent
          url: this.saniter?.bypassSecurityTrustUrl(window.URL.createObjectURL(file)),
          base64: ''
       }
+
+      const url = this.saniter?.bypassSecurityTrustUrl(window.URL.createObjectURL(file))
+
       console.log(fileHandler.url)
       if(type === 'nin')
       {
@@ -364,6 +369,11 @@ export class RegisterComponent
       
       // 3. Create file from blob
       return new File([blob], fileName, { type: 'image/jpeg' });
+   }
+
+   saveFile(fileToSave: string, type: string)
+   {
+      console.log({ fileToSave, type })
    }
     
      
