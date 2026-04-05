@@ -9,6 +9,7 @@ import { InputFieldComponent } from '../../../../../components/controls/input-fi
 import { ModalComponent } from '../../../../../components/modal/modal.component';
 import { SetErrorMessage, SetLoadingStatus } from '../../../../../state/actions/spinner.action';
 import { delay, of } from 'rxjs';
+import { TextAreaComponent } from '../../../../../components/controls/text-area/text-area.component';
 
 export const departmentNameRequired = (control: AbstractControl): ValidationErrors | null => 
 {
@@ -23,7 +24,7 @@ export const departmentDescriptionRequired = (control: AbstractControl): Validat
 @Component({
   selector: 'app-write-department',
   standalone: true,
-  imports: [RouterModule, ReactiveFormsModule, BotinComponent, InputFieldComponent, ModalComponent ],
+  imports: [RouterModule, ReactiveFormsModule, BotinComponent, InputFieldComponent, ModalComponent, TextAreaComponent ],
   templateUrl: './write-department.component.html',
   styleUrl: './write-department.component.scss'
 })
@@ -35,6 +36,8 @@ export class WriteDepartmentComponent implements OnInit {
    @Input() buttonName: string = ''
    @Output() close: EventEmitter<void> = new EventEmitter()
 
+   rows: number = 7
+   cols: number = 20
     
    pageTitle: string = ''
    isLoading: boolean = false
@@ -48,8 +51,8 @@ export class WriteDepartmentComponent implements OnInit {
   
    errorMessages = 
    { 
-      departmentNameRequired: 'Enter department name', 
-      departmentDescriptionRequired: 'Write a note about department to be created'
+     departmentNameRequired: 'Enter department name', 
+     departmentDescriptionRequired: 'Write a note about department to be created'
    } 
 
    departmentForm: FormGroup

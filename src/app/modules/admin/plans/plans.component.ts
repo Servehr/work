@@ -13,6 +13,7 @@ import { EditComponent } from '../../../util/icons/edit/edit.component';
 import { NgIcon } from '@ng-icons/core';
 import { bootstrapPlusCircleFill } from '@ng-icons/bootstrap-icons';
 import { WritePlanComponent } from './write-plan/write-plan.component';
+import { RemoveComponent } from '../../../shared/remove/remove.component';
 
 // 1. Define your data structure
 type Person = { type: string }
@@ -22,7 +23,7 @@ const columnHelper = createColumnHelper<any>();
 @Component({
   selector: 'app-plans',
   standalone: true,
-  imports: [FlexRenderDirective, ModalComponent, NgIcon, WritePlanComponent, ModalComponent],
+  imports: [FlexRenderDirective, ModalComponent, NgIcon, WritePlanComponent, ModalComponent, RemoveComponent],
   templateUrl: './plans.component.html',
   styleUrl: './plans.component.scss'
 })
@@ -33,6 +34,7 @@ export class PlansComponent {
   title: string = 'Plan'
   
   isModalOpen: boolean = false
+  planOut: boolean = false
   modalWidth: string = 'w-[850px]'
   addIcon: any = bootstrapPlusCircleFill
 
@@ -42,22 +44,7 @@ export class PlansComponent {
     { type: 'Classic' },
     { type: 'Premium'  },
     { type: 'Ultimate' }
-  ]);
-
-  onConfirm = () => 
-  {
-     
-  }
-
-  removeOperation(value: number): void 
-  {
-     this.isModalOpen = true
-  }
-
-  writeOperation(value: number): void 
-  {
-     this.planUp = true
-  }  
+  ]); 
 
   columns: ColumnDef<any>[] = [
     {
@@ -109,6 +96,21 @@ export class PlansComponent {
   {
       alert("Yeah!! Good")
   }
+
+  onConfirm = () => 
+  {
+     
+  }
+
+  removeOperation(value: number): void 
+  {
+     this.planOut = true
+  }
+
+  writeOperation(value: number): void 
+  {
+     this.planUp = true
+  } 
 
 
 }

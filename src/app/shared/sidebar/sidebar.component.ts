@@ -1,6 +1,6 @@
-import { Component, input, output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
@@ -11,6 +11,13 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 })
 export class SidebarComponent {
 
+  private router = inject(Router)
+
   menuItems = input<{ label: string, path: string, icon: string }[]>([])
+
+  goTo = (path: string) => 
+  {
+     this.router.navigate([path])
+  }
 
 }

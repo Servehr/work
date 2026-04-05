@@ -1,0 +1,118 @@
+<div 
+    class="container gap-1 md:p-0 mb-5 -mt-3 px-5"
+>
+  <div 
+    class="flex space-between-10 items-center"
+  >
+    <p 
+      class="font-bold text-md text-gray-500 mb-3"
+    >
+      {{ PageTitle }}
+    </p>
+
+    <div 
+      class="rounded-full flex justify-center ml-5 -mt-1 items-center w-fit py-1 px-1 hover:border-2 hover:border-[#3e4095] hover:py-1 hover:px-1 cursor-pointer"
+      (click)="ToggleWithTitle('Create Local Government Area')"
+    >
+      <ng-icon 
+        [svg]="addIcon" 
+        [size]="'20'" 
+        [color]="'black'"
+      />
+    </div>
+  </div>
+
+
+  <div 
+    class="mt-2"
+  >
+    <table>
+      <thead>
+        @for (headerGroup of table.getHeaderGroups(); track headerGroup.id) {
+          <tr>
+            @for (header of headerGroup.headers; track header.id) {
+              @if (!header.isPlaceholder) {
+                <th>
+                  <ng-container
+                    *flexRender="
+                      header.column.columnDef.header;
+                      props: header.getContext();
+                      let header
+                    "
+                  >
+                    <div [innerHTML]="header"></div>
+                  </ng-container>
+                </th>
+              }
+            }
+          </tr>
+        }
+      </thead>
+      <tbody>
+        @for (row of table.getRowModel().rows; track row.id) {
+          <tr class="table-row-hover">
+            @for (cell of row.getVisibleCells(); track cell.id) {
+              <td>
+                <ng-container
+                  *flexRender="
+                    cell.column.columnDef.cell;
+                    props: cell.getContext();
+                    let cell
+                  "
+                >
+                  <div [innerHTML]="cell"></div>
+                </ng-container>
+              </td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+
+<app-modal 
+  [isOpen]="isModalOpen" 
+  title="title" 
+  [modalWidth]="modalWidth"
+  (closeModal)="isModalOpen = false"
+  (close)="onConfirm()"
+>
+  <app-remove
+    (close)="isModalOpen = false"
+  >
+     You are about to delete local government
+  </app-remove>
+</app-modal>
+
+<app-modal 
+  [isOpen]="writeLocalGovernment" 
+  title="title" 
+  [modalWidth]="modalWidth"
+  (closeModal)="writeLocalGovernment = false"
+  (confirmAction)="onConfirm()"
+>
+  <app-write-local-government 
+    [title]="title" 
+    [buttonName]="buttonName" 
+    (close)="writeLocalGovernment = false"
+  >
+  </app-write-local-government>
+</app-modal>
+
+<!-- <app-modal 
+  [isOpen]="isCountryState" 
+  title="title" 
+  [modalWidth]="modalWidth"
+  (closeModal)="isCountryState = false"
+  (confirmAction)="onConfirm()"
+>
+  <app-country-state 
+    [title]="title" 
+    [buttonName]="buttonName" 
+    (close)="isCountryState = false"
+  >
+  </app-country-state>
+</app-modal> -->

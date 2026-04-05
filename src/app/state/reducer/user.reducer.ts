@@ -12,10 +12,10 @@ const _userReducer = createReducer(UserProfileInitialState,
             profile: action.profile
         }
     }
-    )
+  )
 )
 
 export function userReducer(state: any, action: Action)
 {
-     return _userReducer(state, action)
+   return _userReducer(state, action)
 }

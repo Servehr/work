@@ -1,0 +1,57 @@
+<div 
+    class="w-full gap-1 md:p-0 mb-5 -mt-3 p-5"
+>
+  <div 
+    class="flex justify-between m-3 p-3"
+  >
+     Back Arrow
+  </div>
+</div>  
+
+<div 
+    class="grid grid-cols-12 gap-2 md:gap-5 m-3"
+>
+  @for(user of users; track user.id)
+  {
+     <div 
+       class="col-span-6 md:col-span-3 shadow-lg"
+       (click)="viewUserInfo()"
+     >
+
+       <div 
+         class="w-full bg-white border-2 border-gray-200 p-1 flex justify-center items-center"
+       >
+         <app-image
+           [src]="user.image"
+           [alt]="user.alt"
+           [height]="height"
+           [width]="width"
+           [ngClass]="'imageClass'"
+           [style]="imageStyle"
+         >
+         </app-image>
+       </div>
+       <div 
+         class="py-2 px-3 text-[15px] md:text-[17px]"
+       >         
+         <div 
+           class="w-full"
+         >
+            {{ user.firstname }} {{ user.surname }}
+         </div>
+         <div 
+           class="w-full"
+         >
+            {{ user.rating }}
+         </div>
+         <div 
+           class="w-full"
+         >
+            {{ user.status }}
+         </div>
+       </div>
+
+     </div>    
+  }
+
+</div>

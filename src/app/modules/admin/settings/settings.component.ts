@@ -16,19 +16,23 @@ export class SettingsComponent {
     activeTabIndex: number = 0
     level: string = 'Management'
 
-    role: number = -1
-    roles:any[] = [
-      { id: 'admin', name:'Admin' },
-      { id: 'vendors', name:'Vendors' },
-      { id: 'partners', name:'Partners' }
+    role: string = '-1'
+    value: string = ''
+
+    roles:any[] = 
+    [
+      { id: '1', name:'Admin' },
+      { id: '2', name:'Manager' },
+      { id: '2', name:'Secretary' }
     ] 
-    
-    resource: {  id: number, name: string } = { id: -1, name: "" }
-    resources:any[] = [
-      { id: 1, name:'Technicians' },
-      { id: 2, name:'Vendors' },
-      { id: 3, name:'Partners' }
-    ] 
+    resource: {  id: string, name: string } = { id: '-1', name: "" }
+    resources:{ id: string, name: string }[] = [
+      { id: '1', name:'Merchant' },
+      { id: '2', name:'Staff' },
+      { id: '3', name:'Transactions' },
+      { id: '4', name:'Leave' },
+      { id: '5', name:'Profile' }
+    ]  
 
     roleForm: FormGroup;    
 
@@ -40,9 +44,9 @@ export class SettingsComponent {
         }) 
     }
     
-    ControlPage(resource: { id: number, name: string })
+    ControlPage(resource: { id: string, name: string })
     {
-      this.role = 3
+      this.role = "3"
       this.resource = resource
     }
 

@@ -93,3 +93,18 @@
 >
   <app-write-plan></app-write-plan>
 </app-modal>
+
+
+<app-modal 
+  [isOpen]="planOut" 
+  title="title" 
+  [modalWidth]="modalWidth"
+  (closeModal)="planOut = false"
+  (close)="onConfirm()"
+>
+  <app-remove
+    (close)="planOut = false"
+  >
+     You are about to delete a plan
+  </app-remove>
+</app-modal>

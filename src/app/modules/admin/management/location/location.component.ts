@@ -11,6 +11,11 @@ import { EditComponent } from '../../../../util/icons/edit/edit.component';
 import { DeleteComponent } from '../../../../util/icons/delete/delete.component';
 import { ViewComponent } from '../../../../util/icons/view/view.component';
 import { ModalComponent } from '../../../../components/modal/modal.component';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { NgClass } from '@angular/common';
+import { CountryComponent } from './country/country.component';
+import { StateComponent } from './state/state.component';
+import { LgaComponent } from './lga/lga.component';
 
 // 1. Define your data structure
 type Person = { firstName: string; lastName: string; age: number, gender: string };
@@ -20,92 +25,44 @@ const columnHelper = createColumnHelper<any>();
 @Component({
   selector: 'app-location',
   standalone: true,
-  imports: [FlexRenderDirective, ModalComponent],
+  imports: [FlexRenderDirective, ModalComponent, NgClass, CountryComponent, StateComponent, LgaComponent],
   templateUrl: './location.component.html',
   styleUrl: './location.component.scss'
 })
 export class LocationComponent {
 
-  PateTitle: string = 'Locations'
+  pageTitle:string = 'User Management'
+  page: number = -1
+  level: string = 'Management'
 
-  isModalOpen: boolean = false
-  title: string = 'Delete Item'
-  modalWidth: string = 'w-[1000px]'
+  location: number = -1
+  roles:any[] = [
+    { id: 'admin', name:'Admin' },
+    { id: 'manager', name:'Manager' },
+    { id: 'secretary', name:'Secretary' }
+  ] 
+  resource: {  id: number, name: string } = { id: -1, name: "" }
+  locations:any[] = [
+    { id: 0, name:'Country' },
+    { id: 1, name:'State' },
+    { id: 2, name:'LGA' }
+  ] 
 
-  // 2. Define data
-  data = signal<Person[]>([
-    { firstName: 'Tanner', lastName: 'Linsley', age: 30, gender: 'Female' },
-    { firstName: 'Stephen', lastName: 'Fresh', age: 30, gender: 'Male' },
-    { firstName: 'Bimbo', lastName: 'Awomasun', age: 19, gender: 'Male' },
-    { firstName: 'Bright', lastName: 'Ben', age: 20, gender: 'Female' },
-    { firstName: 'Wasiu', lastName: 'Kehinde', age: 28, gender: 'Female' },
-  ]);
+  roleForm: FormGroup;    
 
-  onConfirm = () => 
+  constructor()
   {
-     
+    this.roleForm = new FormGroup(
+    {
+      role: new FormControl('', [Validators.required])
+    }) 
+  }
+    
+  GoToPage(page: number)
+  {
+     this.location = page
   }
 
-
-  handleClick(value: number): void 
-  {
-     this.isModalOpen = true
-  }  
-
-  columns: ColumnDef<any>[] = [
-    {
-       accessorKey: 'firstName',
-       header: 'First Name'
-    },
-    {
-       accessorKey: 'lastName',
-       header: 'Last Name'
-    },
-    {
-       accessorKey: '...',
-       header: '',
-       cell: (context) => {
-         return flexRenderComponent(
-            EditComponent, {
-              inputs: {
-                value: context.getValue<number>()
-              },
-              outputs: {
-                clickEvent: (value) => this.handleClick(value)
-              }
-            }
-         )
-       }       
-    },
-    {
-       accessorKey: 'firstName',
-       header: '',
-       cell: (context) => {
-         return flexRenderComponent(
-            DeleteComponent, {
-              inputs: {
-                value: context.getValue<number>()
-              },
-              outputs: {
-                clickEvent: (value) => this.handleClick(value)
-              }
-            }
-         )
-       }       
-    }
-  ]
-
-  // 4. Create the table instance
-  table = createAngularTable(() => ({
-    data: this.data(),
-    columns: this.columns,
-    getCoreRowModel: getCoreRowModel(),
-  }))
-
-  callOut = () => 
-  {
-      alert("Yeah!! Good")
-  }
 
 
 }

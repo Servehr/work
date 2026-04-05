@@ -3,15 +3,16 @@ import { InputFieldComponent } from '../../../components/controls/input-field/in
 import { BotinComponent } from '../../../components/controls/botin/botin.component';
 import { liveQuery } from 'dexie';
 import { DatabaseService } from '../../../service/db/database.service';
-import { AsyncPipe, KeyValuePipe, NgFor } from '@angular/common';
+import { AsyncPipe, KeyValuePipe, NgFor, NgIf } from '@angular/common';
 import { bootstrapXCircleFill } from '@ng-icons/bootstrap-icons';
 import { NgIcon } from '@ng-icons/core';
 import { Router } from '@angular/router';
+import { SuggestionComponent } from '../../../components/suggestion/suggestion.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [InputFieldComponent, BotinComponent, AsyncPipe, KeyValuePipe, NgFor, NgIcon],
+  imports: [NgIf, NgFor, InputFieldComponent, BotinComponent, AsyncPipe, KeyValuePipe, NgFor, NgIcon, SuggestionComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })

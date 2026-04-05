@@ -1,4 +1,33 @@
-<app-wysiwyg 
+<div 
+  class="w-full p-5"
+>
+  <p
+    class="font-bold text-lg text-gray-500 mb-5"
+  >
+    Create Plan
+  </p>
+
+  <app-wysiwyg 
     [content]="content"
   >
   </app-wysiwyg>
+
+  <div 
+    class="flex justify-between mt-5 w-full mb-5 gap-5"
+  >
+    <app-botin
+      (sendData)="closeModal()"
+      class="bg-black w-full p-2 rounded-md text-gray-200 hover:bg-gray-700"
+    >
+      <h3>Close </h3>
+    </app-botin>
+    <app-botin
+      (sendData)="closeModal()"
+      class="bg-green-500 w-full p-2 rounded-md text-gray-200 hover:bg-green-700"
+    >
+      <h3>Save </h3>
+    </app-botin>
+
+  </div>
+
+</div>

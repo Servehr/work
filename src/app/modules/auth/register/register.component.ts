@@ -38,7 +38,7 @@ export const PhoneRequired = (control: AbstractControl): ValidationErrors | null
 
 export const MakeSelection = (control: AbstractControl): ValidationErrors | null => 
 {
-   return control.value?.length === 0 || control.value === null ? { selectionRequired : 'selectionRequired' } :  null
+   return control.value?.length === 0 || control.value === '-1' ? { selectionRequired : 'selectionRequired' } :  null
 }
 
 export const PasswordRequired = (control: AbstractControl): ValidationErrors | null => 
@@ -203,8 +203,7 @@ export class RegisterComponent
            this.message = msg
            this.statusCode = statusCode
          }
-       ) 
-      
+       )       
     }
 
     ChangeOnButtonHoverIn()

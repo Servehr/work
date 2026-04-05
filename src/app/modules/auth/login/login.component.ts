@@ -73,7 +73,7 @@ export class LoginComponent
       this.loginForm = new FormGroup(
        {
          email: new FormControl('', [Validators.required, Validators.email]),
-         password: new FormControl('')
+         password: new FormControl('', [PasswordRequiredAndLength])
        }
       ) 
       this.store.select(getResponseMessage).subscribe((data) => 

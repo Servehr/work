@@ -4,11 +4,12 @@ import { Store } from '@ngrx/store';
 import AppState from '../../state/app.state';
 import { ImageComponent } from '../../components/controls/image/image.component';
 import { NgClass } from '@angular/common';
+import { BotinComponent } from '../../components/controls/botin/botin.component';
 
 @Component({
   selector: 'app-view-info',
   standalone: true,
-  imports: [LabelComponent, ImageComponent, NgClass],
+  imports: [LabelComponent, ImageComponent, NgClass, BotinComponent],
   templateUrl: './view-info.component.html',
   styleUrl: './view-info.component.scss'
 })
@@ -35,5 +36,10 @@ export class ViewInfoComponent {
    title: string = 'User Information'
    @Input() buttonName: string = ''
    @Output() close: EventEmitter<void> = new EventEmitter()
+
+   closeModal()
+   {
+    
+   }
 
 }

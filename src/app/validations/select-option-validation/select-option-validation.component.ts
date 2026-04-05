@@ -33,6 +33,8 @@ export class SelectOptionValidationComponent<T> extends SelectOptionValueAccesso
              ...this.errorMessages, ...customErrorMessages.currentValue
           }
        } 
+       console.log(changes)
+       console.log(this.errorMessages)
     }
 
 

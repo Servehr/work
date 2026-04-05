@@ -9,6 +9,7 @@ import { InputFieldComponent } from '../../../../../components/controls/input-fi
 import { ModalComponent } from '../../../../../components/modal/modal.component';
 import { SetErrorMessage, SetLoadingStatus } from '../../../../../state/actions/spinner.action';
 import { delay, of } from 'rxjs';
+import { TextAreaComponent } from '../../../../../components/controls/text-area/text-area.component';
 
 export const categoryNameRequired = (control: AbstractControl): ValidationErrors | null => 
 {
@@ -23,7 +24,7 @@ export const categoryDescriptionRequired = (control: AbstractControl): Validatio
 @Component({
   selector: 'app-write-category',
   standalone: true,
-  imports: [RouterModule, ReactiveFormsModule, BotinComponent, InputFieldComponent, ModalComponent],
+  imports: [RouterModule, ReactiveFormsModule, BotinComponent, InputFieldComponent, ModalComponent, TextAreaComponent],
   templateUrl: './write-category.component.html',
   styleUrl: './write-category.component.scss'
 })
@@ -45,6 +46,9 @@ export class WriteCategoryComponent implements OnInit {
      'color': 'black',
      'padding': '20px'
    }
+
+   rows: number = 7
+   cols: number = 20
   
    errorMessages = 
    { 

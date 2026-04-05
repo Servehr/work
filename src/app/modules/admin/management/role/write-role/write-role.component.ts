@@ -9,6 +9,7 @@ import { InputFieldComponent } from '../../../../../components/controls/input-fi
 import { ModalComponent } from '../../../../../components/modal/modal.component';
 import { SetErrorMessage, SetLoadingStatus } from '../../../../../state/actions/spinner.action';
 import { delay, of } from 'rxjs';
+import { TextAreaComponent } from '../../../../../components/controls/text-area/text-area.component';
 
 export const roleNameRequired = (control: AbstractControl): ValidationErrors | null => 
 {
@@ -23,7 +24,7 @@ export const roleDescriptionRequired = (control: AbstractControl): ValidationErr
 @Component({
   selector: 'app-write-role',
   standalone: true,
-  imports: [RouterModule, ReactiveFormsModule, BotinComponent, InputFieldComponent, ModalComponent],
+  imports: [RouterModule, ReactiveFormsModule, BotinComponent, InputFieldComponent, ModalComponent, TextAreaComponent],
   templateUrl: './write-role.component.html',
   styleUrl: './write-role.component.scss'
 })
@@ -35,6 +36,8 @@ export class WriteRoleComponent implements OnInit {
    @Input() buttonName: string = ''
    @Output() close: EventEmitter<void> = new EventEmitter()
 
+   rows: number = 7
+   cols: number = 20
     
    pageTitle: string = ''
    isLoading: boolean = false

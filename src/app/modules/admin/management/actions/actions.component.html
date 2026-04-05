@@ -5,7 +5,7 @@
         class="py-2 border-b border-gray-100 pt-5"
     >
         <h3 
-          class="font-semibold text-gray-800 font-bold pl-5"
+          class="font-semibold text-gray-800 font-bold pl-0"
         >
            {{pageTitle}}
         </h3>
@@ -13,8 +13,25 @@
     <div 
         class="overflow-x-auto"
     >
+      <form 
+        [formGroup]="actionForm"
+        class="flex flex-col space-y-5"
+      >
+        <app-select 
+          #role
+          [id]="'role'"  
+          [name]="'role'"  
+          [title]="'- Select role -'"
+          [options]="roles"
+          formControlName="userRole" 
+          [value]="''"
+          [customErrorMessages]="errorMessages"
+        >         
+        </app-select>
+      </form>
+
         <div 
-          class="container m-auto grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 py-3 px-2 md:px-5 pb-5 mb-7 pt-1"
+          class="container mt-3 m-auto grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 py-3 px-2 md:px-0 pb-5 mb-7 pt-1"
         >   
            <div 
               class="d-flex md:flex  w-full h-full gap-0 md:gap-3"
@@ -63,7 +80,7 @@
             <div 
               class="w-full md:w-9/12 px-0 flex flex-col bg-white h-[40rem] overflow-y-scroll mt-6 md:mt-0"
             >
-               <app-settings-control [resource]="resource" [role]="role"></app-settings-control>
+               <app-settings-control [resource]="resource" [selectedRole]="permsssion"></app-settings-control>
             </div>
           </div>
 

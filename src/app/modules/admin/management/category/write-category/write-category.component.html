@@ -42,17 +42,14 @@
           <div 
             class="flex flex-col space-y-1 text-gray-200"
           >
-            <input-field
-                [id]="'categoryDescription'"
-                #categoryDescription
-                [name]="'categoryDescription'"
-                [placeholder]="'Enter categoryDescription'"
-                [type]="'categoryDescription'"
-                [value]="''"
-                formControlName="categoryDescription"
-                [customErrorMessages]="errorMessages"
+            <app-text-area  
+              placeholder="Leave description"
+              [rows]="rows"
+              [cols]="cols"
+              formControlName="categoryDescription"
+              [customErrorMessages]="errorMessages"
             >
-            </input-field>
+            </app-text-area>
           </div>
           <p></p>
           <div 

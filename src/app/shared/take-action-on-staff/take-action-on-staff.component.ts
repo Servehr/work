@@ -42,10 +42,10 @@ export class TakeActionOnStaffComponent implements OnInit {
     
    actions:{ id: string, name: string }[] = 
    [
-      { id: 'Human Resource', name:'Hr' },
-      { id: 'Sales', name: 'Sales' },
-      { id: 'Finance', name:'finance' },
-      { id: 'agent', name:'agent' },
+      { id: 'suspend', name:'Suspend' },
+      { id: 'exit', name: 'Exit' },
+      { id: 'sack', name:'Sack' },
+      { id: 'relieve', name:'relieve' },
    ]
     
    pageTitle: string = ''

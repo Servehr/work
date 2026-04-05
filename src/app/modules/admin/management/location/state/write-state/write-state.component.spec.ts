@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WriteLocationComponent } from './write-location.component';
+import { WriteStateComponent } from './write-state.component';
 
-describe('WriteLocationComponent', () => {
-  let component: WriteLocationComponent;
-  let fixture: ComponentFixture<WriteLocationComponent>;
+describe('WriteStateComponent', () => {
+  let component: WriteStateComponent;
+  let fixture: ComponentFixture<WriteStateComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [WriteLocationComponent]
+      imports: [WriteStateComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(WriteLocationComponent);
+    fixture = TestBed.createComponent(WriteStateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

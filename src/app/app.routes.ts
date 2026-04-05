@@ -35,6 +35,8 @@ import { NotificationComponent } from './modules/admin/notification/notification
 import { InfoComponent } from './modules/user/info/info.component';
 import { UploadComponent } from './modules/user/upload/upload.component';
 import { StaffComponent } from './modules/admin/administration/user/staff/staff.component';
+import { UserDetailComponent } from './modules/admin/user-search/user-detail/user-detail.component';
+import { UserSearchComponent } from './modules/admin/user-search/user-search.component';
 
 export const routes: Routes = [
    { 
@@ -86,6 +88,8 @@ export const routes: Routes = [
         { path: 'settings', component: SettingsComponent  },
         { path: 'request', component: RequestComponent  },
         { path: 'notifications', component: NotificationComponent  },
+        { path: 'user-detail', component: UserDetailComponent  },
+        { path: 'user-search', component: UserSearchComponent  },
       ]  
    },
    { 
@@ -94,7 +98,7 @@ export const routes: Routes = [
       children: 
       [
          { path: 'info', component: InfoComponent  },
-         { path: 'upload', component: UploadComponent  }
+         { path: 'upload-passport', component: UploadComponent  }
       ]  
    }
 ];

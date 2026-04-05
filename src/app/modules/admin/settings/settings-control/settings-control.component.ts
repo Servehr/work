@@ -11,8 +11,8 @@ import { CheckComponent } from '../../../../components/controls/check/check.comp
 })
 export class SettingsControlComponent {
 
-   @Input() role: number = -1
-   @Input() resource: { id: number, name: string } = { id: -1, name: "" }
+   @Input() selectedRole: string = '-1'
+   @Input() resource: { id: string, name: string } = { id: '-1', name: "" }
 
    @Input() label: string = ''
    @Input() switchStatus:boolean = true

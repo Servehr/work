@@ -5,7 +5,8 @@
   {
     
      <div 
-        class="sticky top-0 bg-[#3e4095] hover:bg-gray-600 px-2 py-3 text-white w-full border border-b-1"
+        class="sticky cursor-pointer top-0 bg-[#3e4095] hover:bg-gray-600 px-2 py-3 text-white w-full border border-b-1"
+        (click)="goTo(item.path)"
      >
        <a 
          [routerLink]="item.path" 

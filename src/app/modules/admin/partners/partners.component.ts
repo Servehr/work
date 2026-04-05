@@ -38,6 +38,10 @@ export class PartnersComponent {
   takeActionOnStaff: boolean = false
   viewingInfo: boolean = false
 
+  style = {
+     "margin-top": "-40px"
+  }
+
   // 2. Define data
   data = signal<Person[]>([
     { firstName: 'Tanner', lastName: 'Linsley', age: 30, gender: 'Female' },

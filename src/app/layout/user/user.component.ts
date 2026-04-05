@@ -19,11 +19,8 @@ export class UserComponent {
   }
 
   sidebarData = [
-    { label: 'Profile', path: '/user/info', icon: '📊' },
-    { label: 'Upload', path: '/user/upload', icon: '⚙️' },
-    { label: 'Passport', path: '/user/passport', icon: '⚙️' },
-    { label: 'Subscription', path: '/user/subscription', icon: '⚙️' },
-    { label: 'Settings', path: '/user/setting', icon: '⚙️' }
+    { label: 'Profile', path: '/user/info', icon: '' },
+    { label: 'Photograph', path: '/user/upload-passport', icon: '' },
   ]
 
 }

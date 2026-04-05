@@ -90,18 +90,17 @@ export class AdministerComponentmponent  implements OnInit {
     
   departments:{ id: string, name: string }[] = 
   [
-    { id: 'Human Resource', name:'Hr' },
+    { id: 'Human Resource', name:'HR' },
     { id: 'Sales', name: 'Sales' },
-    { id: 'Finance', name:'finance' },
-    { id: 'agent', name:'agent' },
+    { id: 'Finance', name:'Finance' },
+    { id: 'agent', name:'Agent' },
   ]
     
   actions:{ id: string, name: string }[] = 
   [
-    { id: 'Human Resource', name:'Hr' },
-    { id: 'Sales', name: 'Sales' },
-    { id: 'Finance', name:'finance' },
-    { id: 'agent', name:'agent' },
+    { id: 'Human Resource', name:'HR Manager' },
+    { id: 'Sales', name: 'Sales Manager' },
+    { id: 'Finance', name:'Finance Manager' }
   ]
 
   administerForm: FormGroup
