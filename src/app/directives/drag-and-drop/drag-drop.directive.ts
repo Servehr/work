@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, HostBinding, HostListener, Output } from '@angular/core';
+import { Directive, EventEmitter, HostBinding, HostListener, Input, Output } from '@angular/core';
 import { IFileHandler } from '../../interface/FileHandler';
 import { DomSanitizer } from '@angular/platform-browser';
 import { reduceImageSize } from '../../util/image';
@@ -9,9 +9,14 @@ import { reduceImageSize } from '../../util/image';
 })
 export class DragDropDirective {
 
+  imageUploads: any[] = []
+  multiplePreview: any[] = []
+
   @Output() dropFile: EventEmitter<IFileHandler> = new EventEmitter()
 
   @HostBinding("style.background") private background = "#eee"
+
+  @Input() uploadType: string = 'single'
 
   constructor(private saniter: DomSanitizer) { }
 
@@ -32,50 +37,64 @@ export class DragDropDirective {
   }
 
   @HostListener("drop", ["$event"])
-//   public async onDrop(event: DragEvent)
-//   {
-//      event.preventDefault()
-//      event.stopPropagation()
-//      this.background = "#eee"
-     
-//      let fileHandler: IFileHandler
-//      const file = event?.dataTransfer?.files[0]!
-//      const imageString = await this.toBase64(file)
-//      const base64: any = imageString
-//      console.log(base64)
-//      console.log(typeof base64)
-//      const url = this.saniter?.bypassSecurityTrustUrl(window.URL.createObjectURL(file))
-     
-//      console.log("Calling One")
-//      fileHandler = { file, url, base64 }
-//      this.dropFile.emit(fileHandler)     
-//   }
-
   public async onDrop(event: DragEvent)
   {
-     event.preventDefault()
-     event.stopPropagation()
-     this.background = "#eee"
+    event.preventDefault()
+    event.stopPropagation()
+    this.background = "#eee"
      
-     let fileHandler: IFileHandler
-     const files = event?.dataTransfer?.files!
-     let fileCount = files?.length
-     if(fileCount > 1)
-     {
-       console.log("Great")
-     } else {
-        const file = event?.dataTransfer?.files[0]!
-        console.log("One One")
-        const imageString = await this.toBase64(file)
-        const base64Image: any = imageString
-         
-        const url = this.saniter?.bypassSecurityTrustUrl(window.URL.createObjectURL(file))
+    let fileHandler: IFileHandler
 
-        const baseImage64: unknown | string = await reduceImageSize(base64Image)
-        const base64 = baseImage64?.toString()!
+    if(this.uploadType === 'multiple')
+    {          
+       const files = Array.from(event?.dataTransfer?.files!)
+       for (let index = 0; index < files.length; index++) 
+       {
+          let element: any = files?.[index]
+          let urlFile = window.URL.createObjectURL(element)
+           this.multiplePreview.push(urlFile)
+       }
+
+       Promise.all(
+         files?.map((file: any) => 
+         {
+            return new Promise((resolve, reject) => {
+               const reader: FileReader = new FileReader();
+               reader.readAsDataURL(file);
+               reader.onload = async () => 
+               {                        
+                  let sizeToCalculate = reader.result as string
+                  let x = await reduceImageSize(sizeToCalculate)
+                  resolve(x)
+               }
+               reader.onerror = (error) => reject(error);
+            });
+         })
+         ).then((results) => {   
+            for (let index = 0; index < results.length; index++) 
+            {
+               const element = results[index]        
+               this.imageUploads.push(...this.imageUploads, element)
+            }
+            fileHandler = { file: files, url: this.multiplePreview, base64: this.imageUploads }
+            console.log(fileHandler?.file)
+            this.dropFile.emit(fileHandler)
+         })
+     } 
+     
+     if(this.uploadType === 'single')
+     {
+       const file = event?.dataTransfer?.files[0]!
+       const imageString = await this.toBase64(file)
+       const base64Image: any = imageString
          
-        fileHandler = { file, url, base64 }
-        this.dropFile.emit(fileHandler)
+       const url = this.saniter?.bypassSecurityTrustUrl(window.URL.createObjectURL(file))
+
+       const baseImage64: unknown | string = await reduceImageSize(base64Image)
+       const base64 = baseImage64?.toString()!
+         
+       fileHandler = { file, url, base64 }
+       this.dropFile.emit(fileHandler)
      }    
   }
 

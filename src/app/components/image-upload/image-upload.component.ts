@@ -22,6 +22,7 @@ export class ImageUploadComponent {
   isLoading = signal(false)
   ChangeOnHover: boolean = false
   deleteIcon: any = bootstrapTrash
+  
   style: any = {
     'background-color' : '#be9d18',
     'color': 'black',

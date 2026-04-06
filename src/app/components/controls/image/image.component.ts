@@ -12,10 +12,10 @@ import { Router } from '@angular/router';
 export class ImageComponent {
 
   @Input()
-  height: number = 150
+  height: number = 0
 
   @Input()
-  width: number = 150
+  width: number = 0
   
   @Input()
   alt: string = 'company-logo'
