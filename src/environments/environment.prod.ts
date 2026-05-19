@@ -6,7 +6,8 @@
 
 export const environment = {
     production: true,
-    url: 'https://workings.onrender.com/api/'
+    url: 'https://workings.onrender.com/api/',
+    PUBLIC_KEY: 'pk_test_d00906d066cf1219650631e4e7993754b4a9e0c2'
 };
 
 /*
