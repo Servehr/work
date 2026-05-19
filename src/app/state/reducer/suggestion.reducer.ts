@@ -3,26 +3,21 @@ import { InitialState } from "../initials/initial.suggestion.state"
 import { START_SUGGESTION, SUGGESTION_SUCCESS } from "../actions/suggestion.actions"
 
 const _suggestionReducer = createReducer(InitialState,
-     on(START_SUGGESTION, (state: any, action: any) => {
-        console.log("+++++++++++++++++++")
-        console.log(action.productName)
-        console.log("+++++++++++++++++++")
+     on(START_SUGGESTION, (state: any, action: any) => 
+     {
         return {
             ...state,
             results: action
         }
      }),
-     on(SUGGESTION_SUCCESS, (state: any, action: any) => {
-        console.log("@@@@@@@@@@@@@@@@@@@@@")
-        console.log(action)
-        console.log("@@@@@@@@@@@@@@@@@@@@@")
+     on(SUGGESTION_SUCCESS, (state: any, action: any) => 
+     {
         return {
             ...state,
             results: action.results
         }
      })
     )
-
 
 
 export function SuggestionReducer(state: any, action: Action) {

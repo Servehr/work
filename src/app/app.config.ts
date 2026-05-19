@@ -1,5 +1,5 @@
-import { ApplicationConfig, provideZoneChangeDetection, isDevMode } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { ApplicationConfig, provideZoneChangeDetection, isDevMode, APP_INITIALIZER } from '@angular/core';
+import { provideRouter, withRouterConfig } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideStore } from '@ngrx/store';
@@ -14,13 +14,45 @@ import { AuthService } from './service/auth.service';
 import { CustomSerializer } from './router/custom-serializer';
 import { UserEffect } from './state/effects/user.effects';
 import { requestInterceptor } from './core/interceptors/request.interceptor';
+// @ts-ignore
+// import { provideAngularPaystack } from 'angular-paystack';
+import { environment } from '../environments/environment.development';
+import { JobEffect } from './state/effects/job.effects';
+import { GeolocationService } from './util/location/geolocation.service';
+import { LocationService } from './util/location/location.service';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideToastr } from 'ngx-toastr'
+import { CategoryEffect } from './state/effects/management/category.effects';
+import { RemoveEffect } from './state/effects/remove.effects';
+
+
+export function initializeLocation(locationService: LocationService) 
+{
+  return () => locationService.loadLocation();
+}
+
+
+
+
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    // {
+    //   provide: APP_INITIALIZER,
+    //   useFactory: initializeLocation,
+    //   deps: [LocationService],
+    //   multi: true
+    // },
+    provideAnimations(),
+    provideToastr({
+      timeOut: 5000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
+    }),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
+    provideRouter(routes, withRouterConfig({ onSameUrlNavigation: 'reload' })),
     provideStore(AppReducer),
-    provideEffects([AuthEffect, UserEffect]),
+    provideEffects([AuthEffect, UserEffect, JobEffect, CategoryEffect, RemoveEffect]),
     provideRouterStore({
       serializer: CustomSerializer
     }),
@@ -30,5 +62,6 @@ export const appConfig: ApplicationConfig = {
     provideQuillConfig({}),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     AuthService,
+    // provideAngularPaystack(`${environment.PUBLIC_KEY}`)
   ]
 };

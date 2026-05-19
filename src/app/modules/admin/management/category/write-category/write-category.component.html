@@ -28,14 +28,13 @@
             class="flex flex-col space-y-1 text-gray-200"
           >
             <input-field
-                [id]="'categoryName'"
+                [id]="name()"
                 #categoryName
                 [name]="'categoryName'"
                 [placeholder]="'Enter Category Name'"
-                [type]="'categoryName'"
-                [value]="''"
                 formControlName="categoryName"
                 [customErrorMessages]="errorMessages"
+                [value]="dataToUpdate()?.data?.name"
             >
             </input-field>
           </div>
@@ -47,9 +46,11 @@
               [rows]="rows"
               [cols]="cols"
               formControlName="categoryDescription"
-              [customErrorMessages]="errorMessages"
+              [customErrorMessages]="errorMessages"  
+              [value]="dataToUpdate()?.data?.description"     
             >
-            </app-text-area>
+            </app-text-area>            
+            <!-- [value]="'glory'"  -->
           </div>
           <p></p>
           <div 
@@ -64,9 +65,8 @@
             <app-botin
               (ChangeOnButtonHoverIn)="ChangeOnButtonHoverIn()" 
               (ChangeOnButtonHoverOut)="ChangeOnButtonHoverOut()"
-              (sendData)="wrteCategory()"
+              (sendData)="write()"
               [style]="style"
-              (click)="write()"
             >
               <div
                 class="flex flex-col space-y-1 items-center justify-between"

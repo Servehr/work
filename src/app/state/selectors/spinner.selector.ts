@@ -4,8 +4,9 @@ import { Msg } from '../models/msg';
 import { MESSAGE_NAME_STATE, SPINNER_STATE_NAME } from '../constants/spinner';
 
 const getIsSpinnerLoading = createFeatureSelector<Spinner>(SPINNER_STATE_NAME)
-export const getSpinnerStatus = createSelector(getIsSpinnerLoading, state => {
-    return state.loading
+export const getSpinnerStatus = createSelector(getIsSpinnerLoading, state => 
+{
+    return state
 })
 
 const getResponse = createFeatureSelector<Msg>(MESSAGE_NAME_STATE)

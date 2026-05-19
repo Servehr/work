@@ -21,6 +21,7 @@ import { getResponseMessage, getSpinnerStatus } from '../../../state/selectors/s
 import { AlertComponent } from '../../../components/alert/alert.component';
 import { ImageUploadComponent } from '../../../components/image-upload/image-upload.component';
 import { reduceImageSize } from '../../../util/image';
+import { InputFileComponent } from '../../../components/controls/input-file/input-file.component';
 
 
 export const FirstnameRequired = (control: AbstractControl): ValidationErrors | null => 
@@ -95,7 +96,7 @@ export const ConfirmPasswordRequired = (control: AbstractControl): ValidationErr
   selector: 'app-register',
   standalone: true,
   imports: [
-             RouterModule, InputFieldValidationComponent, ReactiveFormsModule, InputFieldComponent,
+             RouterModule, InputFieldValidationComponent, ReactiveFormsModule, InputFieldComponent, InputFileComponent,
              BotinComponent, NgStyle, SelectComponent, DragDropDirective, ImageComponent, NgIcon, AlertComponent, ImageUploadComponent
            ],
   templateUrl: './register.component.html',
@@ -187,6 +188,7 @@ export class RegisterComponent
           email: new FormControl('', [Validators.required, Validators.email]),
           password: new FormControl('', [PasswordRequired]),
           cPassword: new FormControl('', [ConfirmPasswordRequired]),
+         //  myFile: new FormControl('', [Validators.required]),
          //  nin: new FormControl('', [Validators.required]),
          //  plan: new FormControl('', [Validators.required]),
         }
@@ -195,7 +197,7 @@ export class RegisterComponent
 
     ngOnInit()
     {
-      this.store.select(getSpinnerStatus).subscribe((status: boolean) => 
+      this.store.select(getSpinnerStatus).subscribe((data: any) => 
       {
          this.isLoading.update((currentValue: boolean) => !currentValue)
        })
@@ -226,9 +228,9 @@ export class RegisterComponent
        } 
     }
 
-   register = () =>
+    register = () =>
    {
-     this.store.dispatch(SetLoadingStatus({ loading: true }))
+     this.store.dispatch(SetLoadingStatus({ loader: { loading: true, statusCode: 0 }}))
      if(this.registerForm.valid)
      {
        of(this.registerForm.value)
@@ -244,6 +246,7 @@ export class RegisterComponent
             //    cpassword: UserDetail['cpassword']!,
             //    password: UserDetail['password']!,
             // }  
+            console.log("Crazy")
             const firstname: string = UserDetail['firstname']!                
             const surname: string  = UserDetail['surname']!  
             const phone: string  = UserDetail['phone']!    
@@ -258,16 +261,16 @@ export class RegisterComponent
        )
      } else {
         this.registerForm.markAllAsTouched()
-        this.store.dispatch(SetLoadingStatus({ loading: false }))
+        this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 0 }}))
         //   setTimeout(() => {           
         //     this.store.dispatch(SetLoadingStatus({ loading: false }))
         //   }, 10000)
         this.message = "Attend to all fields"
         this.store.dispatch(SetErrorMessage({ msg: this.message, statusCode: 400, operation: "user-onboarding"  }))
      }        
-   }
+    }
 
-   onFileSelectedChange = async (event: any, type: string) =>
+    onFileSelectedChange = async (event: any, type: string) =>
    {
       const file: any = event?.target?.files[0]
       
@@ -291,9 +294,9 @@ export class RegisterComponent
         this.passportPhotograph = []
         this.passportPhotograph.push(fileHandler?.url)
       }
-   }
+    }
 
-   removeImages = (remove: string) =>
+    removeImages = (remove: string) =>
    {
       if(remove === 'nin')
       {
@@ -303,9 +306,9 @@ export class RegisterComponent
       {
          this.passportPhotograph = []
       }
-   }
+    }
    
-   dropFile = async (upload: IFileHandler, type: string) => 
+    dropFile = async (upload: IFileHandler, type: string) => 
    {
       console.log(upload?.url)
       const SafeUrlToFileObject = await this.safeUrlToFile(upload?.url, 'uploadImage')
@@ -333,16 +336,16 @@ export class RegisterComponent
       }).catch(error => {
          console.error('Error converting file:', error);
       })
-   }
+    }
 
-   toBase64 = (file: any) => new Promise((resolve, reject) => {
+    toBase64 = (file: any) => new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => resolve(reader.result);
       reader.onerror = (error) => reject(error);
-   })
+    })
 
-   private convertFileToBase64(file: File): Promise<string | ArrayBuffer | null> 
+    private convertFileToBase64(file: File): Promise<string | ArrayBuffer | null> 
    {
       return new Promise((resolve, reject) => 
       {
@@ -353,13 +356,12 @@ export class RegisterComponent
          reader.onload = () => resolve(reader.result)
          reader.onerror = (error) => reject(error)
       })
-   }
+    }
 
-   async safeUrlToFile(safeUrl: SafeUrl, fileName: string): Promise<File> 
+    async safeUrlToFile(safeUrl: SafeUrl, fileName: string): Promise<File> 
    {
       // 1. Unwrap the SafeUrl to get raw string
       const rawUrl = this.saniter.sanitize(0, safeUrl) || ''
-      console.log(rawUrl)
       
       // 2. Fetch the URL as a blob
       const response = await fetch(rawUrl);
@@ -369,12 +371,12 @@ export class RegisterComponent
       
       // 3. Create file from blob
       return new File([blob], fileName, { type: 'image/jpeg' });
-   }
+    }
 
-   saveFile(fileToSave: string, type: string)
-   {
+    saveFile(fileToSave: string, type: string)
+    {
       console.log({ fileToSave, type })
-   }
+    }
     
      
 }

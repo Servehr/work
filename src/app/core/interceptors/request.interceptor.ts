@@ -17,6 +17,7 @@ export const requestInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, nex
           {
              const clonedRequest = req.clone({
                  setHeaders: {
+                   ContentType: 'application/json',
                    Authorization: `Bearer ${token}`
                  }
              })

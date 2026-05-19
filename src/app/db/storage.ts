@@ -10,28 +10,27 @@ export interface IUser
   token?: string
 }
 
-// export class StorageDB extends Dexie 
-// {
-//   user!: Table<IUser, number>;
-
-//   constructor() {
-//     super('technicians-work')
-//     this.version(4).stores(
-//       {
-//         user: '++id, todoListId'
-//       }
-//     );
-//   }
-// }
-
-// export const db = new StorageDB()
-
-const db = new Dexie('technicianswork') as Dexie & {
-   user: EntityTable<IUser, 'id'>
+export interface ILocation
+{
+   id?: string
+   longitude: string
+   latitude: string
 }
 
-db.version(6).stores({
-   user: '++id, userId, firstname, surname, token'
-})
+export class StorageDB extends Dexie 
+{
+  user!: Table<IUser, number>;  
+  location!: Table<ILocation, number>;  
 
-export { db }
+  constructor() {
+    super('technicians-work')
+    this.version(1000).stores(
+      {
+        user: '++id, userId, firstname, surname, token',
+        location: '++id, longitude, latitude'
+      }
+    );
+  }
+}
+
+export const db = new StorageDB()

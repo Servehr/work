@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, signal } from '@angular/core';
 import { SearchComponent } from '../../../components/search/search.component';
 import { NotificationComponent } from '../../../components/notification/notification.component';
 import { bootstrapHouseDoorFill, bootstrapList, bootstrapPersonBoundingBox } from '@ng-icons/bootstrap-icons';
@@ -14,13 +14,14 @@ import { Router } from '@angular/router';
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
 
     menu: boolean = false
     iconSize: string = '20'
     isHover: number = 0
     openMobileNav : boolean = false
     hamburger: any = bootstrapList
+    enableViewResults = signal<boolean>(false)
 
     home: any = bootstrapHouseDoorFill
     style: any = {
@@ -35,7 +36,13 @@ export class HeaderComponent {
     @Output() toggleBar: EventEmitter<boolean> = new EventEmitter()
 
 
+
     constructor(private router: Router){}
+
+    ngOnInit(): void 
+    {
+       this.enableViewResults.set(true)
+    }
 
     goHome(to: any)
     {

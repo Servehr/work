@@ -1,8 +1,8 @@
 <div
-  class="bg-blue-100 px-5 pt-3 pb-3 md:py-7 mb-3"
+  class="bg-blue-50 px-5 pt-3 pb-3 md:py-7"
 >
   <div 
-    class='container mx-auto p-3 py-4  md:p-10 flex-cols justify-center items-center'
+    class='container mx-auto px-3 pt-3 py-4  md:p-10 flex-cols justify-center items-center'
   >
       <div 
         class="w-full d-flex justify-content-between md:flex md:w-11/12 md:gap-0 mx-auto border-1 md:shadow-lg md:border-gray-200 md:rounded-full md:overflow-hidden"
@@ -16,7 +16,7 @@
             [name]="'search'"
             [placeholder]="'e.g plumber'"
             [type]="'text'"
-            [value]="'value'"
+            [value]="''"
           >
           </input-field>
         </div>
@@ -29,7 +29,7 @@
             [name]="'search'"
             [placeholder]="'e.g lagos'"
             [type]="'text'"
-            [value]="'value'"
+            [value]="''"
           >
           </input-field>
         </div>
@@ -88,50 +88,214 @@
 </div>
 
 <div 
-   class='container mx-auto p-3'
+   class='container mx-auto mb-5'
 >
    <div 
-     class="w-full flex-cols md:flex gap-2"
+     class="w-full flex-cols md:flex gap-4"
    >
      <div 
-       class="w-12/12 md:w-7/12 shadow-lg h-[350px] pl-3"
+       class="w-12/12 md:w-7/12 shadow-lg border-2"
      >
-        <p 
-          class="w-full flex justify-left text-[15px] mt-5 text-gray-500"
-        >
-          <!-- Sliders - {{ (users$ | async) as user }} -->
-        </p> 
+     
+      <swiper-container 
+        navigation="true" 
+        pagination="true"
+        autoplay="true" 
+        delay="3000" 
+        disable-on-interaction="false"
+        loop="true"
+      >
+        @for(slide of sliders(); track slide)
+        { 
+          <!-- <swiper-slide>
+            <app-image
+              [src]="slide"
+              [alt]="slide"
+            >
+            </app-image>
+          </swiper-slide> -->
+          <swiper-slide>
+            <img [src]="slide" />
+          </swiper-slide>
+        }
+      </swiper-container>  
+    
+    <!-- <swiper-container 
+      navigation="true" 
+      pagination="true"
+    >
+      @for(slide of sliders(); track slide)
+      {          
+        <swiper-slide>
+          <app-image
+            [src]="slide"
+            [alt]="slide"
+          >
+          </app-image>
+        </swiper-slide>
+      }
+    </swiper-container> -->
         
         <ul>
           <li 
             *ngFor="let user of users$ | async"
           >
             <!-- ({{ user.firstname }} -> {{ user.surname }} -> {{ user.token }} -> {{ user.id }}) -->
-              ({{ user.firstname }} -> {{ user.surname }})
+              <!-- ({{ user.firstname }} -> {{ user.surname }}) -->
           </li>
         </ul>
      </div>
 
      <div 
-       class="w-12/12 md:w-5/12 shadow-lg h-[350px] pl-3"
+       class="w-12/12 md:w-5/12 shadow-lg mx-auto"
      >
-        <p 
-          class="w-full flex justify-left text-[15px] mt-5 text-gray-500"
-        >
-          Workflow
-        </p> 
-        <app-suggestion></app-suggestion>
+        <!-- <iframe width="560" height="315" 
+            src="https://www.youtube.com/watch?v=SRNKPxr9uR8" 
+            title="YouTube video player" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+        </iframe> -->
+
+        <iframe 
+          width="630" height="320" 
+          src="https://www.youtube.com/embed/SRNKPxr9uR8" 
+          title="YouTube video player" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          referrerpolicy="strict-origin-when-cross-origin" 
+          allowfullscreen>
+        </iframe>
+
+        <!-- <app-suggestion></app-suggestion> -->
         
      </div>
 
    </div>
 </div>
 
+
 <div 
-   class='container mx-auto px-0 py-3 h-[300px] shadow-lg pb-10'
+  class="container mx-auto"
+>
+  <p
+      class="text-sm md:text-md mb-5 mt-5 text-[#be9d18] font-bold text-left"
+    >
+       Top Engagers
+    </p>
+</div>
+
+<div 
+    class="container mx-auto grid grid-cols-2 md:grid-cols-6 gap-7 mb-5"
+>    
+   @if(users().length > 0)
+   {
+      @for(user of users(); track user.id)
+      {
+        <!-- <app-user-card [user]="user"></app-user-card> -->
+        <div 
+          class="border-2 shadow-md d-flex justify-center items-center relative"
+        >
+          <!-- <ng-icon 
+            [svg]="threeDot" 
+            [size]="'22'" 
+            [color]="'black'" 
+            [ngClass]="{'circle-over' : isHamburgOver}"
+            (mouseover)="overBurger()"
+            class="z-50 cursor-pointer top-3 right-1 absolute"
+          /> -->
+        <div 
+          class="group absolute inline-block z-500 right-0 top-0"
+        >
+          <button 
+            class="p-2 rounded-full hover:bg-gray-200 mr-1"
+          >
+            <div 
+              class="flex flex-col gap-0.5"
+            >
+              <span class="w-1.5 h-1.5 bg-gray-600 rounded-full"></span>
+              <span class="w-1.5 h-1.5 bg-gray-600 rounded-full"></span>
+              <span class="w-1.5 h-1.5 bg-gray-600 rounded-full"></span>
+            </div>
+          </button>
+          
+          <!-- Hidden by default, shown on parent hover -->
+          <ul 
+            class="hidden z-500 group-hover:block absolute bg-white border w-[110px] text-[12px] -ml-20"
+          >
+            <li 
+              class="px-2 py-1 hover:bg-[#f6e7a0] border-b-2 border-gray-200 cursor-pointer"
+            >
+              Rate & Reviews
+            </li>
+            <li 
+              class="px-2 py-1 hover:bg-[#f6e7a0] border-b-2 border-gray-200 cursor-pointer"
+            >
+              Scam
+            </li>
+            <li   
+              class="px-2 py-1 hover:bg-[#f6e7a0] border-b-2 border-gray-200 cursor-pointer"
+            >
+              Fake Profile
+            </li>
+          </ul>
+        </div>
+        
+        
+          <!-- <div 
+            class="w-full h-[150px] hover:bg-yellow-100 absolute opacity-60 flex justify-center item-center z-30 cursor-pointer"
+            (click)="''"
+          >
+            <ng-icon 
+              [svg]="view" 
+              [size]="'22'" 
+              [color]="'black'" 
+              [ngClass]="{'circle-over' : isHamburgOver}"
+              (mouseover)="overBurger()"
+              class="z-50 cursor-pointer top-20 absolute"
+            /> 
+          </div> -->
+          <app-image
+            [src]="user.image"
+            [alt]="user.alt"
+            [height]="300"
+            [width]="300"
+            class="cursor-none"
+          >
+          </app-image>   
+          <div 
+            class="w-full flex justify-between items-center text-[12px] px-2 py-2"
+          >
+            <p>Temitope Ugochukwu</p>
+            <div 
+              class="flex justify-center items-center gap-1"
+            >
+              <p>Rating:</p>
+              <p class="text-yellow-700 mt-1">
+                <ng-icon 
+                  [svg]="rating" 
+                  [size]="'14'" 
+                  [color]="'yellow'" 
+                  [ngClass]="{'circle-over' : isHamburgOver}"
+                  (mouseover)="overBurger()"
+                  class="z-50 cursor-pointer ml-1"
+                />
+              </p>
+            </div>
+          </div>
+        </div>
+      }
+   } @else {
+       <h1>No user present</h1>
+   }
+</div>
+
+
+<div 
+   class='container mx-auto px-0 py-3 h-[300px] shadow-lg pb-10 mb-1'
 >
     <p 
-      class="w-full flex justify-center text-[18px] mt-5 text-gray-500"
+      class="text-sm md:text-md mb-5 mt-5 text-[#be9d18] font-bold text-center"
     >
       Partners
     </p>
@@ -139,145 +303,62 @@
       class="flex justify-center item-center"
     >
 
+<div class="slider w-full bg-zinc-100 overflow-hidden">
+    <div class="slider-track slider-animation flex gap-16 p-16">
+      <div class="slide">
+        <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" class="h-16 opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-200" />
+      </div>
+      <div class="slide">
+        <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" class="h-16 opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-200" />
+      </div>
+      <div class="slide">
+        <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" class="h-16 opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-200" />
+      </div>
+      <div class="slide">
+        <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" class="h-16 opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-200" />
+      </div>
+      <div class="slide">
+        <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" class="h-16 opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-200" />
+      </div>
+      <div class="slide">
+        <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" class="h-16 opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-200" />
+      </div>
     </div>
-</div>
-
-
-<!-- Newsletter -->
-<div
-  class="bg-[#3e4095] px-5 py-10 md:py-16 mb-3"
->
-  <div 
-    class='container gap-2 mx-auto md:p-3 py-7 md:p-10 flex justify-center items-center'
-  >
-      <div 
-        class="w-9/12 md:w-6/12"
-      >
-        <input-field
-          [id]="'email'"
-          #email
-          [name]="'email'"
-          [placeholder]="'Enter email'"
-          [type]="'text'"
-          [value]="'value'"
-        >
-        </input-field>
-      </div>
-      <div 
-        class="w-3/12 md:w-2/12"
-      >
-        <app-botin
-          (ChangeOnButtonHoverIn)="ChangeOnButtonHoverIn()" 
-          (ChangeOnButtonHoverOut)="ChangeOnButtonHoverOut()"
-          (sendData)="''"
-          [disabled]="disabled"
-          [style]="style"
-        >
-          <div
-            class="flex flex-col space-y-1 items-center justify-between"
-          >
-            <h3>Subscribe</h3>
-          </div>
-        </app-botin>
-      </div>
   </div>
-</div>
-
-<div 
-   class='container mx-auto px-3 pb-10'
->
-    <p 
-      class="w-full flex justify-center text-[18px] mt-10 mb-5 text-gray-500"
-    >
-      Testimonials
-    </p>
-
-    <div 
-      class="flex-cols md:flex justify-center item-center gap-5"
-    >
-
-      <div 
-        class="w-full md:w-4/12 shadow-lg h-[300px] my-2"
-      >
-        
-      </div>
-      <div 
-        class="w-full md:w-4/12 shadow-lg h-[300px] my-2"
-      >
-       
-      </div>
-      <div 
-        class="w-full md:w-4/12 shadow-lg h-[300px] my-2"
-      >
-       
-      </div>
-
     </div>
 </div>
 
-<div 
-   class='container mx-auto p-3 h-[300px] shadow-lg mb-14'
->
 
+<div 
+  class="container mx-auto w-12/12 md:w-7/12 mt-14"
+>  
+  <p 
+    class="w-full text-center text-md font-bold text-gray-500 mb-4"
+  >
+     Professionals At Work
+  </p>
+
+  <swiper-container 
+    navigation="true" 
+    pagination="true"
+    autoplay="true" 
+    delay="3000" 
+    disable-on-interaction="false"
+    loop="true"
+  >
+     @for(slide of sliders(); track slide)
+     { 
+       <swiper-slide>
+         <img [src]="slide" />
+       </swiper-slide>
+     }
+   </swiper-container>  
+  <!-- At work ends here -->   
 </div>
 
 
-
-<div 
-   class='container mx-auto mb-20'
+<app-newsletter
 >
-   <div 
-     class="w-full flex-cols md:flex gap-2"
-   >
-     <div 
-       class="w-12/12 md:w-6/12 shadow-lg h-[350px] pl-3"
-     >
-        <p 
-          class="w-full flex justify-left text-[15px] mt-5 text-gray-500"
-        >
-          +++++
-        </p> 
-     </div>
+</app-newsletter>
 
-     <div 
-       class="w-12/12 md:w-6/12 shadow-lg h-[350px] pl-3"
-     >
-        <p 
-          class="w-full flex justify-left text-[15px] mt-5 text-gray-500"
-        >
-          *****
-        </p> 
-     </div>
-
-   </div>
-</div>
-
-
-<!-- <div 
-  class="container mx-auto p-4 z-50"
->
-    <div 
-      class="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center"
-    >
-        <div 
-          class="bg-white -mt-20 dark:bg-gray-900 dark:text-gray-100 p-8 rounded-lg shadow-lg max-w-md w-full relative"
-        >
-            <p
-              class="mb-6"
-            >
-                This is great
-            </p>
-            <ng-icon 
-              [svg]="close" 
-              [size]="'30'" 
-              [color]="'red'"
-              class="cursor-pointer text-xl"
-            />
-            <button 
-              class="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
-            >
-              +++++
-            </button>
-        </div>
-    </div>
-</div> -->
+  

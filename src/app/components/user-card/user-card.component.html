@@ -1,0 +1,39 @@
+<div 
+   class="col-span-6 md:col-span-6 shadow-lg pb-3"
+   (click)="viewUserInfo()"
+>
+  <div 
+    class="w-full bg-white border-2 border-gray-200 p-1 flex justify-center items-center"
+  >
+ 
+    <app-image
+      [src]="user().image"
+      [alt]="user().alt"
+      [ngClass]="'imageClass'"
+      [style]="imageStyle"
+      [width]="width"
+      [height]="height"
+    >
+    </app-image>
+  </div>
+  <div 
+    class="py-2 px-3 text-[15px] md:text-[17px]"
+  >         
+    <div 
+      class="w-full"
+    >
+      {{ user().firstname }} {{ user().surname }}
+    </div>
+   <div 
+     class="w-full"
+   >
+     {{ user().rating }}
+   </div>
+   <div 
+     class="w-full"
+   >
+     {{ user().status }}
+   </div>
+  </div>
+
+</div>    

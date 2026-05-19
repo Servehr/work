@@ -67,7 +67,7 @@ export class ActionsComponent
          return flexRenderComponent(
              BoteenComponent, {
               inputs: {
-                value: context.getValue<number>(),
+                value: context.getValue<{ count: number, data: any }>(),
                 boteenStyle: this.boteenStyle,
                 boteeName: this.boteeName,
                 boteenCssClass: this.linkCss

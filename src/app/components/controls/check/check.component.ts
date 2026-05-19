@@ -28,5 +28,6 @@ export class CheckComponent<T> extends CheckBoxValueAccessorDirective<T>
    @Input() disabled: boolean = false;
  
    @Input() customErrorMessages: Record<string, string> = {} 
+   
 
 }

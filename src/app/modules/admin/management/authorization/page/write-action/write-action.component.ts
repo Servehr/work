@@ -77,8 +77,8 @@ export class WriteActionComponent implements OnInit {
 
    ngOnInit(): void 
    {
-     this.store.select(getSpinnerStatus).subscribe((status: boolean) => {
-       this.isLoading = status
+     this.store.select(getSpinnerStatus).subscribe((data: any) => {
+      //  this.isLoading = status
      })
    }
 
@@ -112,7 +112,7 @@ export class WriteActionComponent implements OnInit {
     
     write = async () => 
     {
-      this.store.dispatch(SetLoadingStatus({ loading: true }))
+      this.store.dispatch(SetLoadingStatus({ loader: { loading: true, statusCode: 0 }}))
       if(this.actionForm.valid)
       {
         of(this.actionForm.value)
@@ -126,7 +126,7 @@ export class WriteActionComponent implements OnInit {
         )
       } else {
          this.actionForm.markAllAsTouched()
-         this.store.dispatch(SetLoadingStatus({ loading: false }))
+         this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 0 }}))
          this.message = "Attend to all fields"
          this.store.dispatch(SetErrorMessage({ msg: this.message, statusCode: 400, operation: "write-action"  }))
       }     

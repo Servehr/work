@@ -1,11 +1,13 @@
-import { Component, computed, signal, TemplateRef } from '@angular/core';
+import { Component, computed, effect, inject, input, signal, SimpleChanges, TemplateRef } from '@angular/core';
 import {
   createAngularTable,
   getCoreRowModel,
   ColumnDef,
   FlexRenderDirective,
   createColumnHelper,
-  flexRenderComponent
+  flexRenderComponent,
+  getPaginationRowModel,
+  PaginationState
 } from '@tanstack/angular-table';
 import { EditComponent } from '../../../../util/icons/edit/edit.component';
 import { DeleteComponent } from '../../../../util/icons/delete/delete.component';
@@ -15,6 +17,17 @@ import { NgIcon } from '@ng-icons/core';
 import { bootstrapPlusCircleFill } from '@ng-icons/bootstrap-icons';
 import { WriteCategoryComponent } from './write-category/write-category.component';
 import { RemoveComponent } from '../../../../shared/remove/remove.component';
+import { Store } from '@ngrx/store';
+import AppState from '../../../../state/app.state';
+import { getSpinnerStatus } from '../../../../state/selectors/spinner.selector';
+import { START_CATEGORY } from '../../../../state/actions/management/category.actions';
+import { getAllCategory } from '../../../../state/selectors/admin/management/category.action';
+import { toSentenceCase } from '../../../../util/text';
+import { LoaderComponent } from '../../../../components/loader/loader.component';
+import { sleepWait } from '../../../../util/sleep';
+import { BoteenComponent } from '../../../../util/icons/boteen/boteen.component';
+import { DivisionComponent } from './divisions/division/division.component';
+import { PaginationComponent } from '../../../../components/pagination/pagination.component';
 
 // 1. Define your data structure
 type Person = { firstName: string; lastName: string; age: number, gender: string }
@@ -24,7 +37,10 @@ const columnHelper = createColumnHelper<any>();
 @Component({
   selector: 'app-category',
   standalone: true,
-  imports: [FlexRenderDirective, ModalComponent, NgIcon, WriteCategoryComponent, RemoveComponent],
+  imports: [
+              FlexRenderDirective, NgIcon, 
+              PaginationComponent, DivisionComponent, WriteCategoryComponent, RemoveComponent, ModalComponent, ModalComponent, LoaderComponent,
+           ],
   templateUrl: './category.component.html',
   styleUrl: './category.component.scss'
 })
@@ -32,67 +48,166 @@ export class CategoryComponent {
 
   PageTitle: string = 'Categories'
   buttonName: string = ''
-  writeCategory: boolean = false
+  writeCategory = signal<boolean>(false)
   addIcon: any = bootstrapPlusCircleFill
+  isLoading = signal<boolean>(false)
+  divisions = signal<any>([])
+
+  category = signal<string>('')
+  path = signal<string>('')
+
+  // pagination
+  currentPage = signal<number>(1)
+  perPage  = signal<number>(5)
+  totalPages = signal<number>(5)
+  totalDocs =  signal<number>(10)
+  hasNextPage =  signal<boolean>(true)
+  hasPrevPage =  signal<boolean>(true)
 
   isModalOpen: boolean = false
   title: string = ''
   modalWidth: string = 'w-[700px]'
+  actions: boolean = false
+  dataToUpdate = signal<any>(null)
+  id = signal<string>("")
+
+  boteenStyle: any = {
+    'color': 'black',
+    'border': '2px solid #3e4095',
+    'border-radius': '10px'
+  }
+  linkCss: string = "text-black border-2 bg-gray-200 hover:bg-[#3e4095] hover:text-white"
+  unLinkCss: string = "text-black border-2 bg-yellow-200 hover:bg-gray-600 hover:text-white"
+  boteeName: string = 'Link'  
+
+  constructor(private store: Store<AppState>)
+  {
+    // this.store.dispatch(START_CATEGORY({ page: Number(this.currentPage()), limit: Number(this.perPage()) }))
+    effect(() => 
+    {
+       this.dataToUpdate() 
+    }) 
+  }   
 
   // 2. Define data
-  data = signal<Person[]>([
-    { firstName: 'Tanner', lastName: 'Linsley', age: 30, gender: 'Female' },
-    { firstName: 'Stephen', lastName: 'Fresh', age: 30, gender: 'Male' },
-    { firstName: 'Bimbo', lastName: 'Awomasun', age: 19, gender: 'Male' },
-    { firstName: 'Bright', lastName: 'Ben', age: 20, gender: 'Female' },
-    { firstName: 'Wasiu', lastName: 'Kehinde', age: 28, gender: 'Female' },
-  ]);
+  data = signal<any>([])
 
-  onConfirm = () => 
+  async ngOnInit()
   {
-     
-  } 
-
-  ToggleWithTitle = (status: string) => 
-  {
-    this.title = status
+    this.store.dispatch(START_CATEGORY({ page: Number(this.currentPage()), limit: Number(this.perPage()) }))
+    this.isLoading.set(true)    
     this.buttonName = 'Save'
-    this.writeCategory = true
+    await sleepWait(1000)
+    this.store.select(getSpinnerStatus).subscribe((data: any) => 
+    {
+      this.isLoading.set(data?.loader?.loading)
+      if(!data?.loader?.loading)
+      {
+        this.isModalOpen = false
+        this.isLoading.set(data?.loader?.loading)
+        // this.writeCategory.set(false)   
+      }
+    }) 
+
+    this.store.select(getAllCategory).subscribe((cat: any) => 
+    {
+      this.isLoading.set(false)
+      this.data.set(cat?.category)
+      this.currentPage.set(cat?.category?.pagination?.currentPage)
+      this.totalPages.set(cat?.category?.pagination?.totalPages)
+      this.hasPrevPage.set(cat?.category?.pagination?.hasPrevPage)
+      this.hasNextPage.set(cat?.category?.pagination?.hasNextPage)
+    })   
+    
+    
   }
 
-  handleClick(value: number, action: string): void 
+  writeCategori = () => 
   {
-     if(action === 'update')
+    this.dataToUpdate.set({ id: "", data: { name: '', description: '' } })
+    this.writeCategory.set(false)
+  }
+
+  create(value: string)
+  {
+    this.title = value
+    this.writeCategory.set(true)   
+  }
+
+  change(cellData: any): void 
+  {
+    this.title = 'Update Category'
+    this.buttonName = 'Update'
+    this.writeCategory.set(true)
+    // console.log(cellData)
+    this.dataToUpdate.set(cellData)
+  } 
+
+  ngOnChanges(changes: SimpleChanges)
+   {
+     if(changes['dataToUpdate'])
      {
-        this.title = 'Update Category'
-        this.buttonName = 'Update'
-        this.ToggleWithTitle(this.title)
-     } else {
-        this.isModalOpen = true
+        console.log(changes['dataToUpdate'])
      }
+  }  
+
+  remove(value: string): void 
+  {
+    this.title = 'Delete Category'
+    this.buttonName = 'Update'
+    this.isModalOpen = true
+    this.category.set(value)
+    this.path.set('category/remove')
   }  
 
   columns: ColumnDef<any>[] = [
     {
-       accessorKey: 'firstName',
-       header: 'First Name'
+      accessorKey: 'name',
+      header: 'Name',
+      cell: (info) => toSentenceCase(info.renderValue() as string),
     },
     {
-       accessorKey: 'lastName',
-       header: 'Last Name'
+      accessorKey: 'description',
+      header: 'Description',
+      cell: (info) => toSentenceCase(info.renderValue() as string),
     },
     {
-       accessorKey: '...',
+      accessorKey: 'divisions',
+      header: 'Divisions',
+      cell: (context) => {
+         return flexRenderComponent(
+            BoteenComponent, {
+              inputs: {
+                value: context.getValue<{ count: number, data: any }>(),
+                boteenStyle: this.boteenStyle,
+                boteenCssClass: this.unLinkCss,
+              },
+              outputs: {
+                clickEvent: (division) => this.categoryDivisions(division)
+              }
+            }
+          )
+       }       
+    },
+    {
+       accessorKey: 'change',
        header: '',
        cell: (context) => {
+        
+         const name: string = context.row.getValue('name')
+         const description: string = context.row.getValue('description')
+         const rowData: any =  { name, description }
+
          return flexRenderComponent(
             EditComponent, {
               inputs: {
-                value: context.getValue<number>()
+                value: context.getValue<string>(),
+                data: rowData
               },
               outputs: {
-                clickEvent: (value) => { 
-                  this.handleClick(value, 'update')
+                clickEvent: (cellData) => 
+                { 
+                  this.change(cellData)
                 }
               }
             }
@@ -100,16 +215,16 @@ export class CategoryComponent {
        }       
     },
     {
-       accessorKey: 'firstName',
+       accessorKey: 'remove',
        header: '',
-       cell: (context) => {
+       cell: (context,) => {
          return flexRenderComponent(
             DeleteComponent, {
               inputs: {
-                value: context.getValue<number>()
+                value: context.getValue<string>()
               },
               outputs: {
-                clickEvent: (value) => this.handleClick(value, 'delete')
+                clickEvent: (value) => this.remove(value)
               }
             }
          )
@@ -117,18 +232,56 @@ export class CategoryComponent {
     }
   ]
 
-  // 4. Create the table instance
-  table = createAngularTable(() => ({
-    data: this.data(),
-    columns: this.columns,
-    getCoreRowModel: getCoreRowModel(),
-  }))
+  pagination = signal<PaginationState>(
+    {
+      pageIndex: 0,
+      pageSize: 20,
+    }
+  )  
 
-  callOut = () => 
+  // 4. Create the table instance
+  table = createAngularTable(() => (
+    {
+      data: this.data(),
+      columns: this.columns,
+      // state: {
+      //   pagination: this.pagination(),
+      // },
+      // state: {
+      //    pagination: this.pagination()
+      // },
+      manualPagination: true,
+      getCoreRowModel: getCoreRowModel(),
+      rowCount: 12,
+    }
+  ));
+
+  // table = createAngularTable(() => ({
+  //   data: this.data(),
+  //   columns: this.columns,
+  //   getCoreRowModel: getCoreRowModel(),
+  // })) 
+
+  categoryDivisions(division: any): void
   {
-      alert("Yeah!! Good")
+    this.title = 'All division under category'
+    this.buttonName = 'Save'
+    this.actions = true        
+    this.dataToUpdate.set({ id: "", data: { name: "", description: "" } })
+    this.divisions.set(division) 
   }
 
+  onConfirm = () => 
+  {
+  }
+
+  getData = async (event: any) => 
+  {
+    this.currentPage.set(this.currentPage())
+    this.isLoading.set(true)  
+    await sleepWait(500)
+    this.store.dispatch(START_CATEGORY({ page: Number(event.page), limit: Number(this.perPage()) }))
+  }
 
 }
 

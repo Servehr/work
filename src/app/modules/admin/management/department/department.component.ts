@@ -57,19 +57,7 @@ export class DepartmentComponent {
     this.title = status
     this.buttonName = 'Save'
     this.writeDepartment = true
-  }
-
-  handleClick(value: number, action: string): void 
-  {
-     if(action === 'update')
-     {
-        this.title = 'Update Department'
-        this.buttonName = 'Update'
-        this.ToggleWithTitle(this.title)
-     } else {
-        this.isModalOpen = true
-     }
-  }  
+  } 
 
   columns: ColumnDef<any>[] = [
     {
@@ -84,14 +72,21 @@ export class DepartmentComponent {
        accessorKey: '...',
        header: '',
        cell: (context) => {
+        
+        //  const name: string = context.row.getValue('name')
+        //  const description: string = context.row.getValue('description')
+         const rowData: any =  { name: '', description: '' }
+
          return flexRenderComponent(
             EditComponent, {
               inputs: {
-                value: context.getValue<number>()
+                value: context.getValue<string>(),
+                data: rowData
               },
               outputs: {
-                clickEvent: (value) => { 
-                  this.handleClick(value, 'update')
+                clickEvent: (cellData) => 
+                { 
+                  this.change(cellData)
                 }
               }
             }
@@ -105,7 +100,7 @@ export class DepartmentComponent {
          return flexRenderComponent(
             DeleteComponent, {
               inputs: {
-                value: context.getValue<number>()
+                value: context.getValue<string>()
               },
               outputs: {
                 clickEvent: (value) => this.handleClick(value, 'delete')
@@ -127,6 +122,23 @@ export class DepartmentComponent {
   {
       alert("Yeah!! Good")
   }
+
+  handleClick(value: string, action: string): void 
+  {
+     if(action === 'update')
+     {
+        this.title = 'Update Department'
+        this.buttonName = 'Update'
+        this.ToggleWithTitle(this.title)
+     } else {
+        this.isModalOpen = true
+     }
+  } 
+
+  change(value: any): void 
+  {
+     this.isModalOpen = true
+  } 
 
 
 }

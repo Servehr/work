@@ -4,16 +4,15 @@
   [type]="type"
   [placeholder]="placeholder"
   class="p-4 border-2 border-gray-200 shadow-md bg-white text-black w-full"
-  (click)="InputFocus()"
+  (click)="InputChange($event)"
   [required]="isRequired"
+  [value]="value"
+  [(ngModel)]="value"
   [formControl]="control"
-  (input)="InputChange($event)"
-  [disabled]="disabled"
-  [value]="''"
-  [ngStyle]="style"
 />
 <!-- rounded-lg -->
 
+ 
 <app-input-field-validation 
   [customErrorMessages]="customErrorMessages" 
   [errors]="control.errors"

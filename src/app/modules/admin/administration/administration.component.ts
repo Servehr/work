@@ -46,7 +46,12 @@ export class AdministrationComponent {
   }
 
 
-  handleClick(value: number): void 
+  handleClick(value: string): void 
+  {
+     this.isModalOpen = true
+  }  
+
+  change(cellData: any): void 
   {
      this.isModalOpen = true
   }  
@@ -64,13 +69,22 @@ export class AdministrationComponent {
        accessorKey: '...',
        header: '',
        cell: (context) => {
+        
+         const name: string = context.row.getValue('name')
+         const description: string = context.row.getValue('description')
+         const rowData: any =  { name, description }
+
          return flexRenderComponent(
             EditComponent, {
               inputs: {
-                value: context.getValue<number>()
+                value: context.getValue<string>(),
+                data: rowData
               },
               outputs: {
-                clickEvent: (value) => this.handleClick(value)
+                clickEvent: (cellData) => 
+                { 
+                  this.change(cellData)
+                }
               }
             }
          )
@@ -83,7 +97,7 @@ export class AdministrationComponent {
          return flexRenderComponent(
             DeleteComponent, {
               inputs: {
-                value: context.getValue<number>()
+                value: context.getValue<string>()
               },
               outputs: {
                 clickEvent: (value) => this.handleClick(value)

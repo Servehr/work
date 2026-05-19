@@ -1,5 +1,5 @@
 // modal.component.ts
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -14,8 +14,8 @@ export class ModalComponent {
   @Input() isOpen = false;
   @Input() title = 'Modal Title'
   @Input() modalWidth: string = 'w-[750px]'
-  @Output() closeModal = new EventEmitter<void>();
-  @Output() confirmAction = new EventEmitter<void>();
+  closeModal = output<void>();
+  confirmAction = output<void>();
 
   close() 
   {

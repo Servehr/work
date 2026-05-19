@@ -85,8 +85,8 @@ export class TakeActionOnStaffComponent implements OnInit {
 
    ngOnInit(): void 
    {
-     this.store.select(getSpinnerStatus).subscribe((status: boolean) => {
-       this.isLoading = status
+     this.store.select(getSpinnerStatus).subscribe((data: any) => {
+      //  this.isLoading = status
      })
    }
 

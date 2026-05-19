@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import { Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
 import { FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { InputFieldValidationComponent } from '../../../validations/input-field-validation/input-field-validation.component';
@@ -10,7 +10,7 @@ type InputType = 'text' | 'password' | 'email' | 'number'
 @Component({
   selector: 'input-field',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, InputFieldValidationComponent],
+  imports: [CommonModule, FormsModule, NgClass, ReactiveFormsModule, InputFieldValidationComponent],
   templateUrl: './input-field.component.html',
   styleUrl: './input-field.component.scss',
   providers: [
@@ -24,8 +24,8 @@ type InputType = 'text' | 'password' | 'email' | 'number'
 export class InputFieldComponent<T> extends InputFieldValueAccessorDirective<T> {
 
     // style: string = 'rounded-lg'
-
-    style: any = {
+   @Input()
+   style: any = {
        'border-raidus' : '0%'
     }
 
@@ -42,7 +42,13 @@ export class InputFieldComponent<T> extends InputFieldValueAccessorDirective<T> 
     placeholder: string = ""
 
     @Input()
-    override value: string = ""
+    userValue: string = ''
+
+   //  @Input()
+   //  override value: string = ""
+
+   //  @Input()
+   //  value: string = 'innocent'
 
     @Input()
     disabled: boolean = false
@@ -55,7 +61,11 @@ export class InputFieldComponent<T> extends InputFieldValueAccessorDirective<T> 
     InputChange(event: any)
     {
       let userInput = event?.target?.value
+      this.value = userInput
       this.changedInput.emit({ value: userInput, type: this.name })
+
+      // const val = (event.target as HTMLInputElement).value;
+      // this.value = val
     }
 
     InputFocus()

@@ -13,15 +13,17 @@ import { NgIcon } from '@ng-icons/core';
 export class EditComponent {
   
   editIcon: any = bootstrapCrosshair2
-  readonly value = input.required<number>()
-  readonly clickEvent = output<number>()
+  readonly value = input.required<string>()
+  readonly data = input.required<any>()
+  readonly clickEvent = output<{ id: string, data: any }>()
   editColor: string = 'blue'
   style: any = {
     'color': 'blue'
   }
 
-  onClick(): void {
-    this.clickEvent.emit(this.value())
+  onClick(): void 
+  {
+    this.clickEvent.emit({ id: this.value(), data: this.data()})
   }
 
   ChangeOnButtonHoverIn()

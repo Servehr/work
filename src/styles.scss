@@ -1,5 +1,9 @@
+@import 'ngx-toastr/toastr';
+
+
 @import 'quill/dist/quill.core.css';
 @import 'quill/dist/quill.snow.css';
+
 
 
 .table-row {
@@ -17,13 +21,24 @@
 }
 
 
+.toast-message {
+  font-size: 13px; /* Adjust as needed */
+  font-weight: normal;
+}
 
+.toast-title {
+  font-size: 14px; /* Adjust as needed */
+  font-weight: bold;
+}
 
 
 /* You can add global styles to this file, and also import other style files */
 @tailwind base;
 @tailwind components;
 @tailwind utilities
+
+
+
 
 
 

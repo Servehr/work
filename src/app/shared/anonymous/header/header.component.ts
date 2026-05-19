@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, SimpleChanges } from '@angular/core';
 import { LogoComponent } from '../../../components/logo/logo.component';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { bootstrapList, bootstrapXLg, bootstrapGrid1x2Fill, bootstrapHouseDoorFill, bootstrapFacebook, bootstrapTwitter, bootstrapInstagram, bootstrapYoutube, bootstrapTiktok, bootstrapPersonFill, bootstrapPersonPlusFill, bootstrapPower } from '@ng-icons/bootstrap-icons';
@@ -13,11 +13,16 @@ import { LoaderComponent } from '../../../components/loader/loader.component';
 import { DatabaseService } from '../../../service/db/database.service';
 import { PASS_THE_TOKEN } from '../../../state/actions/auth.actions';
 import { BroadcastService } from '../../../service/util/broadcast.service';
+import { ModalComponent } from '../../../components/modal/modal.component';
+import { PostComponent } from '../../../modules/user/post/post.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, NgIcon, RouterModule, LogoComponent, LoaderComponent, NgIf],
+  imports: [
+              CommonModule, NgIcon, RouterModule, NgIf, 
+              LogoComponent, LoaderComponent, ModalComponent, PostComponent
+           ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
@@ -25,10 +30,19 @@ export class HeaderComponent implements OnInit {
 
     authService = inject(AuthService)
     store = inject(Store<AppState>)
+    private subscription!: Subscription
     dbService = inject(DatabaseService)
     broadcastService = inject(BroadcastService)
     router = inject(Router)
-    private subscription!: Subscription
+    postJob = signal<boolean>(false)
+
+    modalWidth = signal<string>('w-[700px]')
+    style =  signal({
+      'background-color' : '#be9d18',
+      'color': 'black',
+      'padding': '20px'
+    })
+    
     
     IsInSession: boolean = false
     logOut = signal(false);
@@ -42,6 +56,7 @@ export class HeaderComponent implements OnInit {
         { page: 'Partners', route: '/partner' },
         { page: 'jobs', route: '/jobs' },
         { page: 'community', route: '/community' },
+        { page: 'plan', route: '/plan' },
         { page: 'blog', route: '/blog' },
         { page: 'faq', route: '/faq' },
         { page: 'contact', route: '/contact' }
@@ -107,6 +122,29 @@ export class HeaderComponent implements OnInit {
        this.logoutColor = state === 'over' ?  'red' :  'red'
     }
 
+   ChangeOnButtonHoverIn()
+   {
+      this.style.set({
+        'background-color' : '#776005',
+        'color': 'white',
+        'padding': '20px'         
+      })
+    }
+
+    ChangeOnButtonHoverOut()
+    {
+       this.style.set({
+          'background-color' : '#be9d18',
+          'color': 'black',
+          'padding': '20px'        
+       }) 
+    }
+
+    write()
+    {
+
+    }
+
     harmburger()
     {       
       this.openMobileNav = !this.openMobileNav;
@@ -131,6 +169,11 @@ export class HeaderComponent implements OnInit {
        })
     }
 
+    wrteCategory()
+    {
+
+    }
+
     sendMessage(): void 
     {
       const message = `User action at ${new Date().toLocaleTimeString()}`;
@@ -142,6 +185,26 @@ export class HeaderComponent implements OnInit {
       this.subscription.unsubscribe();
       // Optionally close the channel here if no other components use it
       // this.broadcastService.close(); 
+    }
+
+    onConfirm(): void 
+    {
+
+    }   
+
+    jobPost(): void 
+    {
+      this.postJob.update((toggle) => !toggle)
+    }
+
+    cancelModal()
+    {
+       this.postJob.set(false)
+    }
+
+    closeModal()
+    {
+      this.postJob.update((toggle) => !toggle)
     }
 
 }

@@ -71,7 +71,7 @@ export class TechniciansComponent {
          return flexRenderComponent(
             ViewComponent, {
               inputs: {
-                value: context.getValue<number>()
+                value: context.getValue<string>()
               },
               outputs: {
                 clickEvent: (value) => this.viewUser(value)
@@ -87,7 +87,7 @@ export class TechniciansComponent {
          return flexRenderComponent(
             DeleteComponent, {
               inputs: {
-                value: context.getValue<number>()
+                value: context.getValue<string>()
               },
               outputs: {
                 clickEvent: (value) => this.handleClick(value)
@@ -110,12 +110,12 @@ export class TechniciansComponent {
       alert("Yeah!! Good")
   }
 
-  handleClick(value: number): void 
+  handleClick(value: string): void 
   {
      this.takeActionOnStaff = true
   } 
 
-  viewUser(value: number)
+  viewUser(value: string)
   {
     this.viewingInfo = true
   }

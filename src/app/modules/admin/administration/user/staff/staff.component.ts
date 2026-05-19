@@ -100,8 +100,8 @@ export class StaffComponent  implements OnInit {
   
   ngOnInit(): void 
   {
-    this.store.select(getSpinnerStatus).subscribe((status: boolean) => {
-      this.isLoading = status
+    this.store.select(getSpinnerStatus).subscribe((data: any) => {
+      // this.isLoading = status
     })
   }  
 
@@ -143,7 +143,7 @@ export class StaffComponent  implements OnInit {
          return flexRenderComponent(
             BoteenComponent, {
               inputs: {
-                 value: context.getValue<number>(),
+                 value: context.getValue<{ count: number, data: any }>(),
                  boteenStyle: this.boteenStyle,
                  boteeName: this.boteeName,
                  boteenCssClass: this.linkCss
@@ -175,17 +175,26 @@ export class StaffComponent  implements OnInit {
        accessorKey: '...',
        header: '',
        cell: (context) => {
+        
+        //  const name: string = context.row.getValue('name')
+        //  const description: string = context.row.getValue('description')
+         const rowData: any =  { name: '', description: '' }
+
          return flexRenderComponent(
             EditComponent, {
               inputs: {
-                value: context.getValue<number>()
+                value: context.getValue<string>(),
+                data: rowData
               },
               outputs: {
-                clickEvent: (value) => this.handleClick(value)
+                clickEvent: (cellData) => 
+                { 
+                  this.change(cellData)
+                }
               }
             }
          )
-       }       
+       }        
     },
     {
        accessorKey: 'firstName',
@@ -194,7 +203,7 @@ export class StaffComponent  implements OnInit {
          return flexRenderComponent(
             DeleteComponent, {
               inputs: {
-                value: context.getValue<number>()
+                value: context.getValue<string>()
               },
               outputs: {
                 clickEvent: (value) => this.takeAction(value)
@@ -215,11 +224,6 @@ export class StaffComponent  implements OnInit {
   callOut = () => 
   {
       alert("Yeah!! Good")
-  }
-
-  takeAction(data: number)
-  {
-     this.takeActionOnStaff = true
   }
 
   closeModal()
@@ -262,12 +266,22 @@ export class StaffComponent  implements OnInit {
     this.writeStaff = true
   }  
 
-  handleClick(value: number): void 
+  takeAction(data: string)
   {
-    this.title = 'Update Staff'
+     this.takeActionOnStaff = true
+  }
+
+  handleClick(value: string): void 
+  {
+    this.title = 'Update ...'
     this.buttonName = 'Save'
-    this.writeStaff = true
+    this.isModalOpen = true
   } 
+
+  change(value: any): void 
+  {
+     this.isModalOpen = true
+  }  
 
   administer(value: number): void 
   {

@@ -12,7 +12,7 @@ import { NgIcon } from '@ng-icons/core';
 })
 export class BoteenComponent {
   
-  readonly value = input.required<number>()
+  readonly value = input.required<{ count: number, data: any }>()
   readonly clickEvent = output<number>()
   boteenStyle = input.required<any>()
   readonly boteeName = input.required()
@@ -24,7 +24,7 @@ export class BoteenComponent {
   }
 
   onClick(): void {
-    this.clickEvent.emit(this.value())
+    this.clickEvent.emit(this.value()?.data)
   }
 
   ChangeOnButtonHoverIn()

@@ -12,7 +12,7 @@ export class InputFieldValueAccessorDirective<T> implements ControlValueAccessor
     isRequired = false
     
     @Input()
-    value: string = ''
+    value: string = 'saw'
 
     private _isDisabled: Boolean = false
     private _isDestroyed$: any = new Subject<void>()
@@ -47,9 +47,38 @@ export class InputFieldValueAccessorDirective<T> implements ControlValueAccessor
        }
     }
 
-    writeValue(value: T): void {
-      this.control ? this.control?.setValue(value) : (this.control = new FormControl(value) )
+    writeValue(value: T): void 
+    {
+      // console.log(this.control.value)
+      // this.control ? this.control?.setValue(value) : (this.control = new FormControl(value) )
       // console.log(this.control)
+
+      // if (value === null) {
+      //    this.control.reset(); // Clear internal form control
+      // }
+      // console.log(value)
+      // if (value !== null) {
+      //    // this.control ? this.control?.setValue(value) : (this.control = new FormControl(value) )
+      //    if(this.control)
+      //    {
+      //       this.control?.setValue(value)
+      //    } else {
+      //       console.log('Here')
+      //       this.control = new FormControl(value)
+      //    }
+      // }      
+      
+      // if (value) {
+      //    // Use { emitEvent: false } to stop recursion
+      //    this.control.setValue(value, { emitEvent: false });
+      // }
+
+      if (value !== this.control.value) 
+      { 
+         // Only update if different
+         // console.log(value)
+         this.control.patchValue(value, { emitEvent: false });
+      }
     }
 
     registerOnChange(fn: (val: T | null) => T): void {
@@ -59,8 +88,10 @@ export class InputFieldValueAccessorDirective<T> implements ControlValueAccessor
              startWith(this.control.value),
              distinctUntilChanged(),
              tap((val) => fn(val))
-          ).subscribe(() => {
+          ).subscribe((data) => {
+            //  console.log(this.control.value)
             // this.control?.markAsUntouched()
+            // this._onChanged(data)
           })
     }
 
@@ -71,6 +102,16 @@ export class InputFieldValueAccessorDirective<T> implements ControlValueAccessor
     setDisabledState?(isDisabled: boolean): void {
        this._isDisabled = isDisabled
     }
+
+    onInputChange(event: Event)
+    {
+       const val = (event.target as HTMLInputElement).value
+      //  this.control = val
+      this.value = val
+      this._onChanged(val)
+    }
+
+    
     
 
 }

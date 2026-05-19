@@ -64,19 +64,26 @@ export class RexourceComponent
        accessorKey: '...',
        header: '',
        cell: (context) => {
+        
+        //  const name: string = context.row.getValue('name')
+        //  const description: string = context.row.getValue('description')
+         const rowData: any =  { name: '', description: '' }
+
          return flexRenderComponent(
             EditComponent, {
               inputs: {
-                value: context.getValue<number>()
+                value: context.getValue<string>(),
+                data: rowData
               },
               outputs: {
-                clickEvent: (value) => { 
-                  this.handleClick(value, 'update')
+                clickEvent: (cellData) => 
+                { 
+                  this.change(cellData)
                 }
               }
             }
          )
-       }       
+       }         
     },
     {
        accessorKey: 'firstName',
@@ -85,7 +92,7 @@ export class RexourceComponent
          return flexRenderComponent(
             DeleteComponent, {
               inputs: {
-                value: context.getValue<number>()
+                value: context.getValue<string>()
               },
               outputs: {
                 clickEvent: (value) => this.handleClick(value, 'delete')
@@ -108,7 +115,7 @@ export class RexourceComponent
     this.writeRexource = true
   }
 
-  handleClick(value: number, action: string): void 
+  handleClick(value: string, action: string): void 
   {
      if(action === 'update')
      {
@@ -119,6 +126,11 @@ export class RexourceComponent
         this.isModalOpen = true
      }
   }
+
+  change(value: any): void 
+  {
+     this.isModalOpen = true
+  }  
 
   // 4. Create the table instance
   table = createAngularTable(() => ({

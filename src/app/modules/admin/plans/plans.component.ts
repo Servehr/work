@@ -55,17 +55,26 @@ export class PlansComponent {
        accessorKey: '...',
        header: '',
        cell: (context) => {
+        
+        //  const name: string = context.row.getValue('name')
+        //  const description: string = context.row.getValue('description')
+         const rowData: any =  { name: '', description: '' }
+
          return flexRenderComponent(
             EditComponent, {
               inputs: {
-                value: context.getValue<number>()
+                value: context.getValue<string>(),
+                data: rowData
               },
               outputs: {
-                clickEvent: (value) => this.writeOperation(value)
+                clickEvent: (cellData) => 
+                { 
+                  this.change(cellData)
+                }
               }
             }
          )
-       }       
+       }        
     },
     {
        accessorKey: 'firstName',
@@ -74,7 +83,7 @@ export class PlansComponent {
          return flexRenderComponent(
             DeleteComponent, {
               inputs: {
-                value: context.getValue<number>()
+                value: context.getValue<string>()
               },
               outputs: {
                 clickEvent: (value) => this.removeOperation(value)
@@ -102,12 +111,17 @@ export class PlansComponent {
      
   }
 
-  removeOperation(value: number): void 
+  removeOperation(value: string): void 
   {
      this.planOut = true
   }
 
-  writeOperation(value: number): void 
+  change(value: any): void 
+  {
+     this.isModalOpen = true
+  }  
+
+  writeOperation(value: string): void 
   {
      this.planUp = true
   } 

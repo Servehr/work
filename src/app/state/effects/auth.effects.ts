@@ -25,28 +25,30 @@ export class AuthEffect {
     login$ = createEffect(() => {
       return this.actions$.pipe(
         ofType(START_LOGIN),
-          exhaustMap((action) => {
+          switchMap((action) => {
             return this.authService.login(action.email, action.password)
              .pipe(
                 map((data) => {
+                  console.log(data)
+                  console.log("Talk to me")
                   let stringIt = JSON.stringify(data?.data)
                   let parsetData = JSON.parse(stringIt)
                   Object.assign(parsetData?.user, { token: data?.data?.token })
                   const user = this.authService.formatUserResponse(data?.message, parsetData?.user)
-                  this.store.dispatch(SetErrorMessage({ msg: data?.message, statusCode: data?.statusCode, operation: "authenticate-user"  }))
-                  this.store.dispatch(SetLoadingStatus({ loading: false }))
+                  this.store.dispatch(SetErrorMessage({ msg: data?.message, statusCode: data?.statusCode, operation: "authenticate-uxer"  }))
+                  this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 0 }}))
                   return LOGIN_SUCCESS({ auth: user });
               }),
               catchError((err: any) => 
                 {
                   this.store.dispatch(SetErrorMessage({ msg: err.error?.message, statusCode: err.error?.statusCode, operation: "authenticate-user"  }))
-                  this.store.dispatch(SetLoadingStatus({ loading: false }))
+                  this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 400 }}))
                   return of();
                 }
               )
             )
-          })
-      )
+          })      
+        )
     })
 
     loginRedirect$ = createEffect(() => {
@@ -66,13 +68,13 @@ export class AuthEffect {
              .pipe(
                 map((data) => {
                   this.store.dispatch(SetErrorMessage({ msg: data?.message, statusCode: data?.statusCode, operation: "register-user"  }))
-                  this.store.dispatch(SetLoadingStatus({ loading: false }))
+                  this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 0 }}))
                    return REGISTER_SUCCESS({ data: data?.data })
                 }),
                 catchError((err: any) => 
                   {
                     this.store.dispatch(SetErrorMessage({ msg: err.error?.message, statusCode: err.error?.statusCode, operation: "register-user"  }))
-                    this.store.dispatch(SetLoadingStatus({ loading: false }))
+                    this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 0 }}))
                     return of();
                   }
                 )
@@ -116,13 +118,13 @@ export class AuthEffect {
                   console.log(data)
                   console.log(data?.data)
                   this.store.dispatch(SetErrorMessage({ msg: data?.message, statusCode: data?.statusCode, operation: "forgot-user"  }))
-                  this.store.dispatch(SetLoadingStatus({ loading: false }))
+                  this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 0 }}))
                   return FORGOT_SUCCESS()
                 }),
                 catchError((err: any) => 
                   {
                     this.store.dispatch(SetErrorMessage({ msg: err.error?.message, statusCode: err.error?.statusCode, operation: "forgot-user"  }))
-                    this.store.dispatch(SetLoadingStatus({ loading: false }))
+                    this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 0 }}))
                     return of();
                   }
                 )
@@ -139,13 +141,13 @@ export class AuthEffect {
              .pipe(
                 map((data) => {
                   this.store.dispatch(SetErrorMessage({ msg: data?.message, statusCode: data?.statusCode, operation: "reset-user-password"  }))
-                  this.store.dispatch(SetLoadingStatus({ loading: false }))
+                  this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 0 }}))
                   return RESET_PASSWORD_SUCCESS()
                 }),
                 catchError((err: any) => 
                   {
                     this.store.dispatch(SetErrorMessage({ msg: err.error?.message, statusCode: err.error?.statusCode, operation: "reset-user-password"  }))
-                    this.store.dispatch(SetLoadingStatus({ loading: false }))
+                    this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 0 }}))
                     return of();
                   }
                 )

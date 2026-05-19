@@ -1,5 +1,10 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, input, Output, signal } from '@angular/core';
 import { BotinComponent } from '../../components/controls/botin/botin.component';
+import { Store } from '@ngrx/store';
+import AppState from '../../state/app.state';
+import { REMOVE } from '../../state/actions/management/category.actions';
+import { sleepWait } from '../../util/sleep';
+import { getSpinnerStatus } from '../../state/selectors/spinner.selector';
 
 @Component({
   selector: 'app-remove',
@@ -11,6 +16,22 @@ import { BotinComponent } from '../../components/controls/botin/botin.component'
 export class RemoveComponent {
 
   @Output() close: EventEmitter<void> = new EventEmitter()
+  isLoading = signal<boolean>(false)
+  path = input.required<string>()
+  category = input.required<string>()
+
+  constructor(private store: Store<AppState>)
+  {
+    this.store.select(getSpinnerStatus).subscribe((data: any) => 
+    {
+       this.isLoading.set(data?.loader?.loading)
+       if(!data?.loader?.loading)
+       {
+         this.isLoading.set(data?.loader?.loading)
+         // this.relate()
+       }
+    })
+  }   
   
   style: any = {
     'background-color' : '#be9d18',
@@ -41,9 +62,11 @@ export class RemoveComponent {
      this.close.emit()     
   }
 
-  remove()
+  remove = async () =>
   {
-
+    this.isLoading.set(true)
+    await sleepWait(1000)
+    this.store.dispatch(REMOVE({ path: this.path(), model: this.category() }))
   }
 
 }

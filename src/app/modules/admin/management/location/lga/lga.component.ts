@@ -67,19 +67,7 @@ export class LgaComponent {
     this.title = status
     this.buttonName = 'Save'
     this.writeLocalGovernment = true
-  }
-
-  handleClick(value: number, action: string): void 
-  {
-     if(action === 'update')
-     {
-        this.title = 'Update Local Government Area'
-        this.buttonName = 'Update'
-        this.ToggleWithTitle(this.title)
-     } else {
-        this.isModalOpen = true
-     }
-  }  
+  } 
 
   columns: ColumnDef<any>[] = [
     {
@@ -98,19 +86,26 @@ export class LgaComponent {
        accessorKey: '...',
        header: '',
        cell: (context) => {
+        
+        //  const name: string = context.row.getValue('name')
+        //  const description: string = context.row.getValue('description')
+         const rowData: any =  { name: '', description: '' }
+
          return flexRenderComponent(
             EditComponent, {
               inputs: {
-                value: context.getValue<number>()
+                value: context.getValue<string>(),
+                data: rowData
               },
               outputs: {
-                clickEvent: (value) => { 
-                  this.handleClick(value, 'update')
+                clickEvent: (cellData) => 
+                { 
+                  this.change(cellData)
                 }
               }
             }
          )
-       }       
+       }        
     },
     {
        accessorKey: 'firstName',
@@ -119,7 +114,7 @@ export class LgaComponent {
          return flexRenderComponent(
             DeleteComponent, {
               inputs: {
-                value: context.getValue<number>()
+                value: context.getValue<string>()
               },
               outputs: {
                 clickEvent: (value) => this.handleClick(value, 'delete')
@@ -148,6 +143,24 @@ export class LgaComponent {
     this.buttonName = 'Save'
     this.isCountryState = true     
   }
+
+  handleClick(value: string, action: string): void 
+  {
+     if(action === 'update')
+     {
+        this.title = 'Update Local Government Area'
+        this.buttonName = 'Update'
+        this.ToggleWithTitle(this.title)
+     } else {
+        this.isModalOpen = true
+     }
+  }  
+
+  change(value: any): void 
+  {
+     this.isModalOpen = true
+  } 
+  
 
 }
 

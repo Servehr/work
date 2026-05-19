@@ -84,8 +84,8 @@ export class WriteStateComponent implements OnInit {
 
    ngOnInit(): void 
    {
-     this.store.select(getSpinnerStatus).subscribe((status: boolean) => {
-       this.isLoading = status
+     this.store.select(getSpinnerStatus).subscribe((data: any) => {
+      //  this.isLoading = status
      })
    }
 
@@ -119,7 +119,7 @@ export class WriteStateComponent implements OnInit {
     
     write = async () => 
     {
-      this.store.dispatch(SetLoadingStatus({ loading: true }))
+      this.store.dispatch(SetLoadingStatus({ loader: { loading: true, statusCode: 0 }}))
       if(this.stateForm.valid)
       {
         of(this.stateForm.value)
@@ -133,7 +133,7 @@ export class WriteStateComponent implements OnInit {
         )
       } else {
          this.stateForm.markAllAsTouched()
-         this.store.dispatch(SetLoadingStatus({ loading: false }))
+         this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 0 }}))
          this.message = "Attend to all fields"
          this.store.dispatch(SetErrorMessage({ msg: this.message, statusCode: 400, operation: "write-state"  }))
       }     

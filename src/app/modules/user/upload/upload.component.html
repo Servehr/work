@@ -1,93 +1,26 @@
 <div 
-   class="d-flex justify-center items-center mx-auto w-full pt-20"
+  class="relative d-flex justify-center items-center mx-auto w-9/12 md:w-4/12 mb-80 rounded-lg bg-cover bg-top object-cover object-fit mt-20 cursor-pointer hover:text-green-300"
 >
-  <div
-    class="flex mb-2 text-md font-bold text-gray-500 mx-auto justify-center items-center p-5"
+  <app-image-upload
+    (sendFile)="saveFile($event, 'passport')"
   >
-    Upload Passport
-  </div>
-  
-  <div 
-    class="relative d-flex justify-center items-center mx-auto border-2 w-9/12 md:w-4/12 mb-80 rounded-lg shadow-lg bg-cover bg-top object-cover object-fit mt-1 justify-center items-center cursor-pointer hover:text-green-300 uploader"
-  >  
-    <!-- @if(passportPhotograph.length === 0)
-    { -->
-      <div 
-       appDragDrop
-       (dropFile)="dropFile($event, 'passport')"
-       class="dropzone flex p-3 h-[200px]"
+    <p 
+      class="text-gray-800 text-md w-full flex mb-5 mx-auto justify-center items-center"
+    >
+      Upload Passport Photograph
+    </p>
+  </app-image-upload>  
+
+   <div 
+     class="md:flex mb-3 w-2/2 text-gray-700 mt-10"
+   >
+      <app-botin
+        (sendData)="closeModal()"
+        class="bg-blue-900 p-2 rounded-md text-gray-200 hover:bg-yellow-700 w-full"
+        [ngStyle]="style"
       >
-        <div 
-          class="w-full flex justify-center items-center text-sm"
-        >
-          <p 
-            class="text-[12px]"
-          >
-            Drag and drop a file or 
-            <a 
-              class="cursor-pointer text-blue-700 font-bold"
-              (click)="selectPhotoFile.click()"
-            >
-              Browse
-            </a>
-            for a file
-          </p>
-         </div>
-       </div>
-       <!-- } -->
-       
-       <input 
-         multiple
-         #selectPhotoFile
-         (change)="onFileSelectedChange($event, 'passport')"
-         type='file' 
-         id='passport' 
-         name='passport' 
-         class='hidden'
-       />
-
-       <div 
-         appDragDrop
-         class="relative object-cover z-40 mx-auto flex justify-center items-center"
-         (click)="selectPhotoFile.click()"
-         (dropFile)="dropFile($event, 'passport')"
-       >
-        <!-- @if(passportPhotograph.length > 0)
-        { 
-          @for(image of passportPhotograph; track image.key)
-          { -->
-            <!-- <app-image
-              [src]="passportPhotograph[0]"
-              [alt]="'alt'"
-              [height]="280"
-              [width]="280"
-              [style]="imageStyle"
-            >
-            </app-image> -->
-         <!-- } -->
-           <!-- <div 
-             class="absolute rounded-full text-blue-800 bg:text-gray-400 text-[10px] font-bold py-1 px-3 m-3 bg-yellow-300"
-           >
-              Click to change image
-           </div> -->
-            <!-- }             -->
-       </div>
-
-       <!-- @if(passportPhotograph.length > 0)
-       { -->
-         <div 
-           class="mt-3 w-fit text-right text-red-600 z-50 bg-white py-1 px-2 hover:bg-yellow-100 rounded-full"
-         >
-           <ng-icon 
-            [svg]="deleteIcon" 
-            [size]="'15'" 
-            [color]="'red'"
-            (click)="removeImages('passport')"
-           />
-         </div>
-       <!-- }  -->
-  </div>
-
+        <h3>Upload </h3>
+      </app-botin>
+   </div>
 
 </div>
-

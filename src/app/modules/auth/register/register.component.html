@@ -19,7 +19,7 @@
       <form 
         [formGroup]="registerForm"
         class="flex flex-col space-y-5"
-    >
+      >
 
         <div 
           class="flex"
@@ -175,6 +175,20 @@
                 Upload NIN
               </p>
             </app-image-upload>
+          </div>
+        </div>
+
+        <div 
+            class="w-full flex justify-between mx-auto gap-10"
+        >
+          <div 
+            class="w-full md:w-4/12"
+          >
+             <p>Upload File</p>
+             <app-input-file 
+               formControlName="myFile"
+             >
+             </app-input-file>
           </div>
         </div>
         

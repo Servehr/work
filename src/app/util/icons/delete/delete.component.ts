@@ -13,15 +13,15 @@ import { NgIcon } from '@ng-icons/core';
 export class DeleteComponent {
   
   deleteIcon: any = bootstrapTrash
-  readonly value = input.required<number>()
-  readonly clickEvent = output<number>()
+  readonly value = input.required<string>()
+  readonly clickEvent = output<string>()
   editColor: string = 'red'
   style: any = {
     'color': 'red'
   }
 
-  onClick(): void {
-    console.log(this.value)
+  onClick(): void 
+  {
     this.clickEvent.emit(this.value())
   }
 

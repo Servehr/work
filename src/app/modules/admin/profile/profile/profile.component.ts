@@ -22,19 +22,19 @@ export class ProfileComponent implements OnInit {
 
   constructor(private store: Store<AppState>) 
   { 
-    this.store.select(getProfile).subscribe((data) => 
-      {
-         console.log(data)
-        //  const { statusCode, msg } = data.response
-        //  this.message = msg
-        //  this.statusCode = statusCode
-      }) 
+    // this.store.select(getProfile).subscribe((data) => 
+    //   {
+    //      console.log(data)
+    //     //  const { statusCode, msg } = data.response
+    //     //  this.message = msg
+    //     //  this.statusCode = statusCode
+    //   }) 
     } 
 
   ngOnInit(): void 
   {
     const user: string = "69b42aa7e4551c3510a26a7f"
-    this.store.dispatch(SetLoadingStatus({ loading: true }))
+    this.store.dispatch(SetLoadingStatus({ loader: { loading: true, statusCode: 0 }}))
     this.store.dispatch(START_PROFILE({ user: user }))
   }
 

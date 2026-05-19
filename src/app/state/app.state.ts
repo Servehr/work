@@ -8,16 +8,19 @@ import { routerReducer, RouterReducerState } from "@ngrx/router-store";
 import { UserResponse } from "./response/UserResponse";
 import { userReducer } from "./reducer/user.reducer";
 import { SuggestionReducer } from "./reducer/suggestion.reducer";
+import { Profile } from "./models/profile";
+import { CategoryReducer } from "./reducer/management/category.reducer";
 
 
 export default interface AppState 
 {
    router: RouterReducerState<any>
    auth: AuthResponse
-   loading: Spinner
+   loader: Spinner
    msg: Msg
-   profile: UserResponse
+   profile: Profile
    search: any
+   category: any
 }
 
 
@@ -28,5 +31,6 @@ export const AppReducer =
    spinState: spinReducer,
    msgState: MessageReducer,
    userState: userReducer,
-   suggestionState: SuggestionReducer
+   suggestionState: SuggestionReducer,
+   categoryState: CategoryReducer
 }

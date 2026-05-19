@@ -11,7 +11,6 @@ import { Router } from "@angular/router";
 import { getUserToken } from "../state/selectors/auth.selector";
 
 
-type PromisReturnedValue = Awaited<Promise<String>>
 
 @Injectable({
     providedIn: "root"
@@ -29,11 +28,12 @@ export class AuthService {
 
     register(firstname: string, surname: string, phone: string, email: string, category: string, password: string, cPassword: string, ninImage: string, passportImage: string) : Observable<IAppResponse> {
         // const { firstname, surname, phone, email, category} = user
-        return this._http.post<IAppResponse>(`${environment.url}auth/register`, { firstname, surname, phone, email, category, password, cPassword, ninImage, passportImage });
+        return this._http.post<any>(`${environment.url}auth/register`, { firstname, surname, phone, email, category, password, cPassword, ninImage, passportImage });
     }
 
-    login(email: string, password: string) : Observable<IAppResponse> {
-        return this._http.post<IAppResponse>(`${environment.url}auth/login`, { email, password });
+    login(email: string, password: string) : Observable<IAppResponse> 
+    {
+       return this._http.post<IAppResponse>(`${environment.url}auth/login`, { email, password })
     }
 
     formatUserResponse(message: string, user: { id: string, firstname: string, surname: string, token: string})
@@ -45,8 +45,8 @@ export class AuthService {
     }
     
     persistUser = async (InSession: { userId: string, firstname: string, surname: string, token: string }) =>
-    {console.log(InSession)
-       await this.dbService.newUser(InSession)   
+    {
+       return await this.dbService.newUser(InSession)   
     }
     
     IsUserInSession =  async () : Promise<string> =>

@@ -8,11 +8,14 @@ import { IFileHandler } from '../../../interface/FileHandler';
 import { getSpinnerStatus, getResponseMessage } from '../../../state/selectors/spinner.selector';
 import { bootstrapTrash } from '@ng-icons/bootstrap-icons';
 import { NgIcon } from '@ng-icons/core';
+import { ImageUploadComponent } from '../../../components/image-upload/image-upload.component';
+import { BotinComponent } from '../../../components/controls/botin/botin.component';
+import { NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-upload',
   standalone: true,
-  imports: [ImageComponent, DragDropDirective, NgIcon],
+  imports: [ImageComponent, DragDropDirective, NgIcon, NgStyle, ImageUploadComponent, BotinComponent],
   templateUrl: './upload.component.html',
   styleUrl: './upload.component.scss'
 })
@@ -36,8 +39,11 @@ export class UploadComponent {
 
   @Input() title: string = ''
   @Input() buttonName: string = ''
-  @Output() close: EventEmitter<void> = new EventEmitter()
+  @Output() close: EventEmitter<void> = new EventEmitter() 
 
+  style = {
+    'padding' : '5px 10px 5px 10px'
+  }
 
   isLoading = signal(false);
   value: string = '-1'
@@ -48,22 +54,20 @@ export class UploadComponent {
   NIN: any[] = []
   passportPhotograph: any[] = []
   deleteIcon: any = bootstrapTrash
-  style: any = {
-     'background-color' : '#be9d18',
-     'color': 'black',
-     'padding': '20px'
-  }
 
   base64NinImage: string | ArrayBuffer | null = null
   base64PassportImage: string | ArrayBuffer | null = null
 
   constructor(private saniter: DomSanitizer, private store: Store<AppState>) {}  
 
+//   data: { status: boolean, statusCode: number }
+
   ngOnInit()
   {
-    this.store.select(getSpinnerStatus).subscribe((status: boolean) => 
+    this.store.select(getSpinnerStatus).subscribe((data: any) => 
     {
-      this.isLoading.update((currentValue: boolean) => !currentValue)
+      const status = data?.status
+      this.isLoading.update((currentValue: boolean) => status)
     })
     this.store.select(getResponseMessage).subscribe((data) => 
     {
@@ -173,5 +177,15 @@ export class UploadComponent {
       // 3. Create file from blob
       return new File([blob], fileName, { type: 'image/jpeg' });
    }  
+
+   saveFile(data: any, type: string)
+   {
+
+   }
+
+   closeModal = () => 
+   {
+
+   }
 
 }

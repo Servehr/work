@@ -8,50 +8,15 @@
   </div>
 </div>  
 
-<div 
-    class="grid grid-cols-12 gap-2 md:gap-5 m-3"
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-5"
 >
-  @for(user of users; track user.id)
-  {
-     <div 
-       class="col-span-6 md:col-span-3 shadow-lg"
-       (click)="viewUserInfo()"
-     >
-
-       <div 
-         class="w-full bg-white border-2 border-gray-200 p-1 flex justify-center items-center"
-       >
-         <app-image
-           [src]="user.image"
-           [alt]="user.alt"
-           [height]="height"
-           [width]="width"
-           [ngClass]="'imageClass'"
-           [style]="imageStyle"
-         >
-         </app-image>
-       </div>
-       <div 
-         class="py-2 px-3 text-[15px] md:text-[17px]"
-       >         
-         <div 
-           class="w-full"
-         >
-            {{ user.firstname }} {{ user.surname }}
-         </div>
-         <div 
-           class="w-full"
-         >
-            {{ user.rating }}
-         </div>
-         <div 
-           class="w-full"
-         >
-            {{ user.status }}
-         </div>
-       </div>
-
-     </div>    
-  }
-
+   @if(users().length > 0)
+   {
+      @for(user of users(); track user.id)
+      {
+        <app-user-card [user]="user"></app-user-card>
+      }
+   } @else {
+      <h1>No user present</h1>
+   }
 </div>

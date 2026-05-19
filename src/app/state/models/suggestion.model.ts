@@ -1,4 +1,4 @@
 export interface Suggestion 
 {    
-    results: any[]
+    results: any
 }

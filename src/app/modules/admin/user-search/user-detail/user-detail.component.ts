@@ -5,17 +5,20 @@ import { ImageComponent } from '../../../../components/controls/image/image.comp
 import { NgClass } from '@angular/common';
 import { LabelComponent } from '../../../../components/controls/label/label.component';
 import { BotinComponent } from '../../../../components/controls/botin/botin.component';
+import { bootstrapThreeDotsVertical } from '@ng-icons/bootstrap-icons';
+import { NgIcon } from '@ng-icons/core';
 
 @Component({
   selector: 'app-user-detail',
   standalone: true,
-  imports: [ImageComponent, NgClass, LabelComponent, BotinComponent],
+  imports: [ImageComponent, NgClass, LabelComponent, BotinComponent, NgIcon],
   templateUrl: './user-detail.component.html',
   styleUrl: './user-detail.component.scss'
 })
 export class UserDetailComponent {
 
   pageTitle: string = 'Dawud Information'
+  flyOutPanel: any = bootstrapThreeDotsVertical
 
   private store = inject(Store<AppState>)
 

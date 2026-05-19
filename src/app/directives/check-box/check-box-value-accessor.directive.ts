@@ -11,6 +11,7 @@ export class CheckBoxValueAccessorDirective<T> implements ControlValueAccessor, 
     control!: FormControl
     isRequired: boolean = false
     selectedValue: string | undefined
+    
       
     @Input() value: string = ''
     

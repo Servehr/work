@@ -18,8 +18,18 @@
        class="flex-cols"
      >
         <div 
-          class="w-full bg-white border-2 border-gray-200 p-1 rounded-lg flex justify-center items-center"
+          class="w-full relative bg-white border-2 border-gray-200 p-1 rounded-lg flex justify-center items-center"
         >
+          <div 
+            class="absolute top-0 right-0 mr-2 mt-4"
+          >
+            <ng-icon 
+              [svg]="flyOutPanel" 
+              [size]="'26'" 
+              [color]="'#3e4095'"
+              class="cursor-pointer"
+            />
+          </div>
           <app-image
             [src]="src"
             [alt]="alt"

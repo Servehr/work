@@ -6,8 +6,36 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="tw.ico">
+
+  <style>
+      .loader {
+          margin: 50px auto 0;
+          border:  16px solid #f3f3f3;
+          border-top: 16px solid #b8c505;
+          border-radius: 59%;
+          width: 80px;
+          height: 80px;
+          animation: spin 2s linear infinite;
+          margin-top: -40px;
+      }
+
+      @keyframes spin {
+         0% {
+            transform: rotate(0deg);
+         }
+         100% {
+            transform: rotate(360deg);
+         }
+      }
+  </style>
 </head>
 <body>
-  <app-root></app-root>
+  <app-root>
+    <div 
+      class="w-[1oovh] h-[100vh] flex justify-center items-center bg-[#3e4095]"
+    >        
+      <div class="loader"></div>
+    </div>
+  </app-root>
 </body>
 </html>

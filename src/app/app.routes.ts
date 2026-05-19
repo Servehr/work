@@ -37,6 +37,7 @@ import { UploadComponent } from './modules/user/upload/upload.component';
 import { StaffComponent } from './modules/admin/administration/user/staff/staff.component';
 import { UserDetailComponent } from './modules/admin/user-search/user-detail/user-detail.component';
 import { UserSearchComponent } from './modules/admin/user-search/user-search.component';
+import { PlanComponent } from './modules/anonymous/plan/plan.component';
 
 export const routes: Routes = [
    { 
@@ -54,7 +55,8 @@ export const routes: Routes = [
         { path: 'blog', component: BlogComponent  },
         { path: 'partner', component: PartnerComponent   },
         { path: 'faq', component: FaqComponent  },
-        { path: 'contact', component: ContactComponent  }
+        { path: 'contact', component: ContactComponent  },
+        { path: 'plan', component: PlanComponent  }
       ]  
    },
    { 

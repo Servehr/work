@@ -47,36 +47,41 @@
    class='shadow-lg items-center sticky top-0 z-50 h-fit bg-white'
 >
     <div 
-      class='container mx-auto p-3 flex'
+      class='container mx-auto p-3 flex justify-between'
     >
         <div 
             class="w-6/12 md:w-2/12 px-2 flex-none"
         >
             <app-logo></app-logo>
         </div>
+        <!-- text-[#3e4095] cursor-pointer p-2 hover:text-[#be9d18]" -->
         <div 
-            class="w-5/12 md:w-8/12 hidden md:flex gap-5 md:justify-center md:text-center sm:px-5  shrink-0 overflow-x-scroll scrollbar-thin scrollbar-thumb-green-600 scrollbar-track-green-600 p-2 mb-1 md:overflow-auto md:overflow-x-scroll md:scrollbar-thin md:scrollbar-thumb-green-600 md:scrollbar-track-green-600"
+            class="w-5/12 md:w-9/12 hidden md:flex gap-10 md:justify-between items-center mx-auto md:text-center sm:px-3  shrink-0 overflow-x-scroll scrollbar-thin scrollbar-thumb-green-600 scrollbar-track-green-600 p-2 mb-1 md:overflow-auto md:overflow-x-scroll md:scrollbar-thin md:scrollbar-thumb-green-600 md:scrollbar-track-green-600"
         >
-            <ng-container>
-                @for (name of header; track $index) 
-                {
-                  <ul 
-                    class="text-white flex gap-2"
-                  >                     
-                    <li 
-                        [routerLink]="[name.route]"
-                        class="flex justify-center whitespace-nowrap items-center font-bold md:text-[12px] lg:text-md text-gray-500 cursor-pointer p-2 hover:text-[#3e4095]"
-                        (click)="harmburger()"
-                        [ngClass]="{'cursor-pointer' : isHover != $index}" 
-                    >
-                        {{ name?.page?.toUpperCase() }}
-                    </li>
-                  </ul>  
-                }
-            </ng-container>
+            <div 
+                class="flex justify-center text-center cursor-pointer border-2 w-4/12 rounded-md py-2 hover:bg-[#be9d18] hover:border-[#be9d18] hover:opacity-60 hover:text-white"
+            >
+                <p>Become our partner</p>
+            </div>
+            <div 
+                class="flex justify-center text-center cursor-pointer border-2 w-4/12 rounded-md py-2 hover:bg-[#be9d18] hover:border-[#be9d18] hover:opacity-60 hover:text-white"
+            >
+                <p>Become an apprentice</p>
+            </div>
+            <div 
+                class="flex justify-center text-center cursor-pointer border-2 w-4/12 rounded-md py-2 hover:bg-[#be9d18] hover:border-[#be9d18] hover:opacity-60 hover:text-white"
+            >
+                <p>Join our master class</p>
+            </div>
+            <div 
+                class="flex justify-center text-center cursor-pointer bg-blue-300 hover:bg-blue-800 hover:border-blue-400 w-4/12 rounded-md py-2 hover:bg-[#be9d18] hover:border-[#be9d18] hover:opacity-60 hover:text-white"
+                (click)="jobPost()"
+            >
+                <p>Post Job</p>
+            </div>
         </div>
         <div 
-            class="w-6/12 md:min-w-fit md:max-w-2/12 gap-3 md:gap-5 mt-1 pt-2 pl-5 md:pl-2 flex justify-end"
+            class="w-6/12 md:min-w-fit md:max-w-1/12 gap-3 md:gap-5 mt-1 pt-2 pl-5 md:pl-2 flex justify-end"
         >            
             @for (icon of authIcons; track $index+10) 
             {
@@ -192,5 +197,48 @@
 
     
 </div>
+
+    <!-- ////// -->
+<div 
+    class="bg-blue-50"
+>
+    <div 
+      class='container mx-auto p-3 flex justify-between item-center'
+    >
+      <ng-container>
+          @for (name of header; track $index) 
+          {
+            <ul 
+              class="text-white flex gap-2"
+            >                     
+               <li 
+                 [routerLink]="[name.route]"
+                 class="flex justify-center whitespace-nowrap items-center font-bold md:text-[12px] lg:text-md text-[#3e4095] cursor-pointer p-2 hover:text-[#be9d18]"
+                 (click)="harmburger()"
+                 [ngClass]="{'cursor-pointer' : isHover != $index}" 
+               >
+                  {{ name?.page?.toUpperCase() }}
+               </li>
+            </ul>  
+          }
+        </ng-container>        
+    </div>
+</div>   
+
+
+<app-modal 
+  [isOpen]="postJob() === true" 
+  title="title" 
+  [modalWidth]="modalWidth()"
+  (closeModal)="cancelModal()"
+  (confirmAction)="onConfirm()"
+>
+  <app-post
+    [title]="'Post Job'" 
+    (close)="closeModal()"
+    [posting]="postJob()"
+  >
+  </app-post>
+</app-modal>
 
 

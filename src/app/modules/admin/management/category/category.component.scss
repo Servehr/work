@@ -189,3 +189,8 @@
     background-color: #f5f5f5; /* Example background color on hover */
     cursor: pointer; /* Optional: Change cursor to a pointer */
   }
+
+table td:nth-child(3) {
+  font-size: 18px;
+  color: #007bff;
+}

@@ -72,18 +72,6 @@ export class CountryComponent {
     this.writeCountry = true
   }
 
-  handleClick(value: number, action: string): void 
-  {
-     if(action === 'update')
-     {
-        this.title = 'Update Category'
-        this.buttonName = 'Update'
-        this.ToggleWithTitle(this.title)
-     } else {
-        this.isModalOpen = true
-     }
-  }  
-
   columns: ColumnDef<any>[] = [
     {
        accessorKey: 'name',
@@ -96,7 +84,7 @@ export class CountryComponent {
           return flexRenderComponent(
             BoteenComponent, {
               inputs: {
-                 value: context.getValue<number>(),
+                 value: context.getValue<{ count: number, data: any }>(),
                  boteenStyle: this.boteenStyle,
                  boteeName: context.getValue<number>(),
                  boteenCssClass: this.unLinkCss,
@@ -112,19 +100,26 @@ export class CountryComponent {
        accessorKey: '...',
        header: '',
        cell: (context) => {
+        
+        //  const name: string = context.row.getValue('name')
+        //  const description: string = context.row.getValue('description')
+         const rowData: any =  { name: '', description: '' }
+
          return flexRenderComponent(
             EditComponent, {
               inputs: {
-                value: context.getValue<number>()
+                value: context.getValue<string>(),
+                data: rowData
               },
               outputs: {
-                clickEvent: (value) => { 
-                  this.handleClick(value, 'update')
+                clickEvent: (cellData) => 
+                { 
+                  this.change(cellData)
                 }
               }
             }
          )
-       }       
+       }        
     },
     {
        accessorKey: 'firstName',
@@ -133,7 +128,7 @@ export class CountryComponent {
          return flexRenderComponent(
             DeleteComponent, {
               inputs: {
-                value: context.getValue<number>()
+                value: context.getValue<string>()
               },
               outputs: {
                 clickEvent: (value) => this.handleClick(value, 'delete')
@@ -162,6 +157,23 @@ export class CountryComponent {
     this.buttonName = 'Save'
     this.isCountryState = true     
   }
+
+  handleClick(value: string, action: string): void 
+  {
+     if(action === 'update')
+     {
+        this.title = 'Update Category'
+        this.buttonName = 'Update'
+        this.ToggleWithTitle(this.title)
+     } else {
+        this.isModalOpen = true
+     }
+  }  
+
+  change(value: any): void 
+  {
+     this.isModalOpen = true
+  } 
 
 }
 

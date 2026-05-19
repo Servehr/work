@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ImageComponent } from '../../../components/controls/image/image.component';
-import { NgClass } from '@angular/common';
+import { JsonPipe, NgClass } from '@angular/common';
+import { UserCardComponent } from '../../../components/user-card/user-card.component';
 
 @Component({
   selector: 'app-user-search',
   standalone: true,
-  imports: [ImageComponent, NgClass],
+  imports: [ImageComponent, NgClass, UserCardComponent, JsonPipe],
   templateUrl: './user-search.component.html',
   styleUrl: './user-search.component.scss'
 })
@@ -18,7 +19,7 @@ export class UserSearchComponent {
     'border-radius' : '20%'
   }
 
-   users: { id: string, image: string, alt: string, firstname: string, surname: string, skills: string[], rating: number, status: string }[] = [
+  users = signal([
      {
        id: "1",
        image: '../../../../../man.jpg',
@@ -59,7 +60,7 @@ export class UserSearchComponent {
        rating: 3,
        status: 'inactive'
      }
-   ]
+   ])
 
    viewUserInfo = () => 
    {

@@ -13,8 +13,7 @@ export class DatabaseService {
   {
     try 
     {
-      const id = await db.user.add(user)
-      console.log(`User added with id => : ${id}`)
+      await db.user.add(user)
     } catch (error) {
       console.error('Error adding user => :', error)
     }
@@ -34,4 +33,25 @@ export class DatabaseService {
   {
     return db.user.delete(id)
   }
+
+  async userLocation(currentLocation: any) 
+  {
+    try 
+    {
+      await db.location.add(currentLocation)
+    } catch (error) {
+      console.error('Error adding user => :', error)
+    }
+  }
+
+  async clearUserCurrentPosition() 
+  {
+    return await db.location.clear()
+  }
+
+  async getUserLocation() 
+  {
+    return await db.location.toArray()
+  }
+
 }

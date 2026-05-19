@@ -17,4 +17,14 @@ export class UserService {
       return this._http.get<any>(`${environment.url}profile/${user}`);
     }
 
+    search(keyword: string) : Observable<any> 
+    {
+      return this._http.get<any>(`${environment.url}user/${keyword}`);
+    }
+
+    newsletter(email: string) : Observable<any> 
+    {
+      return this._http.post<any>(`${environment.url}user/subscribe`, { email });
+    }
+
 }

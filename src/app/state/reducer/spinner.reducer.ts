@@ -4,10 +4,11 @@ import { SetErrorMessage, SetLoadingStatus } from "../actions/spinner.action";
 
 
 const _spinner = createReducer(InitialState,
-    on(SetLoadingStatus, (state:any, action: any) => {
+    on(SetLoadingStatus, (state:any, action: any) => 
+    {
         return {
             ...state,
-            loading: action.loading
+            loader: action?.loader
         }
     })
 )

@@ -22,11 +22,18 @@
          <app-botin
            (ChangeOnButtonHoverIn)="ChangeOnButtonHoverIn()" 
            (ChangeOnButtonHoverOut)="ChangeOnButtonHoverOut()"
-           (sendData)="'wrteCategory()'"
+           (sendData)="remove()"
            [style]="style"
            (click)="remove()"
          >
-           Remove
+           @if(isLoading() === true)
+           {
+             <p class="font-bold text-white"> ... deleting </p>
+           }
+           @if(isLoading() === false)
+           {
+             <h3>Remove</h3>
+           }
          </app-botin>
        </div>  
 

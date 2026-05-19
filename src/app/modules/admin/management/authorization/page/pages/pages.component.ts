@@ -140,7 +140,7 @@ export class PagesComponent
          return flexRenderComponent(
             BoteenComponent, {
               inputs: {
-                value: context.getValue<number>(),
+                value: context.getValue<{ count: number, data: any }>(),
                 boteenStyle: this.boteenStyle,
                 boteeName: '5',
                 boteenCssClass: this.unLinkCss,
@@ -156,17 +156,26 @@ export class PagesComponent
        accessorKey: '...',
        header: 'Update Page',
        cell: (context) => {
+        
+        //  const name: string = context.row.getValue('name')
+        //  const description: string = context.row.getValue('description')
+         const rowData: any =  { name: '', description: '' }
+
          return flexRenderComponent(
             EditComponent, {
               inputs: {
-                value: context.getValue<number>()
+                value: context.getValue<string>(),
+                data: rowData
               },
               outputs: {
-                clickEvent: (value) => this.handleClick(value, 'update')
+                clickEvent: (cellData) => 
+                { 
+                  this.change(cellData)
+                }
               }
             }
          )
-       }       
+       }        
     },
     {
        accessorKey: 'firstName',
@@ -175,7 +184,7 @@ export class PagesComponent
          return flexRenderComponent(
             DeleteComponent, {
               inputs: {
-                value: context.getValue<number>()
+                value: context.getValue<string>()
               },
               outputs: {
                 clickEvent: (value) => this.handleClick(value, 'delete')
@@ -196,19 +205,7 @@ export class PagesComponent
     this.title = status
     this.buttonName = 'Save'
     this.writePage = true
-  }
-
-  handleClick(value: number, action: string): void 
-  {
-     if(action === 'update')
-     {
-        this.title = 'Update Page'
-        this.buttonName = 'Update'
-        this.ToggleWithTitle(this.title)
-     } else {
-        this.isModalOpen = true
-     }
-  }
+  } 
 
   connectPageToResource(status: number): void
   {
@@ -249,6 +246,23 @@ export class PagesComponent
   {
       alert("Yeah!! Good")
   }
+
+  handleClick(value: string, action: string): void 
+  {
+     if(action === 'update')
+     {
+        this.title = 'Update Page'
+        this.buttonName = 'Update'
+        this.ToggleWithTitle(this.title)
+     } else {
+        this.isModalOpen = true
+     }
+  }
+
+  change(value: any): void 
+  {
+     this.isModalOpen = true
+  }  
 
 
 }

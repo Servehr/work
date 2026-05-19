@@ -17,6 +17,7 @@ import { getResponseMessage, getSpinnerStatus } from '../../../state/selectors/s
 import { AlertComponent } from '../../../components/alert/alert.component';
 import { NgIcon } from '@ng-icons/core';
 import { MultipleImageUploadComponent } from '../../../components/multiple-image-upload/multiple-image-upload.component';
+import { sleepWait } from '../../../util/sleep';
 
 
 export const PasswordRequiredAndLength = (control: AbstractControl): ValidationErrors | null => {
@@ -74,7 +75,7 @@ export class LoginComponent
       this.loginForm = new FormGroup(
        {
          email: new FormControl('', [Validators.required, Validators.email]),
-         password: new FormControl('', [PasswordRequiredAndLength])
+         password: new FormControl(''  )
        }
       ) 
       this.store.select(getResponseMessage).subscribe((data) => 
@@ -87,8 +88,10 @@ export class LoginComponent
 
     ngOnInit()
     {
-       this.store.select(getSpinnerStatus).subscribe((status: boolean) => {
-          this.isLoading = status
+       this.isLoading = false
+       this.store.select(getSpinnerStatus).subscribe((data: any) => 
+       {
+          this.isLoading = data
        })
     }
 
@@ -112,7 +115,9 @@ export class LoginComponent
 
     authenticate = async () => 
     {
-       this.store.dispatch(SetLoadingStatus({ loading: true }))
+       this.isLoading = true
+       await sleepWait(1000)
+       this.store.dispatch(SetLoadingStatus({ loader: { loading: true, statusCode: 0 }}))
        if(this.loginForm.valid)
        {
           of(this.loginForm.value)
@@ -120,13 +125,14 @@ export class LoginComponent
           .subscribe(UserDetail => 
               {
                 const email = UserDetail['email']!
-                const password = UserDetail['password']!      
+                const password = UserDetail['password']!  
+                console.log("Authenticating ...")    
                 this.store.dispatch(START_LOGIN({ email, password }))
               }
           )
        } else {
           this.loginForm.markAllAsTouched()
-          this.store.dispatch(SetLoadingStatus({ loading: false }))
+          this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 0 }}))
           this.message = "Attend to all fields"
           this.store.dispatch(SetErrorMessage({ msg: this.message, statusCode: 400, operation: "authenticate-user"  }))
        }     
@@ -136,5 +142,5 @@ export class LoginComponent
    {
       console.log({ fileToSave, type })
    }
-     
+
 }

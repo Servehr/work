@@ -123,8 +123,8 @@ export class AdministerComponentmponent  implements OnInit {
   
   ngOnInit(): void 
   {
-    this.store.select(getSpinnerStatus).subscribe((status: boolean) => {
-      this.isLoading = status
+    this.store.select(getSpinnerStatus).subscribe((data: any) => {
+      // this.isLoading = status
     })
   }  
 
@@ -163,13 +163,22 @@ export class AdministerComponentmponent  implements OnInit {
        accessorKey: '...',
        header: 'Administer',
        cell: (context) => {
+        
+        //  const name: string = context.row.getValue('name')
+        //  const description: string = context.row.getValue('description')
+         const rowData: any =  { name: '', description: '' }
+
          return flexRenderComponent(
             EditComponent, {
               inputs: {
-                value: context.getValue<number>()
+                value: context.getValue<string>(),
+                data: rowData
               },
               outputs: {
-                clickEvent: (value) => this.handleClick(value)
+                clickEvent: (cellData) => 
+                { 
+                  this.change(cellData)
+                }
               }
             }
          )
@@ -182,7 +191,7 @@ export class AdministerComponentmponent  implements OnInit {
     //      return flexRenderComponent(
     //         EditComponent, {
     //           inputs: {
-    //             value: context.getValue<number>()
+    //             value: context.getValue<string>()
     //           },
     //           outputs: {
     //             clickEvent: (value) => this.handleClick(value)
@@ -195,17 +204,26 @@ export class AdministerComponentmponent  implements OnInit {
        accessorKey: '...',
        header: '',
        cell: (context) => {
+        
+        //  const name: string = context.row.getValue('name')
+        //  const description: string = context.row.getValue('description')
+         const rowData: any =  { name: '', description: '' }
+
          return flexRenderComponent(
             EditComponent, {
               inputs: {
-                value: context.getValue<number>()
+                value: context.getValue<string>(),
+                data: rowData
               },
               outputs: {
-                clickEvent: (value) => this.handleClick(value)
+                clickEvent: (cellData) => 
+                { 
+                  this.change(cellData)
+                }
               }
             }
          )
-       }       
+       }      
     },
     {
        accessorKey: 'firstName',
@@ -214,7 +232,7 @@ export class AdministerComponentmponent  implements OnInit {
          return flexRenderComponent(
             DeleteComponent, {
               inputs: {
-                value: context.getValue<number>()
+                value: context.getValue<string>()
               },
               outputs: {
                 clickEvent: (value) => this.takeAction(value)
@@ -237,7 +255,7 @@ export class AdministerComponentmponent  implements OnInit {
       alert("Yeah!! Good")
   }
 
-  takeAction(data: number)
+  takeAction(data: string)
   {
      this.takeActionOnStaff = true
   }
@@ -287,12 +305,17 @@ export class AdministerComponentmponent  implements OnInit {
     this.writeStaff = true
   }  
 
-  handleClick(value: number): void 
+  handleClick(value: string): void 
   {
-    this.title = 'Update Staff'
+    this.title = 'Update ...'
     this.buttonName = 'Save'
-    this.writeStaff = true
-  } 
+    this.isModalOpen = true
+  }  
+
+  change(value: any): void 
+  {
+     this.isModalOpen = true
+  }  
 
 
 }

@@ -3,6 +3,6 @@ import { START_SUGGESTION_SEARCH, SUGGESTED_RESULT } from "../constants/suggesti
 
 
 // Login
-export const START_SUGGESTION = createAction(START_SUGGESTION_SEARCH, props<{keyword: string}>())
+export const START_SUGGESTION = createAction(START_SUGGESTION_SEARCH, props<{ url: string }>())
 
-export const SUGGESTION_SUCCESS = createAction(SUGGESTED_RESULT, props<{result: any}>())
+export const SUGGESTION_SUCCESS = createAction(SUGGESTED_RESULT, props<{results: any}>())

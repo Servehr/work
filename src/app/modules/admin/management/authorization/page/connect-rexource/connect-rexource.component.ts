@@ -49,8 +49,8 @@ export class ConnectRexourceComponent {
       this.message = msg
       this.statusCode = statusCode
     })
-    this.store.select(getSpinnerStatus).subscribe((status: boolean) => {
-      this.isLoading = status
+    this.store.select(getSpinnerStatus).subscribe((data: any) => {
+      // this.isLoading = status
     })
   }
   

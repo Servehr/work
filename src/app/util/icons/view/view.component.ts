@@ -13,8 +13,8 @@ import { NgIcon } from '@ng-icons/core';
 export class ViewComponent {
   
   viewIcon: any = bootstrapEyeFill
-  readonly value = input.required<number>()
-  readonly clickEvent = output<number>()
+  readonly value = input.required<string>()
+  readonly clickEvent = output<string>()
   editColor: string = 'green'
   style: any = {
     'color': 'green'

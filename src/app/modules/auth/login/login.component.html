@@ -86,11 +86,10 @@
               <div
                 class="flex flex-col space-y-1 items-center justify-between"
               >
-                @if(isLoading)
+                @if(isLoading === true)
                 {
                    <p class="font-bold text-white"> ... authenticating </p>
-                }
-                @if(!isLoading)
+                } @else 
                 {
                   <h3>Login</h3>
                 }
