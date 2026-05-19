@@ -1,0 +1,95 @@
+<div 
+   class='container mx-auto pb-30 mt-1 md:mt-1 mb-7 md:shadow-md flex-col md:flex'
+>
+    <div 
+      class="w-12/12 md:w-5/12 h-[350px] px-2 pb-40 py-1 md:p-5 pl-5 md:pl-10"
+    >
+      <p 
+        class="text-gray-400 font-bold mb-5 -pl-2"
+      >
+        {{ heading }}
+      </p>
+
+      
+      <app-alert 
+        [statusCode]="statusCode" 
+        [message]="message"
+      >
+      </app-alert>
+
+      <form 
+        [formGroup]="forgotForm"
+        class="flex flex-col space-y-5"
+    >
+        <div 
+          class="flex flex-col space-y-1"
+        >
+          <input-field
+              [id]="'email'"
+              #email
+              [name]="'email'"
+              [placeholder]="'Enter Email'"
+              [type]="'email'"
+              [value]="''"
+              formControlName="email"
+              [customErrorMessages]="errorMessages"
+          >
+          </input-field>
+        </div>
+        <div>
+          <app-botin
+            (ChangeOnButtonHoverIn)="ChangeOnButtonHoverIn()" 
+            (ChangeOnButtonHoverOut)="ChangeOnButtonHoverOut()"
+            (sendData)="forgot()"
+            [disabled]="disabled"
+            [style]="style"
+          >
+            <div
+              class="flex flex-col space-y-1 items-center justify-between"
+            >
+                @if(isLoading)
+                {
+                   <p class="font-bold text-white"> ... requesting </p>
+                }
+                @if(!isLoading)
+                {
+                   <h3>Request New Credential</h3>
+                }
+            </div>
+          </app-botin>
+        </div>
+        
+        <div 
+          class="flex flex-col space-x-2 justify-content-between mt-10"
+        >
+          <div 
+            class="flex justify-between px-1"
+          >
+            <a 
+              [routerLink]="['/auth/login']" 
+              class="text-sm text-gray-600 -mt-2 mb-3 hover:text-green-700 hover:font-bold"
+            >
+              Login
+            </a>
+            <a 
+              [routerLink]="['/auth/register']" 
+              class="text-sm text-gray-600 -mt-2 mb-3 hover:text-green-700 hover:font-bold"
+            >
+              Signup
+            </a>
+          </div>
+        </div>
+      </form>
+
+   </div>
+
+
+   <div 
+      class="w-12/12 md:w-7/12 h-[350px] px-2 py-1 md:p-5"
+   >
+
+   </div>
+
+
+
+</div>

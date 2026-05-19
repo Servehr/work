@@ -1,0 +1,94 @@
+<div 
+    class="w-full gap-1 md:p-0 mb-5 -mt-3 p-5"
+>
+  <div 
+    class="flex justify-between m-3"
+  >
+     Back Arrow
+  </div>
+</div>  
+
+<div 
+    class="grid grid-cols-12 gap-5 m-3"
+>
+  <div 
+    class="col-span-12 md:col-span-3 justify-between rounded-md"
+  >
+     <div 
+       class="flex-cols"
+     >
+        <div 
+          class="w-full relative bg-white border-2 border-gray-200 p-1 rounded-lg flex justify-center items-center"
+        >
+          <div 
+            class="absolute top-0 right-0 mr-2 mt-4"
+          >
+            <ng-icon 
+              [svg]="flyOutPanel" 
+              [size]="'26'" 
+              [color]="'#3e4095'"
+              class="cursor-pointer"
+            />
+          </div>
+          <app-image
+            [src]="src"
+            [alt]="alt"
+            [height]="height"
+            [width]="width"
+            [ngClass]="'imageClass'"
+            [style]="imageStyle"
+          >
+          </app-image>
+        </div>
+        <div 
+          class="mt-5 shadow-md rounded-md h-[500px] w-full"
+        >
+
+        </div>
+    </div>
+  </div>
+
+  <div 
+    class="col-span-12 md:col-span-9 rounded-md"
+  >
+     <div 
+       class="md:flex mb-3 gap-5 w-2/2 text-gray-700"
+     >
+        <div 
+          class="w-full md:w-1/2"
+        >
+          <app-label>
+            Heavy Blessing
+          </app-label>
+        </div>
+        <div 
+          class="w-full md:w-1/2"
+        >
+          <app-label>
+            Heavy Blessing
+          </app-label>
+        </div>
+     </div>
+
+     <div 
+       class="md:flex mb-3 gap-5 w-2/2 text-gray-700"
+     >
+        <div 
+          class="w-full md:w-1/2"
+        >
+          <app-label>
+            Heavy Blessing
+          </app-label>
+        </div>
+        <div 
+          class="w-full md:w-1/2"
+        >
+          <app-label>
+            Heavy Blessing
+          </app-label>
+        </div>
+     </div>
+
+
+  </div>
+</div> 

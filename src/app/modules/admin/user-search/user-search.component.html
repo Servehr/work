@@ -1,0 +1,22 @@
+<div 
+    class="w-full gap-1 md:p-0 mb-5 -mt-3 p-5"
+>
+  <div 
+    class="flex justify-between m-3 p-3"
+  >
+     Back Arrow
+  </div>
+</div>  
+
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-5"
+>
+   @if(users().length > 0)
+   {
+      @for(user of users(); track user.id)
+      {
+        <app-user-card [user]="user"></app-user-card>
+      }
+   } @else {
+      <h1>No user present</h1>
+   }
+</div>

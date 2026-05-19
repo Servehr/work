@@ -1,0 +1,110 @@
+ 
+            
+            <div 
+                class="grid md:grid-cols-12 grid-cols-1 gap-5 mb-10 justify-center items-center md:px-3"
+            >
+
+                <section 
+                    class="col-span-12 justify-center antialiased text-gray-600 py-2"
+                >
+                    <div 
+                        class="h-full"
+                    >                        
+                        <div 
+                            class="w-full mx-auto bg-white shadow-lg rounded-sm border border-gray-200"
+                        >                            
+                            <header 
+                                class="px-5 py-4 border-b border-gray-100"
+                            >
+                                <h1 class="font-bold text-gray-500 text-md font-bold">{{title}} </h1>
+                            </header>
+
+                            <app-tabs (CurrentPage)="setPage($event)" [TabPages]="TabPages"></app-tabs>
+
+                            @if(page === 0)
+                            {
+                              <div 
+                               class="overflow-x-auto"
+                              >
+                                <app-about></app-about>
+                              </div>
+                            }
+
+                            @if(page === 1)
+                            {
+                              <div
+                                class="overflow-x-auto"
+                              >
+                                <app-blog></app-blog>
+                              </div>
+                            }
+
+                            @if(page === 2)
+                            {
+                              <div 
+                               class="overflow-x-auto"
+                              >
+                                <app-certification></app-certification>
+                              </div>
+                            }
+
+                            @if(page === 3)
+                            {
+                               <div
+                                class="overflow-x-auto"
+                               >
+                                 <app-community></app-community>
+                               </div>
+                            }
+
+                            @if(page === 4)
+                            {
+                              <div
+                               class="overflow-x-auto"
+                              >
+                                <app-contact></app-contact>
+                              </div>
+                            }
+
+                            @if(page === 5)
+                            {
+                              <div
+                               class="overflow-x-auto"
+                              >
+                                <app-events></app-events>
+                              </div>
+                            }
+
+                            @if(page === 6)
+                            {
+                              <div
+                               class="overflow-x-auto"
+                              >
+                                <app-faq></app-faq>
+                              </div>
+                            }
+
+                            @if(page === 7)
+                            {
+                              <div
+                               class="overflow-x-auto"
+                              >
+                                <app-jobs></app-jobs>
+                              </div>
+                            }
+
+                            @if(page === 8)
+                            {
+                              <div
+                               class="overflow-x-auto"
+                              >
+                                <app-partners></app-partners>
+                              </div>
+                            }
+
+                            
+                        </div>
+
+                    </div>
+                </section>
+            </div>

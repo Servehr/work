@@ -1,0 +1,151 @@
+
+@if(isLoading()  === true)
+{
+    <div 
+      class="h-[400px] box-shadow w-full flex justify-center items-center"
+    >
+        <app-loader></app-loader>
+    </div>
+}
+
+@if(isLoading() === false)
+{
+  <div 
+      class="container gap-1 md:p-0 mb-5 -mt-3 px-5"
+  >
+    <div 
+      class="flex space-between-10 items-center"
+    >
+      <p 
+        class="font-bold text-md text-gray-500 mb-3"
+      >
+        {{ PageTitle }}
+      </p>
+
+      <div 
+        class="rounded-full flex justify-center ml-5 -mt-1 items-center w-fit py-1 px-1 hover:border-2 hover:border-[#3e4095] hover:py-1 hover:px-1 cursor-pointer"
+        (click)="create('Create Cateogry')"
+      >
+        <ng-icon 
+          [svg]="addIcon" 
+          [size]="'20'" 
+          [color]="'black'"
+        />
+      </div>
+    </div>
+
+
+    <div 
+      class="mt-2"
+    >
+      <table>
+        <thead>
+          @for (headerGroup of table.getHeaderGroups(); track headerGroup.id) {
+            <tr>
+              @for (header of headerGroup.headers; track header.id) {
+                @if (!header.isPlaceholder) {
+                  <th>
+                    <ng-container
+                      *flexRender="
+                        header.column.columnDef.header;
+                        props: header.getContext();
+                        let header
+                      "
+                    >
+                      <div [innerHTML]="header"></div>
+                    </ng-container>
+                  </th>
+                }
+              }
+            </tr>
+          }
+        </thead>
+        <tbody>
+          @for (row of table.getRowModel().rows; track row.id) {
+            <tr class="table-row-hover">
+              @for (cell of row.getVisibleCells(); track cell.id) {
+                <td>
+                  <ng-container
+                    *flexRender="
+                      cell.column.columnDef.cell;
+                      props: cell.getContext();
+                      let cell
+                    "
+                  >
+                    <div [innerHTML]="cell"></div>
+                  </ng-container>
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <div 
+    class="container mx-auto p-4 flex justify-center items-center"
+  >
+    <app-pagination
+      [currentPage]="currentPage()"
+      [noOfPages]="totalPages()"
+      [hasNextPage]="hasNextPage()"
+      [hasPreviousPage]="hasPrevPage()"
+      (pageData)="getData($event)"
+    >
+    </app-pagination>
+  </div>
+}
+
+
+<app-modal 
+  [isOpen]="actions" 
+  title="title" 
+  [modalWidth]="modalWidth"
+  (closeModal)="actions = false"
+  (confirmAction)="onConfirm()"
+>
+  <app-division 
+     [title]="title" 
+     [buttonName]="buttonName" 
+     (close)="actions = false"
+     [divisions]="divisions()"
+  >
+  </app-division>
+</app-modal>
+
+
+<app-modal 
+  [isOpen]="isModalOpen" 
+  title="title" 
+  [modalWidth]="modalWidth"
+  (closeModal)="isModalOpen = false"
+  (close)="onConfirm()"
+>
+  <app-remove
+    (close)="isModalOpen = false"
+    [path]="path()"
+    [category]="category()"
+  >
+     You are about to delete category
+  </app-remove>
+</app-modal>
+
+<app-modal 
+  [isOpen]="writeCategory()" 
+  title="title" 
+  [modalWidth]="modalWidth"
+  (closeModal)="writeCategori()"
+  (confirmAction)="onConfirm()"
+>
+  <app-write-category 
+     [title]="title" 
+     [buttonName]="buttonName" 
+     (close)="writeCategori()"
+     [dataToUpdate]="dataToUpdate()"
+     [currentPage]="currentPage()"
+     [perPage]="perPage()"
+  >
+  </app-write-category>
+</app-modal>

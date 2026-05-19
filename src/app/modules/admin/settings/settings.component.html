@@ -1,0 +1,73 @@
+<div 
+    class="container mx-auto bg-white rounded-sm px-1 md:px-3"
+>
+    <header 
+        class="py-2 border-b border-gray-100 pt-5"
+    >
+        <h3 
+          class="font-semibold text-gray-800 font-bold pl-5"
+        >
+           {{pageTitle}}
+        </h3>
+    </header>
+    <div 
+        class="overflow-x-auto"
+    >
+        <div 
+          class="container m-auto grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 py-3 px-2 md:px-5 pb-5 mb-7 pt-1"
+        >   
+           <div 
+              class="d-flex md:flex  w-full h-full gap-0 md:gap-3"
+           >
+             <label 
+               class="py-0 static md:hidden"
+             >
+               <h3 
+                 class="text-sm text-center bg-slate-300 py-4 font-bold uppercase text-gray-400" 
+                 style="background-color: rgb(76, 52, 116)"
+               >
+                 {{  'All Resources under level'  }}
+               </h3>
+             </label>
+
+             <div 
+               class="d-flex md:block md:w-3/12 border-y-2 bg-gray-200 min-h-[6rem] h-fit max-h-[40rem] overflow-y-scroll shadow-md bg-white"
+             >
+                <label 
+                  class="py-0 static hidden md:block"
+                >
+                   <h3 
+                     class="text-sm text-center bg-slate-300 py-4 font-bold uppercase text-gray-400" 
+                     style="background-color: rgb(76, 52, 116)"
+                   >
+                     {{  'All Resources under level'  }}
+                   </h3>
+                </label>
+                <div 
+                  class='md:flex-col flex w-[500px] md:w-full min-h-1 h-fit pt-2 md:pb-5 border-b-2 border-blue-900 md:border-none'
+                >
+                  @for(resource of resources; track resource.id)
+                  {
+                    <div 
+                      class="rounded-none bg-gray-100 mb-1 hover:bg-[#ffca0a] py-5 pl-2 md:pl-5 px-0 m-auto w-full text-center md:text-left font-semibold transition-colors cursor-pointer duration-300 text-sm"
+                      [ngClass]="'border-y-1'"
+                      (click)="ControlPage(resource)"
+                      style="font-size: 12; padding-top: 15;"
+                    >
+                      {{ resource.name }}
+                    </div>
+                  }
+                </div>                  
+            </div>
+
+            <div 
+              class="w-full md:w-9/12 px-0 flex flex-col bg-white h-[40rem] overflow-y-scroll mt-6 md:mt-0"
+            >
+               <app-settings-control [resource]="resource" [selectedRole]="role"></app-settings-control>
+            </div>
+          </div>
+
+       </div>
+    </div>
+
+</div>

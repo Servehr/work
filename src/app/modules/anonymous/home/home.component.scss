@@ -1,0 +1,16 @@
+.slider .slider-animation {
+  width: 3600px;
+  animation: scroll 20s linear infinite;
+}
+.slider .slider-animation:hover {
+  animation-play-state: paused;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0)
+  }
+  100% {
+    transform: translateX(-200px)
+  }
+}

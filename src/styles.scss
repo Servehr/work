@@ -1,1 +1,48 @@
+@import 'ngx-toastr/toastr';
+
+
+@import 'quill/dist/quill.core.css';
+@import 'quill/dist/quill.snow.css';
+
+
+
+.table-row {
+   padding: 4px 0px 4px 0px;
+}
+
+.table-row-hover:hover {
+  background-color: #e6f7a8;
+  cursor: pointer;
+}
+
+.tanstack-table {
+   table-layout: auto;
+   width: 100%;
+}
+
+
+.toast-message {
+  font-size: 13px; /* Adjust as needed */
+  font-weight: normal;
+}
+
+.toast-title {
+  font-size: 14px; /* Adjust as needed */
+  font-weight: bold;
+}
+
+
 /* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities
+
+
+
+
+
+
+
+
+
+

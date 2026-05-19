@@ -1,0 +1,12 @@
+<div 
+  class="rounded-full w-fit py-1 px-2 cursor-pointer flex justify-center items-center"
+  (click)="onClick()"
+>
+  <ng-icon 
+    [svg]="editIcon" 
+    [size]="'15'" 
+    (mouseover)="ChangeOnButtonHoverIn()" 
+    (mouseout)="ChangeOnButtonHoverOut()"
+    [ngStyle]="style"
+  />
+</div>

@@ -1,0 +1,133 @@
+<div 
+   class='container mx-auto pb-30 mt-1 md:mt-1 mb-7 md:shadow-md flex-col md:flex'
+>
+    <div 
+      class="w-12/12 md:w-5/12 h-fit px-2 pb-40 py-1 md:p-5 pl-5 md:pl-10"
+    >
+      <p 
+        class="text-gray-400 font-bold mb-5 -pl-2"
+      >
+        {{ heading }}
+      </p>
+      
+
+    <div
+    >
+    <app-alert 
+      [statusCode]="statusCode" 
+      [message]="message"
+    >
+    </app-alert>
+    
+    </div>
+      <form 
+          [formGroup]="loginForm"
+          class="flex flex-col space-y-5"
+      >
+          <div 
+            class="flex flex-col space-y-1 text-gray-200"
+          >
+            <input-field
+                [id]="'email'"
+                #email
+                [name]="'email'"
+                [placeholder]="'Enter Email'"
+                [type]="'email'"
+                [value]="''"
+                formControlName="email"
+                [customErrorMessages]="errorMessages"
+            >
+            </input-field>
+          </div>
+          <div 
+            class="flex flex-col space-y-1 text-gray-200"
+          >
+            <input-field
+                [id]="'password'"
+                #password
+                [name]="'password'"
+                [placeholder]="'Enter Password'"
+                [type]="'password'"
+                [value]="''"
+                formControlName="password"
+                [customErrorMessages]="errorMessages"
+            >
+            </input-field>
+          </div>
+
+
+        <!-- <div 
+            class="w-full flex justify-between mx-auto gap-10"
+        >
+          <div 
+            class="w-full md:w-12/12"
+          >
+            <app-multiple-image-upload
+              (sendFile)="saveFile($event, 'multiple-upload')"
+            >
+              <p 
+                class="text-gray-500 text-sm"
+              >
+                Upload Documents
+              </p>
+            </app-multiple-image-upload>
+          </div>
+        </div> -->
+
+
+          <div>
+            <app-botin
+              (ChangeOnButtonHoverIn)="ChangeOnButtonHoverIn()" 
+              (ChangeOnButtonHoverOut)="ChangeOnButtonHoverOut()"
+              (sendData)="authenticate()"
+              [disabled]="disabled"
+              [style]="style"
+            >
+              <div
+                class="flex flex-col space-y-1 items-center justify-between"
+              >
+                @if(isLoading === true)
+                {
+                   <p class="font-bold text-white"> ... authenticating </p>
+                } @else 
+                {
+                  <h3>Login</h3>
+                }
+              </div>
+            </app-botin>
+          </div>
+          
+          <div 
+            class="flex flex-col space-x-2 justify-content-between mt-10 z-50"
+          >
+            <div 
+              class="flex justify-between px-1"
+            >
+              <a 
+                [routerLink]="['/auth/forgot']" 
+                class="text-sm text-gray-600 -mt-2 mb-3 hover:text-green-700 hover:font-bold"
+              >
+                Forgot
+              </a>
+              <a 
+                [routerLink]="['/auth/register']" 
+                class="text-sm text-gray-600 -mt-2 mb-3 hover:text-green-700 hover:font-bold"
+              >
+                Signup
+              </a>
+            </div>
+          </div>
+
+      </form>
+   </div>
+
+
+   <div 
+      class="w-12/12 md:w-7/12 h-[350px] px-2 py-1 md:p-5"
+   >
+
+   </div>
+
+
+
+</div>

@@ -1,0 +1,50 @@
+<div 
+    class="shadow-md pt-3"
+>
+ <!-- bg-[#191b5e] md:bg-white text-white -->
+    <div 
+        class="grid grid-cols-12 py-2 mb-5 pb-10 justify-center items-center md:px-5"
+    >
+        <div 
+            class="col-span-2 md:col-span-1 flex gap-5 md:gap-8 justify-left pl-4 text-center cursor-pointer"
+        >
+            <div 
+                class="block md:hidden"
+            >
+               <ng-icon 
+                 [svg]="hamburger" 
+                 [size]="'25'" 
+                 [color]="'black'" 
+                 [ngClass]="'cursor-pointer'" 
+                 (click)="OpenSideBar()"
+               >
+               </ng-icon>            
+            </div>
+
+            <div 
+                class="text-white md:text-black"
+            > 
+               <ng-icon 
+                 [svg]="home" 
+                 [size]="iconSize" 
+                 [color]="'#3e4095'"
+                 (click)="goHome('/home')"
+               /> 
+            </div>
+
+                                   
+        </div>
+        <div 
+            class="col-span-8 md:col-span-9 px-3 -mt-1 md:mt-0"
+        >
+            <app-search
+            >
+            </app-search>
+        </div>
+        <div 
+            class="col-span-2 md:col-span-2 mt-2 md:mt-0"
+        >
+            <app-notification></app-notification>
+        </div>
+    </div>
+</div>

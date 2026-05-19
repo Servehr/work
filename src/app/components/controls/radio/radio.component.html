@@ -1,0 +1,27 @@
+<div 
+  class="flex items-center"
+>
+  <input
+    #radioBox
+    type="radio"
+    [id]="id"
+    [name]="name"
+    [value]="value"  
+    [disabled]="disabled"
+    class="appearance-none w-7 h-7 checked:ring-offset-4 checked:ring-red-200 checked:ring-2 border-2 border-red-800 rounded-full bg-white checked: checked:bg-red-800 checked:rounded-full checked:after:text-white checked:after:flex checked:after:justify-center checked:after:items-center"
+    [ngModel]="name"
+    (ngModelChange)="onModelChange($event)"
+  />
+  <label 
+    for="name" 
+    class="ml-2 text-gray-700"
+  >
+    <ng-content></ng-content>
+  </label>
+
+  <app-radio-check-validation 
+     [customErrorMessages]="customErrorMessages" 
+     [errors]="control?.errors"
+  >
+  </app-radio-check-validation>
+</div>

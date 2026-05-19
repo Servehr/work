@@ -1,0 +1,86 @@
+<div 
+    class='col-span-7 relative'
+>
+    <form 
+        [formGroup]="suggestForm"
+    >
+        <input  
+            type="text" 
+            name="search" 
+            id="search" 
+            class="block w-full rounded-md border-0 pl-7 pt-3 pb-4 pr-20 text-gray-900 ring-1 ring-inset 
+                        ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset 
+                        focus:ring-slate-200 sm:text-sm sm:leading-6" 
+            placeholder="Search ..."
+            formControlName="keyword"
+            [value]="userWord()"
+            (click)="openUp()"
+            (blur)="closeList()"
+        />
+    </form>
+    
+    @if(showSuggestion() === true)
+    {
+       <div 
+         class="bg-white absolute w-full z-50 h-fit max-h-[500px] flex flex-col shadow-md border-r-2 border-l-2 overflow-y-auto drop-shadow-xl scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-red-400 hover:scrollbar-thumb-blue-400"
+       >   
+         @for(search of results(); track search._id)
+         {
+           <div 
+             class="py-3 px-2 border-b-2 border-gray-200 text-black hover:text-white bg-yellow-50 hover:bg-[#3e4095] cursor-pointer"
+             (click)="select(search)"
+           >
+             <p 
+               class=""
+             >
+               {{ search.name?.charAt(0).toUpperCase() + search.name?.slice(1).toLowerCase() }}
+             </p>
+           </div>
+         }
+       </div>
+    }
+</div>
+
+
+
+
+
+
+
+
+
+<!-- <div 
+   class="search-container"
+>
+  <input 
+    type="text" 
+    [formControl]="searchControl" 
+    placeholder="Search frameworks..." 
+    class="search-input text-black"
+  />
+
+  <ul
+     class="suggestions-list text-black"
+  >
+      @if(suggestions$ | async; as suggestions)
+      {
+         @for(item of suggestions; track item)
+         {
+            <li
+               (click)="selectSuggestion(item)"
+            >
+               {{ item }}
+            </li>
+         }
+      }
+      @if(suggestions$ | async; as suggestions)
+      {         
+         @if(suggestions?.length === 0 && searchControl.value)
+         {
+            <li>
+               No results found.
+            </li>
+         }
+      }
+  </ul>
+</div> -->

@@ -1,0 +1,47 @@
+<div 
+  class="w-full mx-auto bg-[#3f4195] px-5 py-10 md:py-16 mt-20"
+>
+    <div 
+      class="w-9/12 md:w-6/12 mx-auto gap-5"
+    >
+      <form 
+        [formGroup]="subscribe"
+      >
+        <input-field
+          [id]="'email'"
+          #email
+          [name]="'email'"
+          [placeholder]="'Enter email'"
+          [type]="'text'"
+          [value]="userEmail"
+          formControlName="email"
+          [customErrorMessages]="errorMessages"
+        >
+        </input-field>
+        <div class="p-1"></div>
+        <div 
+          class="w-fit px-6 py-3 mx-auto"
+        >
+          <app-botin
+            (ChangeOnButtonHoverIn)="ChangeOnButtonHoverIn()" 
+            (ChangeOnButtonHoverOut)="ChangeOnButtonHoverOut()"
+            (sendData)="subscribeForNewsletter()"
+            [disabled]="disabled"
+            [style]="style"
+          >
+            <div
+              class="flex flex-col space-y-1 items-center justify-between"
+            >
+              @if(isLoading() === true)
+              {
+                <p class="font-bold text-white"> ... subscribing </p>
+              } @else {
+                <h3>Subscribe</h3>
+              }
+            </div>
+          </app-botin>
+        </div>
+      </form>
+    </div>
+
+</div>

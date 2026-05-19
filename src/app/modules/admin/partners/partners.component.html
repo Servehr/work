@@ -1,0 +1,89 @@
+<div 
+    class="container gap-1 md:p-0 mb-5 -mt-3 px-5"
+>
+  <p 
+   class="font-bold text-md text-gray-500 mb-3"
+  >
+    {{ PateTitle }}
+  </p>
+
+
+  <div 
+    class=""
+  >
+    <table>
+      <thead>
+        @for (headerGroup of table.getHeaderGroups(); track headerGroup.id) {
+          <tr>
+            @for (header of headerGroup.headers; track header.id) {
+              @if (!header.isPlaceholder) {
+                <th>
+                  <ng-container
+                    *flexRender="
+                      header.column.columnDef.header;
+                      props: header.getContext();
+                      let header
+                    "
+                  >
+                    <div [innerHTML]="header"></div>
+                  </ng-container>
+                </th>
+              }
+            }
+          </tr>
+        }
+      </thead>
+      <tbody>
+        @for (row of table.getRowModel().rows; track row.id) {
+          <tr class="table-row-hover">
+            @for (cell of row.getVisibleCells(); track cell.id) {
+              <td>
+                <ng-container
+                  *flexRender="
+                    cell.column.columnDef.cell;
+                    props: cell.getContext();
+                    let cell
+                  "
+                >
+                  <div [innerHTML]="cell"></div>
+                </ng-container>
+              </td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<app-modal 
+  [isOpen]="takeActionOnStaff" 
+  title="title" 
+  [modalWidth]="'w-[650px]'"
+  (closeModal)="takeActionOnStaff = false"
+  (confirmAction)="onConfirm()"
+>
+  <app-take-action-on-staff
+    [title]="title" 
+    [buttonName]="buttonName" 
+    (close)="takeActionOnStaff = false"
+  >
+  </app-take-action-on-staff>
+</app-modal>
+
+
+<app-modal 
+  [isOpen]="viewingInfo" 
+  title="title" 
+  [modalWidth]="'w-[850px]'"
+  (closeModal)="viewingInfo = false"
+  (confirmAction)="onConfirm()"
+>
+  <app-view-info
+    [title]="title" 
+    [buttonName]="buttonName" 
+    (close)="viewingInfo = false"
+  >
+  </app-view-info>
+</app-modal>

@@ -1,0 +1,20 @@
+<input
+  [id]="id"
+  [name]="id"
+  [type]="type"
+  [placeholder]="placeholder"
+  class="p-4 border-2 border-gray-200 shadow-md bg-white text-black w-full"
+  (click)="InputChange($event)"
+  [required]="isRequired"
+  [value]="value"
+  [(ngModel)]="value"
+  [formControl]="control"
+/>
+<!-- rounded-lg -->
+
+ 
+<app-input-field-validation 
+  [customErrorMessages]="customErrorMessages" 
+  [errors]="control.errors"
+>
+</app-input-field-validation>

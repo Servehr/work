@@ -1,0 +1,29 @@
+<div 
+  class='flex justify-items-end justify-end pr-5 gap-6'
+>                        
+  <a 
+    routerLink="/notifications" 
+    class="relative cursor-pointer whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
+  >                    
+    <ng-icon 
+      [svg]="notification" 
+      [size]="iconSize" 
+      [color]="'#3e4095'"
+    />
+    <span 
+      class="absolute right-0 -top-3 rounded-full bg-red-600 w-4 h-4 top right p-0 m-0 text-white font-mono text-sm leading-tight text-center"
+    >
+     5
+    </span>
+  </a>
+  <a 
+    [routerLink]="['/profile']" 
+    class="relative cursor-pointer whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900 drop"
+  >                   
+    <ng-icon 
+      [svg]="personBox" 
+      [size]="iconSize" 
+      [color]="'#3e4095'"
+    />  
+  </a>        
+</div>
