@@ -24,6 +24,10 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr'
 import { CategoryEffect } from './state/effects/management/category.effects';
 import { RemoveEffect } from './state/effects/remove.effects';
+import { DivisionEffect } from './state/effects/management/division.effects';
+import { DepartmentEffect } from './state/effects/management/department.effects';
+import { RoleEffect } from './state/effects/management/role.effects';
+import { RexourceEffect } from './state/effects/management/rexource.effects';
 
 
 export function initializeLocation(locationService: LocationService) 
@@ -52,7 +56,12 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withRouterConfig({ onSameUrlNavigation: 'reload' })),
     provideStore(AppReducer),
-    provideEffects([AuthEffect, UserEffect, JobEffect, CategoryEffect, RemoveEffect]),
+    provideEffects(
+        [
+          AuthEffect, UserEffect, JobEffect, 
+          CategoryEffect, RemoveEffect, DivisionEffect, DepartmentEffect, RoleEffect, RexourceEffect
+        ]
+    ),
     provideRouterStore({
       serializer: CustomSerializer
     }),

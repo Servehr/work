@@ -1,4 +1,4 @@
-import { Component, computed, signal, TemplateRef } from '@angular/core';
+import { Component, computed, effect, signal, TemplateRef } from '@angular/core';
 import {
   createAngularTable,
   getCoreRowModel,
@@ -13,7 +13,15 @@ import { ModalComponent } from '../../../../components/modal/modal.component';
 import { bootstrapPlusCircleFill } from '@ng-icons/bootstrap-icons';
 import { WriteDepartmentComponent } from './write-department/write-department.component';
 import { NgIcon } from '@ng-icons/core';
-import { RemoveComponent } from '../../../../shared/remove/remove.component';
+import { START_DEPARTMENT } from '../../../../state/actions/management/department.actions';
+import { Store } from '@ngrx/store';
+import AppState from '../../../../state/app.state';
+import { sleepWait } from '../../../../util/sleep';
+import { getSpinnerStatus } from '../../../../state/selectors/spinner.selector';
+import { getAllDepartment } from '../../../../state/selectors/admin/management/department.selector';
+import { LoaderComponent } from '../../../../components/loader/loader.component';
+import { RemoveDepartmentComponent } from './remove-department/remove-department.component';
+import { PaginationComponent } from '../../../../components/pagination/pagination.component';
 
 // 1. Define your data structure
 type Person = { name: string; description: string; };
@@ -23,7 +31,11 @@ const columnHelper = createColumnHelper<any>();
 @Component({
   selector: 'app-department',
   standalone: true,
-  imports: [FlexRenderDirective, ModalComponent, NgIcon, WriteDepartmentComponent, RemoveComponent],
+  imports: [
+              FlexRenderDirective, ModalComponent, NgIcon, 
+              WriteDepartmentComponent, RemoveDepartmentComponent, PaginationComponent,
+              LoaderComponent
+            ],
   templateUrl: './department.component.html',
   styleUrl: './department.component.scss'
 })
@@ -33,19 +45,52 @@ export class DepartmentComponent {
   buttonName: string = ''
   writeDepartment: boolean = false
   addIcon: any = bootstrapPlusCircleFill
+  isLoading = signal<boolean>(false)
+  dataToUpdate = signal<any>(null)
+  removeData = signal<any>(null)
 
   isModalOpen: boolean = false
   title: string = ''
   modalWidth: string = 'w-[700px]'
 
-  // 2. Define data
-  data = signal<Person[]>([
-    { name: 'Human Resource', description: 'Linsley' },
-    { name: 'Sales', description: 'Fresh' },
-    { name: 'Finance', description: 'Awomasun' },
-    { name: 'Fleet', description: 'Ben' },
-    { name: 'Recruitment', description: 'Kehinde' },
-  ]);
+  // pagination
+  currentPage = signal<number>(1)
+  perPage  = signal<number>(10)
+  totalPages = signal<number>(5)
+  totalDocs =  signal<number>(10)
+  hasNextPage =  signal<boolean>(true)
+  hasPrevPage =  signal<boolean>(true)
+
+  data = signal<any>([])
+
+  constructor(private store: Store<AppState>){}   
+
+  async ngOnInit()
+  {
+    this.store.dispatch(START_DEPARTMENT({ page: Number(this.currentPage()), limit: Number(this.perPage()) }))
+    this.isLoading.set(true)    
+    this.buttonName = 'Save'
+    await sleepWait(500)
+    this.store.select(getSpinnerStatus).subscribe((data: any) => 
+    {
+      this.isLoading.set(data?.loader?.loading)
+      if(!data?.loader?.loading)
+      {
+        this.isModalOpen = false
+        this.isLoading.set(data?.loader?.loading)
+      }
+    }) 
+
+    this.store.select(getAllDepartment).subscribe((dept: any) => 
+    {
+      this.isLoading.set(false)
+      this.data.set(dept?.departments)
+      this.currentPage.set(dept?.departments?.pagination?.currentPage)
+      this.totalPages.set(dept?.departments?.pagination?.totalPages)
+      this.hasPrevPage.set(dept?.departments?.pagination?.hasPrevPage)
+      this.hasNextPage.set(dept?.departments?.pagination?.hasNextPage)
+    })    
+  }  
 
   onConfirm = () => 
   {
@@ -69,13 +114,13 @@ export class DepartmentComponent {
        header: 'About Department'
     },
     {
-       accessorKey: '...',
+       accessorKey: 'change',
        header: '',
        cell: (context) => {
         
-        //  const name: string = context.row.getValue('name')
-        //  const description: string = context.row.getValue('description')
-         const rowData: any =  { name: '', description: '' }
+         const name: string = context.row.getValue('name')
+         const description: string = context.row.getValue('description')
+         const rowData: any =  { name, description }
 
          return flexRenderComponent(
             EditComponent, {
@@ -94,16 +139,16 @@ export class DepartmentComponent {
        }       
     },
     {
-       accessorKey: 'firstName',
+       accessorKey: 'remove',
        header: '',
-       cell: (context) => {
+       cell: (context,) => {
          return flexRenderComponent(
             DeleteComponent, {
               inputs: {
                 value: context.getValue<string>()
               },
               outputs: {
-                clickEvent: (value) => this.handleClick(value, 'delete')
+                clickEvent: (value) => this.remove(value)
               }
             }
          )
@@ -134,11 +179,35 @@ export class DepartmentComponent {
         this.isModalOpen = true
      }
   } 
-
-  change(value: any): void 
+  
+  writeDept = () => 
   {
-     this.isModalOpen = true
+    this.dataToUpdate.set({ id: "", data: { name: '', description: '' } })
+    this.writeDepartment = false
+  }  
+
+  change(cellData: any): void 
+  {
+    this.title = 'Update Category'
+    this.buttonName = 'Update'
+    // this.writeCategory.set(true)
+    this.dataToUpdate.set(cellData)
+     this.writeDepartment = true
   } 
+
+  remove(value: string): void 
+  {
+    this.removeData.set({ department: value, currentPage: this.currentPage(), pagePage: this.perPage() })
+    this.isModalOpen = true
+  }   
+  
+  getData = async (event: any) => 
+  {
+    this.currentPage.set(Number(event.page))
+    this.isLoading.set(true)  
+    await sleepWait(500)
+    this.store.dispatch(START_DEPARTMENT({ page: Number(this.currentPage()), limit: Number(this.perPage()) }))
+  }
 
 
 }

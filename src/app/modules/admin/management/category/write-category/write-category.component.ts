@@ -89,8 +89,6 @@ export class WriteCategoryComponent implements OnInit {
             this.name.set(this.dataToUpdate()?.data?.name)
             this.categoryForm.get('categoryName')?.setValue(this.dataToUpdate()?.data?.name)
             this.categoryForm.get('categoryDescription')?.setValue(this.dataToUpdate()?.data?.description)
-            // this.name.set(this.dataToUpdate()?.data?.name.toString())
-            // this.description.set(this.dataToUpdate()?.data?.description.toString())
          } else {
             this.categoryForm.get('categoryName')?.setValue("")
             this.categoryForm.get('categoryDescription')?.setValue("")
@@ -136,14 +134,14 @@ export class WriteCategoryComponent implements OnInit {
           'padding': '20px'        
        } 
     }
+
     closeModal()
     {
       this.categoryForm.reset()
       this.categoryForm.get('categoryName')?.setValue("")
       this.categoryForm.get('categoryDescription')?.setValue("")
       this.close.emit()
-    }
-    
+    }    
     
     write = async () => 
     {
@@ -156,22 +154,17 @@ export class WriteCategoryComponent implements OnInit {
           {
             if(this.dataToUpdate().id !== "")
             {                
-               const id = this.dataToUpdate().id
                const categoryName = categ['categoryName']!
-               const categoryDescription = categ['categoryDescription']!  
-               console.log({ id, categoryName, categoryDescription })
-               console.log("Update")
+               const categoryDescription = categ['categoryDescription']!
                this.store.dispatch(CREATE_UPDATE({ category: this.dataToUpdate().id, name: categoryName, description: categoryDescription, page: Number(this.currentPage()), perPage: Number(this.perPage()) }))
             } else {              
                const categoryName = categ['categoryName']!
-               const categoryDescription = categ['categoryDescription']!  
-               console.log("Create")
+               const categoryDescription = categ['categoryDescription']!
                this.store.dispatch(CREATE_CATEGORY({ name: categoryName, description: categoryDescription, page: Number(this.currentPage()), perPage: Number(this.perPage()) }))
             }
           }
         )
       } else {
-         console.log("Great")
          this.categoryForm.markAllAsTouched()  
          this.message = "Attend to all fields"
          this.store.dispatch(SetErrorMessage({ msg: this.message, statusCode: 400, operation: "authenticate-user"  }))

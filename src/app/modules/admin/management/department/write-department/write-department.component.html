@@ -33,7 +33,7 @@
                 [name]="'departmentName'"
                 [placeholder]="'Enter Department Name'"
                 [type]="'departmentName'"
-                [value]="''"
+                [value]="dataToUpdate()?.data?.name"
                 formControlName="departmentName"
                 [customErrorMessages]="errorMessages"
             >
@@ -48,6 +48,7 @@
               [cols]="cols"
               formControlName="departmentDescription"
               [customErrorMessages]="errorMessages"
+              [value]="dataToUpdate()?.data?.description"     
             >
             </app-text-area>
           </div>

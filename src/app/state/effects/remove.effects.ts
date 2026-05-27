@@ -22,28 +22,29 @@ export class RemoveEffect {
     currentUrl!: string;
 
     // constructor(private toastr: ToastrService){} 
-
     
     remove$ = createEffect(() => {
       return this.actions$.pipe(
         ofType(REMOVE),
           switchMap((action) => 
            {
-            return this.removeService.remove(action.path, action.model)
+            return this.removeService.remove(action?.data)
              .pipe(
                 tap(
                   {
                     next: (data) => { 
-                      this.toastr.success(data?.message)
-                      this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200  } }))
-                      this.store.dispatch({ type: '[category creation] category posting' })
+                      console.log(data)
+                      // this.toastr.success(data?.message)
+                      // this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200  } }))
+                      // this.store.dispatch({ type: action.data.action })
                       },
                     error: (err) => { 
-                      this.toastr.error( err?.error?.message, 'Error deleting'),
-                      this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 400  } }))
+                      this.toastr.error( err?.error?.message, 'Error deleting')
+                      // this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 400  } }))
                     },
                     complete: () => {
                       // this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200 } })) 
+                      // this.store.dispatch(LOAD_DIVISIONS({ category: this.divisions(), page: Number(this.currentPage()), limit: Number(this.perPage()) }))
                     },
                   }
                 )
@@ -51,6 +52,6 @@ export class RemoveEffect {
            }
         )
       )
-    }, { dispatch: false })    
+    }, { dispatch: false, functional: true }) 
 
 }

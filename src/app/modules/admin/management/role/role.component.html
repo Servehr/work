@@ -1,76 +1,101 @@
-<div 
-    class="container gap-1 md:p-0 mb-5 -mt-3 px-5"
->
+@if(isLoading()  === true)
+{
   <div 
-    class="flex space-between-10 items-center"
+    class="h-[400px] box-shadow w-full flex justify-center items-center"
   >
-    <p 
-      class="font-bold text-md text-gray-500 mb-3"
+    <app-loader></app-loader>
+  </div>
+}
+
+@if(isLoading() === false)
+{
+  <div 
+    class="container gap-1 md:p-0 mb-5 -mt-3 px-5"
+  >
+    <div 
+      class="flex space-between-10 items-center"
     >
-      {{ PageTitle }}
-    </p>
+      <p 
+        class="font-bold text-md text-gray-500 mb-3"
+      >
+        {{ PageTitle }}
+      </p>
+
+      <div 
+        class="rounded-full flex justify-center ml-5 -mt-1 items-center w-fit py-1 px-1 hover:border-2 hover:border-[#3e4095] hover:py-1 hover:px-1 cursor-pointer"
+        (click)="ToggleWithTitle('Create Role')"
+      >
+        <ng-icon 
+          [svg]="addIcon" 
+          [size]="'20'" 
+          [color]="'black'"
+        />
+      </div>
+    </div>
+
 
     <div 
-      class="rounded-full flex justify-center ml-5 -mt-1 items-center w-fit py-1 px-1 hover:border-2 hover:border-[#3e4095] hover:py-1 hover:px-1 cursor-pointer"
-      (click)="ToggleWithTitle('Create Role')"
+      class="mt-2"
     >
-      <ng-icon 
-        [svg]="addIcon" 
-        [size]="'20'" 
-        [color]="'black'"
-      />
-    </div>
-  </div>
-
-
-  <div 
-    class="mt-2"
-  >
-    <table>
-      <thead>
-        @for (headerGroup of table.getHeaderGroups(); track headerGroup.id) {
-          <tr>
-            @for (header of headerGroup.headers; track header.id) {
-              @if (!header.isPlaceholder) {
-                <th>
+      <table>
+        <thead>
+          @for (headerGroup of table.getHeaderGroups(); track headerGroup.id) {
+            <tr>
+              @for (header of headerGroup.headers; track header.id) {
+                @if (!header.isPlaceholder) {
+                  <th>
+                    <ng-container
+                      *flexRender="
+                        header.column.columnDef.header;
+                        props: header.getContext();
+                        let header
+                      "
+                    >
+                      <div [innerHTML]="header"></div>
+                    </ng-container>
+                  </th>
+                }
+              }
+            </tr>
+          }
+        </thead>
+        <tbody>
+          @for (row of table.getRowModel().rows; track row.id) {
+            <tr class="table-row-hover">
+              @for (cell of row.getVisibleCells(); track cell.id) {
+                <td>
                   <ng-container
                     *flexRender="
-                      header.column.columnDef.header;
-                      props: header.getContext();
-                      let header
+                      cell.column.columnDef.cell;
+                      props: cell.getContext();
+                      let cell
                     "
                   >
-                    <div [innerHTML]="header"></div>
+                    <div [innerHTML]="cell"></div>
                   </ng-container>
-                </th>
+                </td>
               }
-            }
-          </tr>
-        }
-      </thead>
-      <tbody>
-        @for (row of table.getRowModel().rows; track row.id) {
-          <tr class="table-row-hover">
-            @for (cell of row.getVisibleCells(); track cell.id) {
-              <td>
-                <ng-container
-                  *flexRender="
-                    cell.column.columnDef.cell;
-                    props: cell.getContext();
-                    let cell
-                  "
-                >
-                  <div [innerHTML]="cell"></div>
-                </ng-container>
-              </td>
-            }
-          </tr>
-        }
-      </tbody>
-    </table>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
   </div>
 
-</div>
+    <div 
+      class="container mx-auto p-4 flex justify-center items-center"
+    >
+      <app-pagination
+        [currentPage]="currentPage()"
+        [noOfPages]="totalPages()"
+        [hasNextPage]="hasNextPage()"
+        [hasPreviousPage]="hasPrevPage()"
+        (pageData)="getData($event)"
+      >
+      </app-pagination>
+    </div>
+}  
 
 
 <app-modal 
@@ -80,13 +105,12 @@
   (closeModal)="isModalOpen = false"
   (close)="onConfirm()"
 >
-  <app-remove
+  <app-remove-role
     (close)="isModalOpen = false"
-    [path]="'a'"
-    [category]="'a'"
+    [removeData]="removeData()"
   >
      You are about to delete role
-  </app-remove>
+  </app-remove-role>
 </app-modal>
 
 <app-modal 
@@ -97,9 +121,12 @@
   (confirmAction)="onConfirm()"
 >
   <app-write-role 
-      [title]="title" 
-      [buttonName]="buttonName" 
-      (close)="writeRole = false"
+    [title]="title" 
+    [buttonName]="buttonName" 
+    (close)="writeRole = false"
+    [dataToUpdate]="dataToUpdate()"
+    [currentPage]="currentPage()"
+    [perPage]="perPage()"
   >
   </app-write-role>
 </app-modal>

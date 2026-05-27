@@ -21,7 +21,12 @@ export class CategoryService {
     }
 
     update(category: string, name: string, description: string) : Observable<any> 
-    {console.log("Hello")
+    {
       return this._http.put<{category: string, name: string, description: string}>(`${environment.url}category/update`, { category: category, name: name, description: description });
+    } 
+    
+    remove(value: string) : Observable<any> 
+    {
+      return this._http.put<any>(`${environment.url}category/remove`, { category: value })
     }    
 }

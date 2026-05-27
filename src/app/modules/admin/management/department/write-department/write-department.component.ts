@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, effect, EventEmitter, inject, input, Input, OnInit, Output, signal, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import AppState from '../../../../../state/app.state';
 import { getResponseMessage, getSpinnerStatus } from '../../../../../state/selectors/spinner.selector';
@@ -10,6 +10,7 @@ import { ModalComponent } from '../../../../../components/modal/modal.component'
 import { SetErrorMessage, SetLoadingStatus } from '../../../../../state/actions/spinner.action';
 import { delay, of } from 'rxjs';
 import { TextAreaComponent } from '../../../../../components/controls/text-area/text-area.component';
+import { CREATE_DEPARTMENT, UPDATE_DEPARTMENT } from '../../../../../state/actions/management/department.actions';
 
 export const departmentNameRequired = (control: AbstractControl): ValidationErrors | null => 
 {
@@ -35,6 +36,15 @@ export class WriteDepartmentComponent implements OnInit {
    @Input() title: string = ''
    @Input() buttonName: string = ''
    @Output() close: EventEmitter<void> = new EventEmitter()
+
+   dataToUpdate = input<any>(null)
+   currentPage = input<number>()
+   perPage = input<number>()
+   placeholder: string = ''
+
+   id = signal<string>('')
+   name = signal<string>('')
+   description = signal<string>('')   
 
    rows: number = 7
    cols: number = 20
@@ -72,14 +82,41 @@ export class WriteDepartmentComponent implements OnInit {
          this.statusCode = statusCode
       })
 
+      effect(() => 
+      {
+         if(this.dataToUpdate())
+         {
+            this.name.set(this.dataToUpdate()?.data?.name)
+            this.departmentForm.get('departmentName')?.setValue(this.dataToUpdate()?.data?.name)
+            this.departmentForm.get('departmentDescription')?.setValue(this.dataToUpdate()?.data?.description)
+         } else {
+            this.departmentForm.get('departmentName')?.setValue("")
+            this.departmentForm.get('departmentDescription')?.setValue("")
+         }
+      }, { allowSignalWrites: true })      
+
    }
 
    ngOnInit(): void 
    {
-     this.store.select(getSpinnerStatus).subscribe((data: any) => {
-      //  this.isLoading = status
-     })
+     this.store.select(getSpinnerStatus).subscribe((data: any) => 
+      {
+        this.isLoading = data?.loader?.loading
+        if(!data?.loader?.loading)
+        {
+          this.closeModal()
+        }
+      }
+     )
    }
+
+  ngOnChanges(changes: SimpleChanges)
+   {
+     if(!changes['dataToUpdate'])
+     {
+         this.name.set(this.dataToUpdate()?.data?.name)
+     }
+  }     
 
    ChangeOnButtonHoverIn()
    {
@@ -106,21 +143,32 @@ export class WriteDepartmentComponent implements OnInit {
 
     closeModal()
     {
-       this.close.emit()
+      this.departmentForm.reset()
+      this.departmentForm.get('departmentName')?.setValue("")
+      this.departmentForm.get('departmentDescription')?.setValue("")
+      this.close.emit()
     }
     
     write = async () => 
     {
       this.store.dispatch(SetLoadingStatus({ loader: { loading: true, statusCode: 0 }}))
-      if(this.departmentForm.valid)
+      if(this.departmentForm.valid === true)
       {
         of(this.departmentForm.value)
         .pipe(delay(1000))
         .subscribe(dept => 
           {
-            const departmentName = dept['departmentName']!
-            const departmentDescription = dept['departmentDescription']!      
-            // this.store.dispatch(START_LOGIN({ departmentName, departmentDescription }))
+            if(this.dataToUpdate().id !== "")
+            {                
+               const departmentName = dept['departmentName']!
+               const departmentDescription = dept['departmentDescription']!
+               this.store.dispatch(UPDATE_DEPARTMENT({ department: this.dataToUpdate().id, name: departmentName, description: departmentDescription, page: Number(this.currentPage()), perPage: Number(this.perPage()) }))
+            } else {              
+               const departmentName = dept['departmentName']!
+               const departmentDescription = dept['departmentDescription']!
+               this.store.dispatch(CREATE_DEPARTMENT({ name: departmentName, description: departmentDescription, page: Number(this.currentPage()), perPage: Number(this.perPage()) }))
+            }
+
           }
         )
       } else {

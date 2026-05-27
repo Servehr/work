@@ -6,7 +6,6 @@ import { DatabaseService } from '../../../service/db/database.service';
 import { AsyncPipe, KeyValuePipe, NgFor, NgIf } from '@angular/common';
 import { bootstrapEyeFill, bootstrapStarFill, bootstrapThreeDotsVertical, bootstrapXCircleFill } from '@ng-icons/bootstrap-icons';
 import { NgIcon } from '@ng-icons/core';
-import { Router } from '@angular/router';
 import { SuggestionComponent } from '../../../components/suggestion/suggestion.component';
 import { UserCardComponent } from '../../../components/user-card/user-card.component';
 import { ImageComponent } from '../../../components/controls/image/image.component';
@@ -16,6 +15,7 @@ import { Store } from '@ngrx/store';
 import AppState from '../../../state/app.state';
 import { NewsletterComponent } from '../../section/newsletter/newsletter.component';
 import { ToastrService } from 'ngx-toastr';
+import { SkillSearchComponent } from './skill-search/skill-search.component';
 
 
 @Component({
@@ -23,7 +23,7 @@ import { ToastrService } from 'ngx-toastr';
   standalone: true,
   imports: [
                NgIf, NgFor, AsyncPipe, KeyValuePipe, NgFor, NgIcon, ReactiveFormsModule,
-               InputFieldComponent, BotinComponent, SuggestionComponent, 
+               InputFieldComponent, BotinComponent, SuggestionComponent, SkillSearchComponent,
                UserCardComponent, ImageComponent, TestimonialComponent, NewsletterComponent                
             ],
   templateUrl: './home.component.html',
@@ -119,8 +119,8 @@ export class HomeComponent implements OnInit
    ])
 
    sliders = signal([
-      "https://ps.w.org/ml-slider/assets/banner-1544x500.png?rev=2907610",
-      "https://cdn2.mageplaza.com/media/general2/H4BvhSS.jpg"
+     "https://ps.w.org/ml-slider/assets/banner-1544x500.png?rev=2907610",
+     "https://cdn2.mageplaza.com/media/general2/H4BvhSS.jpg"
       
    ])
 

@@ -11,12 +11,10 @@ import {
 } from '@tanstack/angular-table';
 import { EditComponent } from '../../../../util/icons/edit/edit.component';
 import { DeleteComponent } from '../../../../util/icons/delete/delete.component';
-import { ViewComponent } from '../../../../util/icons/view/view.component';
 import { ModalComponent } from '../../../../components/modal/modal.component';
 import { NgIcon } from '@ng-icons/core';
 import { bootstrapPlusCircleFill } from '@ng-icons/bootstrap-icons';
 import { WriteCategoryComponent } from './write-category/write-category.component';
-import { RemoveComponent } from '../../../../shared/remove/remove.component';
 import { Store } from '@ngrx/store';
 import AppState from '../../../../state/app.state';
 import { getSpinnerStatus } from '../../../../state/selectors/spinner.selector';
@@ -28,9 +26,10 @@ import { sleepWait } from '../../../../util/sleep';
 import { BoteenComponent } from '../../../../util/icons/boteen/boteen.component';
 import { DivisionComponent } from './divisions/division/division.component';
 import { PaginationComponent } from '../../../../components/pagination/pagination.component';
+import { RemoveCategoryComponent } from './remove-category/remove-category.component';
 
 // 1. Define your data structure
-type Person = { firstName: string; lastName: string; age: number, gender: string }
+// type Person = { firstName: string; lastName: string; age: number, gender: string }
 
 const columnHelper = createColumnHelper<any>();
 
@@ -39,7 +38,7 @@ const columnHelper = createColumnHelper<any>();
   standalone: true,
   imports: [
               FlexRenderDirective, NgIcon, 
-              PaginationComponent, DivisionComponent, WriteCategoryComponent, RemoveComponent, ModalComponent, ModalComponent, LoaderComponent,
+              PaginationComponent, DivisionComponent, WriteCategoryComponent, RemoveCategoryComponent, ModalComponent, ModalComponent, LoaderComponent,
            ],
   templateUrl: './category.component.html',
   styleUrl: './category.component.scss'
@@ -51,14 +50,17 @@ export class CategoryComponent {
   writeCategory = signal<boolean>(false)
   addIcon: any = bootstrapPlusCircleFill
   isLoading = signal<boolean>(false)
+
   divisions = signal<any>([])
+  action = signal<string>('[retrieve categories] category posting')
 
   category = signal<string>('')
   path = signal<string>('')
+  removeData = signal<any>(null)
 
   // pagination
   currentPage = signal<number>(1)
-  perPage  = signal<number>(5)
+  perPage  = signal<number>(10)
   totalPages = signal<number>(5)
   totalDocs =  signal<number>(10)
   hasNextPage =  signal<boolean>(true)
@@ -82,7 +84,6 @@ export class CategoryComponent {
 
   constructor(private store: Store<AppState>)
   {
-    // this.store.dispatch(START_CATEGORY({ page: Number(this.currentPage()), limit: Number(this.perPage()) }))
     effect(() => 
     {
        this.dataToUpdate() 
@@ -97,7 +98,7 @@ export class CategoryComponent {
     this.store.dispatch(START_CATEGORY({ page: Number(this.currentPage()), limit: Number(this.perPage()) }))
     this.isLoading.set(true)    
     this.buttonName = 'Save'
-    await sleepWait(1000)
+    await sleepWait(500)
     this.store.select(getSpinnerStatus).subscribe((data: any) => 
     {
       this.isLoading.set(data?.loader?.loading)
@@ -117,10 +118,10 @@ export class CategoryComponent {
       this.totalPages.set(cat?.category?.pagination?.totalPages)
       this.hasPrevPage.set(cat?.category?.pagination?.hasPrevPage)
       this.hasNextPage.set(cat?.category?.pagination?.hasNextPage)
-    })   
-    
-    
+    })    
   }
+
+  isNeed = computed(() => this.writeCategory())
 
   writeCategori = () => 
   {
@@ -139,25 +140,15 @@ export class CategoryComponent {
     this.title = 'Update Category'
     this.buttonName = 'Update'
     this.writeCategory.set(true)
-    // console.log(cellData)
     this.dataToUpdate.set(cellData)
   } 
 
-  ngOnChanges(changes: SimpleChanges)
-   {
-     if(changes['dataToUpdate'])
-     {
-        console.log(changes['dataToUpdate'])
-     }
-  }  
-
   remove(value: string): void 
   {
-    this.title = 'Delete Category'
-    this.buttonName = 'Update'
+    // this.title = 'Delete Category'
+    // this.buttonName = 'Remove'
+    this.removeData.set({ category: value, currentPage: this.currentPage(), pagePage: this.perPage() })
     this.isModalOpen = true
-    this.category.set(value)
-    this.path.set('category/remove')
   }  
 
   columns: ColumnDef<any>[] = [
@@ -174,7 +165,9 @@ export class CategoryComponent {
     {
       accessorKey: 'divisions',
       header: 'Divisions',
-      cell: (context) => {
+      cell: (context) => 
+      {
+         const rowId: string = context.row.original?._id as string
          return flexRenderComponent(
             BoteenComponent, {
               inputs: {
@@ -183,7 +176,7 @@ export class CategoryComponent {
                 boteenCssClass: this.unLinkCss,
               },
               outputs: {
-                clickEvent: (division) => this.categoryDivisions(division)
+                clickEvent: (division) => this.categoryDivisions(rowId)
               }
             }
           )
@@ -262,26 +255,33 @@ export class CategoryComponent {
   //   getCoreRowModel: getCoreRowModel(),
   // })) 
 
-  categoryDivisions(division: any): void
+  categoryDivisions(rowId: string): void
   {
     this.title = 'All division under category'
     this.buttonName = 'Save'
     this.actions = true        
     this.dataToUpdate.set({ id: "", data: { name: "", description: "" } })
-    this.divisions.set(division) 
+    this.divisions.set(rowId) 
   }
 
   onConfirm = () => 
   {
   }
 
+  closeModal = () => 
+  {
+     this.store.dispatch(START_CATEGORY({ page: Number(this.currentPage()), limit: Number(this.perPage()) }))
+     this.actions = false
+  }
+
   getData = async (event: any) => 
   {
-    this.currentPage.set(this.currentPage())
+    this.currentPage.set(Number(event.page))
     this.isLoading.set(true)  
     await sleepWait(500)
-    this.store.dispatch(START_CATEGORY({ page: Number(event.page), limit: Number(this.perPage()) }))
+    this.store.dispatch(START_CATEGORY({ page: Number(this.currentPage()), limit: Number(this.perPage()) }))
   }
+  
 
 }
 

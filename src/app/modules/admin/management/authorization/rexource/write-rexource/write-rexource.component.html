@@ -33,7 +33,7 @@
                 [name]="'rexourceName'"
                 [placeholder]="'Enter Resource Name'"
                 [type]="'rexourceName'"
-                [value]="''"
+                [value]="dataToUpdate()?.data?.name"
                 formControlName="rexourceName"
                 [customErrorMessages]="errorMessages"
             >
@@ -48,6 +48,7 @@
               [cols]="cols"
               formControlName="rexourceDescription"
               [customErrorMessages]="errorMessages"
+              [value]="dataToUpdate()?.data?.description"
             >
             </app-text-area>
           </div>

@@ -28,7 +28,7 @@ export class SelectComponent<T> extends SelectOptionValueAccessorDirective<T> {
     selectedOption: string = ''
     
     @Input()
-    title: string = 'kkk'
+    title: string = ''
 
     @Input()
     // id: { id: string, name: string }[] = []

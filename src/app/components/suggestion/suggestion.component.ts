@@ -20,26 +20,23 @@ export class    SuggestionComponent implements OnInit
 {
   searchControl = new FormControl('');
   suggestions$: Observable<string[]> = of([]);
-  suggestForm: FormGroup;
+  searchForm: FormGroup;
   userWord = model<string>('')
   isSearching =  signal<boolean>(false)
   results = signal<any>([])
+  keep = signal<any>([])
   suggest = input<any[]>()
   divisions = output<{ divisions: any, id: string }>()
   showSuggestion = signal<boolean>(false)
+  keyword: string = ''
 
   constructor(private store: Store<AppState>) 
   { 
-    this.suggestForm = new FormGroup(
+    this.searchForm = new FormGroup(
      {
-        keyword: new FormControl('')
+        searchKey: new FormControl('')
      }
     )
-
-    effect(() => 
-    {
-       
-    })
   }
 
   ngOnInit() 
@@ -50,31 +47,33 @@ export class    SuggestionComponent implements OnInit
     //   switchMap(term => term ? this.fetchSuggestions(term) : of([])) // Cancel previous requests
     // );
 
-    
-    
     this.store.select(getSearchSugesstions).subscribe((search: any) => 
     {
         console.log(search)
     }) 
 
     this.showSuggestion.set(false)
-    this.suggestForm.get('typeKey')?.valueChanges.pipe(
+    this.searchForm.get('searchKey')?.valueChanges.pipe(
         debounceTime(1000),
         distinctUntilChanged()
     ).subscribe((value: string) => {
-        this.suggestForm.patchValue(
-         {
-           typeKey: value
-         }
-        )
+        // this.searchForm.patchValue(
+        //  {
+        //    searchKey: value
+        //  }
+        // )
         this.isSearching.set(true)
+        console.log(value)
         if(value?.length > 0)
         {
-          const category: string = 'category'
-          this.store.dispatch(START_SUGGESTION({ url: category }))
+          // this.results.set([])
+          const search = this.results().filter((result: any) => result?.name?.toLowerCase().includes(value.toLowerCase()))
+          // this.showSuggestion.set(true)
+          this.results.set(search)
         } else {
           this.isSearching.set(false)
-          // this.result.set([])
+          this.results.set(this.keep())          
+          this.divisions.emit({ divisions: [], id: "-1" })
         }
       })    
   }
@@ -84,8 +83,11 @@ export class    SuggestionComponent implements OnInit
     if(changes['suggest'])
     {
        this.results.set(changes['suggest'].currentValue?.data)
+       this.keep.set(changes['suggest'].currentValue?.data)
        console.log(this.suggest())
        console.log(changes['suggest'].currentValue?.data)
+       this.divisions.emit({ divisions: [], id: "-1" })
+       this.userWord.set('')
     }
   }
 
@@ -97,6 +99,10 @@ export class    SuggestionComponent implements OnInit
   openUp = () => 
   {
      this.showSuggestion.update((decide) => !decide)
+     if(this.showSuggestion() === false && this.userWord().length === 0)
+     {
+       this.divisions.emit({ divisions: [], id: "-1" })
+     }
   }
 
   select = (selected: { _id: string, name: string, description: string, divisions: any }) => 

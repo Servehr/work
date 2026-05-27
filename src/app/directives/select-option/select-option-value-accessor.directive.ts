@@ -52,7 +52,11 @@ export class SelectOptionValueAccessorDirective<T> implements ControlValueAccess
     }
 
     writeValue(value: T): void {
-      this.control ? this.control?.setValue(value) : (this.control = new FormControl(value) )
+      // this.control ? this.control?.setValue(value) : (this.control = new FormControl(value) )
+      if (value !== this.control.value) 
+      {
+         this.control.patchValue(value, { emitEvent: false });
+      }
     }
 
     registerOnChange(fn: (val: T | null) => T): void {
@@ -75,7 +79,7 @@ export class SelectOptionValueAccessorDirective<T> implements ControlValueAccess
 
     onChange(newValue: Event): void
     {
-      const selectedValue = (newValue.target as HTMLSelectElement).value;
+      const selectedValue = (newValue.target as HTMLSelectElement).value
       this.value = selectedValue
       this._onChanged(selectedValue)
       this._onTouched()

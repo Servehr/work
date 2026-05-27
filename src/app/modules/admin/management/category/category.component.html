@@ -11,7 +11,7 @@
 @if(isLoading() === false)
 {
   <div 
-      class="container gap-1 md:p-0 mb-5 -mt-3 px-5"
+      class="container gap-1 md:p-0 mb-0 -mt-3 px-5"
   >
     <div 
       class="flex space-between-10 items-center"
@@ -98,23 +98,24 @@
   </div>
 }
 
-
-<app-modal 
-  [isOpen]="actions" 
-  title="title" 
-  [modalWidth]="modalWidth"
-  (closeModal)="actions = false"
-  (confirmAction)="onConfirm()"
->
-  <app-division 
-     [title]="title" 
-     [buttonName]="buttonName" 
-     (close)="actions = false"
-     [divisions]="divisions()"
+@if(actions)
+{
+  <app-modal 
+    [isOpen]="actions" 
+    title="title" 
+    [modalWidth]="modalWidth"
+    (closeModal)="closeModal()"
+    (confirmAction)="onConfirm()"
+    
   >
-  </app-division>
-</app-modal>
-
+    <app-division 
+      [title]="title" 
+      [buttonName]="buttonName" 
+      [category]="divisions()"
+    >
+    </app-division>
+  </app-modal>
+}
 
 <app-modal 
   [isOpen]="isModalOpen" 
@@ -123,14 +124,14 @@
   (closeModal)="isModalOpen = false"
   (close)="onConfirm()"
 >
-  <app-remove
+  <app-remove-category
     (close)="isModalOpen = false"
-    [path]="path()"
-    [category]="category()"
+    [removeData]="removeData()"
   >
-     You are about to delete category
-  </app-remove>
+    You are about to delete category
+  </app-remove-category>
 </app-modal>
+
 
 <app-modal 
   [isOpen]="writeCategory()" 
@@ -140,12 +141,13 @@
   (confirmAction)="onConfirm()"
 >
   <app-write-category 
-     [title]="title" 
-     [buttonName]="buttonName" 
-     (close)="writeCategori()"
-     [dataToUpdate]="dataToUpdate()"
-     [currentPage]="currentPage()"
-     [perPage]="perPage()"
+    [title]="title" 
+    [buttonName]="buttonName" 
+    (close)="writeCategori()"
+    [dataToUpdate]="dataToUpdate()"
+    [currentPage]="currentPage()"
+    [perPage]="perPage()"
   >
   </app-write-category>
 </app-modal>
+

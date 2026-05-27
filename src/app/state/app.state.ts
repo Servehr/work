@@ -5,11 +5,14 @@ import { AuthReducer } from "./reducer/auth.reducer";
 import { spinReducer } from "./reducer/spinner.reducer";
 import { MessageReducer } from "./reducer/message.reducer";
 import { routerReducer, RouterReducerState } from "@ngrx/router-store";
-import { UserResponse } from "./response/UserResponse";
 import { userReducer } from "./reducer/user.reducer";
 import { SuggestionReducer } from "./reducer/suggestion.reducer";
 import { Profile } from "./models/profile";
 import { CategoryReducer } from "./reducer/management/category.reducer";
+import { DivisionReducer } from "./reducer/management/division.reducer.";
+import { RoleReducer } from "./reducer/management/role.reducer.";
+import { DepartmentReducer } from "./reducer/management/department.reducer";
+import { RexourceReducer } from "./reducer/management/rexource.reducer";
 
 
 export default interface AppState 
@@ -21,6 +24,10 @@ export default interface AppState
    profile: Profile
    search: any
    category: any
+   divisions: any
+   roles: any
+   department: any
+   rexources: any
 }
 
 
@@ -32,5 +39,10 @@ export const AppReducer =
    msgState: MessageReducer,
    userState: userReducer,
    suggestionState: SuggestionReducer,
-   categoryState: CategoryReducer
+   categoryState: CategoryReducer,
+   divisionState: DivisionReducer,
+   roleState: RoleReducer,
+   departmentState: DepartmentReducer,
+   rexourceState: RexourceReducer
+
 }

@@ -12,8 +12,10 @@ export class RemoveService {
 
     constructor(private _http: HttpClient){} 
     
-    remove(path: string, value: string) : Observable<any> 
+    remove(data: any) : Observable<any> 
     {
+      const { path, value, action } = data
+      console.log({ path, value, action })
       return this._http.put<any>(`${environment.url}${path}`, { value })
     }
 

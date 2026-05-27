@@ -121,10 +121,13 @@ export class PostComponent implements OnInit, OnChanges {
      this.options.clear()
      this.selectedOption.set([])
      this.selectedCategory = data?.id
-     for (let index = 0; index < data.divisions.length; index++) 
+     if(data.divisions.length > 0)
      {
-        let content = data?.divisions[index]
-        this.options.push(this.fb.control(content))      
+       for (let index = 0; index < data.divisions.length; index++) 
+       {
+         let content = data?.divisions[index]
+         this.options.push(this.fb.control(content))      
+       }
      }
   }
 
