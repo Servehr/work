@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, signal, CUSTOM_ELEMENTS_SCHEMA, inject  } from '@angular/core';
+import { Component, Inject, OnInit, signal, CUSTOM_ELEMENTS_SCHEMA, inject, input, Input  } from '@angular/core';
 import { InputFieldComponent } from '../../../components/controls/input-field/input-field.component';
 import { BotinComponent } from '../../../components/controls/botin/botin.component';
 import { liveQuery } from 'dexie';
@@ -16,6 +16,9 @@ import AppState from '../../../state/app.state';
 import { NewsletterComponent } from '../../section/newsletter/newsletter.component';
 import { ToastrService } from 'ngx-toastr';
 import { SkillSearchComponent } from './skill-search/skill-search.component';
+import { WhatsappComponent } from './whatsapp/whatsapp.component';
+import { FastResponseFormComponent } from './fast-response-form/fast-response-form.component';
+import { ModalComponent } from '../../../components/modal/modal.component';
 
 
 @Component({
@@ -23,8 +26,8 @@ import { SkillSearchComponent } from './skill-search/skill-search.component';
   standalone: true,
   imports: [
                NgIf, NgFor, AsyncPipe, KeyValuePipe, NgFor, NgIcon, ReactiveFormsModule,
-               InputFieldComponent, BotinComponent, SuggestionComponent, SkillSearchComponent,
-               UserCardComponent, ImageComponent, TestimonialComponent, NewsletterComponent                
+               InputFieldComponent, BotinComponent, SuggestionComponent, SkillSearchComponent, ModalComponent,
+               UserCardComponent, ImageComponent, TestimonialComponent, NewsletterComponent, WhatsappComponent, FastResponseFormComponent                
             ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -39,6 +42,9 @@ export class HomeComponent implements OnInit
    view: any = bootstrapEyeFill
    threeDot: any = bootstrapThreeDotsVertical
    rating: any = bootstrapStarFill
+   modalWidth = signal<string>('w-[750px]')
+   openFastForm = signal<boolean>(false)
+
    subscribe: FormGroup;
    style: any = {
       'background-color' : '#be9d18',
@@ -194,6 +200,16 @@ export class HomeComponent implements OnInit
          token: "PODfdfdfdf"
       }      
       await this.dbService.newUser(user)
+   }
+
+   sendFastForm = () => 
+   {
+      this.openFastForm.set(true)
+   }  
+
+   closeForm = () => 
+   {
+      this.openFastForm.set(false)
    }
 
 }

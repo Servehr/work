@@ -168,7 +168,6 @@ export class WriteDepartmentComponent implements OnInit {
                const departmentDescription = dept['departmentDescription']!
                this.store.dispatch(CREATE_DEPARTMENT({ name: departmentName, description: departmentDescription, page: Number(this.currentPage()), perPage: Number(this.perPage()) }))
             }
-
           }
         )
       } else {

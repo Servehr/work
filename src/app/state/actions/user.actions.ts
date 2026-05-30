@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { NEWSLETTERS, USER_PROFILE_START, USER_PROFILE_SUCCESS, USER_SEARCH_START, USER_SEARCH_SUCCESS } from "../constants/user";
+import { FAST_RESPONSE_FORM, NEWSLETTERS, USER_PROFILE_START, USER_PROFILE_SUCCESS, USER_SEARCH_START, USER_SEARCH_SUCCESS } from "../constants/user";
 import { UserResponse } from "../response/UserResponse";
 
 
@@ -11,5 +11,7 @@ export const SERARCH_USER = createAction(USER_SEARCH_START, props<{keyword: stri
 export const SEARCH_SUCCESS = createAction(USER_SEARCH_SUCCESS, props<{profile: UserResponse}>())
 
 export const SUBSCRIBE = createAction(NEWSLETTERS, props<{ email: string }>())
+
+export const FastForm = createAction(FAST_RESPONSE_FORM, props<{ firstname: string, surname: string, phone: string, email: string, message: string }>())
 
 

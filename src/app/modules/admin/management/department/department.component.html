@@ -11,77 +11,93 @@
 @if(isLoading() === false)
 {
   <div 
-      class="container gap-1 md:p-0 mb-5 -mt-3 px-5"
+      class="grid md:grid-cols-12 grid-cols-12 md:p-3 -mt-2 -mt-8 justify-center items-center z-50"
   >
-    <div 
-      class="flex space-between-10 items-center"
+    <section 
+      class="col-span-12 justify-center antialiased text-gray-600 py-2"
     >
-      <p 
-        class="font-bold text-md text-gray-500 mb-3"
-      >
-        {{ PageTitle }}
-      </p>
-
       <div 
-        class="rounded-full flex justify-center ml-5 -mt-1 items-center w-fit py-1 px-1 hover:border-2 hover:border-[#3e4095] hover:py-1 hover:px-1 cursor-pointer"
-        (click)="ToggleWithTitle('Create Department')"
+        class="h-full"
       >
-        <ng-icon 
-          [svg]="addIcon" 
-          [size]="'20'" 
-          [color]="'black'"
-        />
-      </div>
-    </div>
+        <div 
+          class="w-full bg-white pb-3 -mt-1"
+        >
+          <header 
+            class="flex justify-between items-center py-2 mb-2 mt-2 border-b border-gray-100"
+          >
+            <div 
+              class="flex justify-between items-center"
+            >
+              <p 
+                class="font-bold text-md text-gray-500 mb-3"
+              >
+                {{ PageTitle }}
+              </p>
 
+              <div 
+                class="rounded-full flex justify-center ml-5 -mt-1 items-center w-fit py-1 px-1 hover:border-2 hover:border-[#3e4095] hover:py-1 hover:px-1 cursor-pointer"
+                (click)="ToggleWithTitle('Create Department')"
+              >
+                <ng-icon 
+                  [svg]="addIcon" 
+                  [size]="'20'" 
+                  [color]="'black'"
+                />
+              </div>
+            </div>
+          </header>
+          
 
-    <div 
-      class="mt-2"
-    >
-      <table>
-        <thead>
-          @for (headerGroup of table.getHeaderGroups(); track headerGroup.id) {
-            <tr>
-              @for (header of headerGroup.headers; track header.id) {
-                @if (!header.isPlaceholder) {
-                  <th>
-                    <ng-container
-                      *flexRender="
-                        header.column.columnDef.header;
-                        props: header.getContext();
-                        let header
-                      "
-                    >
-                      <div [innerHTML]="header"></div>
-                    </ng-container>
-                  </th>
+          <div 
+            class="mt-2"
+          >
+            <table>
+              <thead>
+                @for (headerGroup of table.getHeaderGroups(); track headerGroup.id) {
+                  <tr>
+                    @for (header of headerGroup.headers; track header.id) {
+                      @if (!header.isPlaceholder) {
+                        <th>
+                          <ng-container
+                            *flexRender="
+                              header.column.columnDef.header;
+                              props: header.getContext();
+                              let header
+                            "
+                          >
+                            <div [innerHTML]="header"></div>
+                          </ng-container>
+                        </th>
+                      }
+                    }
+                  </tr>
                 }
-              }
-            </tr>
-          }
-        </thead>
-        <tbody>
-          @for (row of table.getRowModel().rows; track row.id) {
-            <tr class="table-row-hover">
-              @for (cell of row.getVisibleCells(); track cell.id) {
-                <td>
-                  <ng-container
-                    *flexRender="
-                      cell.column.columnDef.cell;
-                      props: cell.getContext();
-                      let cell
-                    "
-                  >
-                    <div [innerHTML]="cell"></div>
-                  </ng-container>
-                </td>
-              }
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
+              </thead>
+              <tbody>
+                @for (row of table.getRowModel().rows; track row.id) {
+                  <tr class="table-row-hover">
+                    @for (cell of row.getVisibleCells(); track cell.id) {
+                      <td>
+                        <ng-container
+                          *flexRender="
+                            cell.column.columnDef.cell;
+                            props: cell.getContext();
+                            let cell
+                          "
+                        >
+                          <div [innerHTML]="cell"></div>
+                        </ng-container>
+                      </td>
+                    }
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
 
+        </div>
+      </div>                    
+    </section>
   </div>
 
   <div 

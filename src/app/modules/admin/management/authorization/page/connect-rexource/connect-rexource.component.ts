@@ -1,14 +1,20 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, input, Input, Output, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import AppState from '../../../../../../state/app.state';
 import { getResponseMessage, getSpinnerStatus } from '../../../../../../state/selectors/spinner.selector';
 import { BotinComponent } from '../../../../../../components/controls/botin/botin.component';
 import { LabelComponent } from '../../../../../../components/controls/label/label.component';
+import { getAllRole } from '../../../../../../state/selectors/admin/management/role.selector';
+import { LoaderComponent } from '../../../../../../components/loader/loader.component';
+import { sleepWait } from '../../../../../../util/sleep';
+import { START_REXOURCE } from '../../../../../../state/actions/management/rexource.actions';
+import { getAllRexource } from '../../../../../../state/selectors/admin/management/rexource.selector';
+import { CONNECT_PAGE_TO_RESOURCE } from '../../../../../../state/actions/management/page.actions';
 
 @Component({
   selector: 'app-connect-rexource',
   standalone: true,
-  imports: [BotinComponent, LabelComponent],
+  imports: [BotinComponent, LabelComponent, LoaderComponent],
   templateUrl: './connect-rexource.component.html',
   styleUrl: './connect-rexource.component.scss'
 })
@@ -21,9 +27,23 @@ export class ConnectRexourceComponent {
   @Output() close: EventEmitter<void> = new EventEmitter()
     
   pageTitle: string = ''
-  isLoading: boolean = false
+  isLoading = signal<boolean>(false)
+  resources = signal<any>([])
+  selectedPage = input<{ id: string, name: string}>({ id: '', name: '' })
+  // happening = signal<string>('You are about to connect')
   message: string = ''
   statusCode!: number
+  selectedRexourceId = signal<string>("")
+  pageIds = signal<string>('')
+
+  // pagination
+  currentPage = signal<number>(1)
+  perPage  = signal<number>(20)
+  totalPages = signal<number>(5)
+  totalDocs =  signal<number>(10)
+  hasNextPage =  signal<boolean>(true)
+  hasPrevPage =  signal<boolean>(true)
+
   style: any = {
     'background-color' : '#be9d18',
     'color': 'black',
@@ -41,18 +61,66 @@ export class ConnectRexourceComponent {
     { 'text': 'Accountant', 'nos': 1 }
   ]
 
-  ngOnInit(): void 
+  async ngOnInit()
   {
-    this.store.select(getResponseMessage).subscribe((data) => 
+    this.store.dispatch(START_REXOURCE({ page: Number(this.currentPage()), limit: Number(this.perPage()) }))
+    this.isLoading.set(true)    
+    this.buttonName = 'Save'
+    await sleepWait(500)      
+    this.store.select(getSpinnerStatus).subscribe((data: any) => 
     {
-      const { statusCode, msg } = data.response
-      this.message = msg
-      this.statusCode = statusCode
-    })
-    this.store.select(getSpinnerStatus).subscribe((data: any) => {
-      // this.isLoading = status
-    })
-  }
+      if(data?.loader?.statusCode === 200)
+      {
+        this.isLoading.set(data?.loader?.loading)
+      }
+    }) 
+
+    this.store.select(getAllRexource).subscribe((rexrc: any) => 
+    {
+      console.log(rexrc?.rexources)
+      if(rexrc?.rexources)
+      {
+        console.log(rexrc?.rexources)
+        this.isLoading.set(false)
+        console.log(rexrc?.rexources)
+        for (let index = 0; index < rexrc?.rexources?.length; index++) 
+        {
+          console.log(rexrc?.rexources[index])
+          let selectedId = rexrc?.rexources[index]?._id
+          console.log(selectedId)
+          console.log(rexrc?.rexources[index]?.pages?.length)
+          if(rexrc?.rexources[index]?.pages?.length > 0)
+          {
+             this.selectedRexourceId.set(selectedId)
+          }
+          rexrc?.rexources[index]?.pages?.map((page: any) => 
+          {
+             console.log(page?._id)
+             this.pageIds.set(page?._id)
+          })
+          // if(rexrc?.rexources[index]?.pages?.legth > 0)
+          // {
+          //    console.log("@@@@@@@@@@@@@@@@@@22")
+          //    console.log(rexrc?.rexources[index]?.pages)
+          // }         
+        }
+        // rexrc?.rexources?.pages?.map((page: { _id: string }) => 
+        //   {
+        //      this.pageIds.update((p) => [...p, page?._id])
+        //   }
+        // )
+        console.log("Selected Resource")
+        console.log(this.selectedRexourceId())
+        console.log(this.pageIds())
+        console.log("Selected Resource")
+        this.resources.set(rexrc?.rexources)
+        this.currentPage.set(rexrc?.rexources?.pagination?.currentPage)
+        this.totalPages.set(rexrc?.rexources?.pagination?.totalPages)
+        this.hasPrevPage.set(rexrc?.rexources?.pagination?.hasPrevPage)
+        this.hasNextPage.set(rexrc?.rexources?.pagination?.hasNextPage)
+      }
+    })    
+  }  
   
   ChangeOnButtonHoverIn()
   {
@@ -75,6 +143,11 @@ export class ConnectRexourceComponent {
   closeModal()
   {
     this.close.emit()
+  }
+
+  connectPageToResource = (rexource: string, pagee: string) => 
+  {
+     this.store.dispatch(CONNECT_PAGE_TO_RESOURCE({ resource: rexource, pagee: pagee, page: this.currentPage(), limit: this.perPage() }))
   }
 
   disconnect()

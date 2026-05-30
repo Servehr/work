@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, effect, EventEmitter, inject, input, Input, OnInit, Output, signal, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import AppState from '../../../../../../state/app.state';
 import { getResponseMessage, getSpinnerStatus } from '../../../../../../state/selectors/spinner.selector';
@@ -10,15 +10,16 @@ import { ModalComponent } from '../../../../../../components/modal/modal.compone
 import { SetErrorMessage, SetLoadingStatus } from '../../../../../../state/actions/spinner.action';
 import { delay, of } from 'rxjs';
 import { TextAreaComponent } from '../../../../../../components/controls/text-area/text-area.component';
+import { CREATE_PAGE, UPDATE_PAGE } from '../../../../../../state/actions/management/page.actions';
 
 export const pageNameRequired = (control: AbstractControl): ValidationErrors | null => 
 {
-   return control.value?.length === 0 || control.value === null ? { roleNameRequired : 'roleNameRequired' } :  null
+   return control.value?.length === 0 || control.value === null ? { pageNameRequired : 'pageNameRequired' } :  null
 }
 
 export const pageDescriptionRequired = (control: AbstractControl): ValidationErrors | null => 
 {
-   return control.value?.length === 0 || control.value === null ? { roleDescriptionRequired : 'roleDescriptionRequired' } :  null
+   return control.value?.length === 0 || control.value === null ? { pageDescriptionRequired : 'pageDescriptionRequired' } :  null
 }
 
 @Component({
@@ -36,9 +37,17 @@ export class WritePageComponent implements OnInit {
    @Input() buttonName: string = ''
    @Output() close: EventEmitter<void> = new EventEmitter()
 
+   dataToUpdate = input<any>(null)
+   currentPage = input<number>()
+   perPage = input<number>()
+   placeholder: string = ''   
+
+   id = signal<string>('')
+   name = signal<string>('')
+   description = signal<string>('')     
+
    rows: number = 7
    cols: number = 20
-
     
    pageTitle: string = ''
    isLoading: boolean = false
@@ -52,7 +61,7 @@ export class WritePageComponent implements OnInit {
   
    errorMessages = 
    { 
-      roleNameRequired: 'Enter resource name', 
+      pageNameRequired: 'Enter resource name', 
       roleDescriptionRequired: 'Write a note about resource to be created'
    } 
 
@@ -73,44 +82,74 @@ export class WritePageComponent implements OnInit {
          this.statusCode = statusCode
       })
 
+      effect(() => 
+      {
+         if(this.dataToUpdate())
+         {
+            this.name.set(this.dataToUpdate()?.data?.name)
+            this.pageForm.get('pageName')?.setValue(this.dataToUpdate()?.data?.name)
+            this.pageForm.get('pageDescription')?.setValue(this.dataToUpdate()?.data?.description)
+         } else {
+            this.pageForm.get('pageName')?.setValue("")
+            this.pageForm.get('pageDescription')?.setValue("")
+         }
+      }, { allowSignalWrites: true })        
+
    }
 
    ngOnInit(): void 
    {
-     this.store.select(getSpinnerStatus).subscribe((data: any) => {
-      //  this.isLoading = status
-     })
+     this.store.select(getSpinnerStatus).subscribe((data: any) => 
+      {
+        this.isLoading = data?.loader?.loading
+        if(!data?.loader?.loading)
+        {
+          this.closeModal()
+        }
+      }
+     )
    }
 
-   ChangeOnButtonHoverIn()
+  ngOnChanges(changes: SimpleChanges)
    {
-      this.style = {
-        'background-color' : '#776005',
-        'color': 'white',
-        'padding': '20px'         
-      }
-    }
+     if(!changes['dataToUpdate'])
+     {console.log(changes['dataToUpdate'])
+         this.name.set(this.dataToUpdate()?.data?.name)
+     }
+  }     
 
-    ChangeOnButtonHoverOut()
-    {
-       this.style = {
-          'background-color' : '#be9d18',
-          'color': 'black',
-          'padding': '20px'        
-       } 
+  ChangeOnButtonHoverIn()
+  {
+    this.style = {
+     'background-color' : '#776005',
+     'color': 'white',
+     'padding': '20px'         
     }
+  }
 
-    writePage()
-    {
+  ChangeOnButtonHoverOut()
+  {
+     this.style = {
+       'background-color' : '#be9d18',
+       'color': 'black',
+       'padding': '20px'        
+     } 
+  }
 
-    }
+  writePage()
+  {
 
-    closeModal()
-    {
-       this.close.emit()
-    }
+  }
+
+  closeModal()
+  {
+    this.pageForm.reset()
+    this.pageForm.get('pageName')?.setValue("")
+    this.pageForm.get('pageDescription')?.setValue("")
+    this.close.emit()
+  }
     
-    write = async () => 
+  write = async () => 
     {
       this.store.dispatch(SetLoadingStatus({ loader: { loading: true, statusCode: 0 }}))
       if(this.pageForm.valid)
@@ -119,10 +158,17 @@ export class WritePageComponent implements OnInit {
         .pipe(delay(1000))
         .subscribe(dept => 
           {
-            const pageName = dept['pageName']!
-            const pageDescription = dept['pageDescription']!      
-            // this.store.dispatch(START_LOGIN({ pageName, pageDescription }))
-          }
+            if(this.dataToUpdate() === null)
+            { 
+              const pageName = dept['pageName']!
+              const pageDescription = dept['pageDescription']!
+              this.store.dispatch(CREATE_PAGE({ name: pageName, description: pageDescription, page: Number(this.currentPage()), perPage: Number(this.perPage()) }))
+            } else {              
+               const pageName = dept['pageName']!
+               const pageDescription = dept['pageDescription']!
+               this.store.dispatch(UPDATE_PAGE({ pagee: this.dataToUpdate().id, name: pageName, description: pageDescription, page: Number(this.currentPage()), perPage: Number(this.perPage()) })) 
+            }
+          }          
         )
       } else {
          this.pageForm.markAllAsTouched()

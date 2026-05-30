@@ -23,8 +23,6 @@ import { LoaderComponent } from '../../../../components/loader/loader.component'
 import { RemoveDepartmentComponent } from './remove-department/remove-department.component';
 import { PaginationComponent } from '../../../../components/pagination/pagination.component';
 
-// 1. Define your data structure
-type Person = { name: string; description: string; };
 
 const columnHelper = createColumnHelper<any>();
 
@@ -192,7 +190,7 @@ export class DepartmentComponent {
     this.buttonName = 'Update'
     // this.writeCategory.set(true)
     this.dataToUpdate.set(cellData)
-     this.writeDepartment = true
+    this.writeDepartment = true
   } 
 
   remove(value: string): void 

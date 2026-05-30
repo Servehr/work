@@ -15,7 +15,6 @@ export const professionNameRequired = (control: AbstractControl): ValidationErro
 @Component({
   selector: 'app-skill-search',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ReactiveFormsModule, InputFieldComponent, SelectComponent, BotinComponent, ModalComponent, ProfessionalLocationComponent],
   templateUrl: './skill-search.component.html',
   styleUrl: './skill-search.component.scss'

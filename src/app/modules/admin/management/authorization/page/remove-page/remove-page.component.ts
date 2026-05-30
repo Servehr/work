@@ -1,19 +1,19 @@
 import { Component, EventEmitter, input, Output, signal } from '@angular/core';
+import { sleepWait } from '../../../../../../util/sleep';
+import { REMOVE_PAGE } from '../../../../../../state/actions/management/page.actions';
 import { Store } from '@ngrx/store';
-import AppState from '../../../../../state/app.state';
-import { getSpinnerStatus } from '../../../../../state/selectors/spinner.selector';
-import { sleepWait } from '../../../../../util/sleep';
-import { REMOVE_DEPARTMENT } from '../../../../../state/actions/management/department.actions';
-import { BotinComponent } from '../../../../../components/controls/botin/botin.component';
+import AppState from '../../../../../../state/app.state';
+import { getSpinnerStatus } from '../../../../../../state/selectors/spinner.selector';
+import { BotinComponent } from '../../../../../../components/controls/botin/botin.component';
 
 @Component({
-  selector: 'app-remove-department',
+  selector: 'app-remove-page',
   standalone: true,
   imports: [BotinComponent],
-  templateUrl: './remove-department.component.html',
-  styleUrl: './remove-department.component.scss'
+  templateUrl: './remove-page.component.html',
+  styleUrl: './remove-page.component.scss'
 })
-export class RemoveDepartmentComponent   {
+export class RemovePageComponent {
 
   @Output() close: EventEmitter<void> = new EventEmitter()
   isLoading = signal<boolean>(false)
@@ -65,7 +65,7 @@ export class RemoveDepartmentComponent   {
   {
     this.isLoading.set(true)
     await sleepWait(1000)
-    this.store.dispatch(REMOVE_DEPARTMENT({ department: this.removeData().department, page: this.removeData().currentPage, limit: this.removeData().perPage }))
+    this.store.dispatch(REMOVE_PAGE({ pagee: this.removeData().department, page: this.removeData().currentPage, limit: this.removeData().perPage }))
   }
 
   

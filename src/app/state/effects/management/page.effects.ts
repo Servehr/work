@@ -7,18 +7,21 @@ import { Store } from "@ngrx/store";
 import AppState from "../../app.state";
 import { SetErrorMessage, SetLoadingStatus } from "../../actions/spinner.action";
 import { ToastrService } from "ngx-toastr";
-import { RexourceService } from "../../../service/management/rexource.service";
-import { CREATE_REXOURCE, REMOVE_REXOURCE, REXOURCE_SUCCESS, START_REXOURCE, UPDATE_REXOURCE } from "../../actions/management/rexource.actions";
+import { PageService } from "../../../service/management/page.service";
+import { CONNECT_PAGE_TO_RESOURCE, CREATE_PAGE, PAGE_SUCCESS, REMOVE_PAGE, START_PAGE, UPDATE_PAGE } from "../../actions/management/page.actions";
+import { PAGE_TO_RESOURCE } from "../../constants/management/page";
+import { START_REXOURCE } from "../../actions/management/rexource.actions";
+
 
 
 @Injectable({
     providedIn: 'root'
 })
 
-export class RexourceEffect {
+export class PageEffect {
 
     private actions$ = inject(Actions);
-    private rexorceService = inject(RexourceService);
+    private pageService = inject(PageService);
     private store = inject(Store<AppState>);
     private router = inject(Router)
 
@@ -26,18 +29,21 @@ export class RexourceEffect {
 
     currentUrl!: string;
   
-    rexource$ = createEffect(() => {
+    page$ = createEffect(() => {
       return this.actions$.pipe(
-        ofType(START_REXOURCE),
+        ofType(START_PAGE),
           switchMap((action) => 
            {
-            return this.rexorceService.rexources(action?.page, action?.limit)
+            return this.pageService.pages(action?.page, action?.limit)
              .pipe(
                 map((data) => 
                 {
                   const transformed = data?.data?.data?.map((item: any) => ({
                     ...item,
-                    rexourcePages: { count: item?.pages?.length, data: null },
+                    connect: item?._id,
+                    disconnect: item?._id,
+                    action: item?._id,
+                    modify: { count: 0, data: item?.aktions },
                     change: item?._id,
                     remove: item?._id
                   }))
@@ -52,7 +58,7 @@ export class RexourceEffect {
                   console.log(transformed)
                   this.store.dispatch(SetErrorMessage({ msg: "successful", statusCode: 200, operation: "all-resource"  }))
                   this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200, page: 'rexource' }}))
-                  return REXOURCE_SUCCESS({ rexources: transformed });
+                  return PAGE_SUCCESS({ pages: transformed });
                 }
               ),
               catchError((errMsg: any) => 
@@ -67,9 +73,9 @@ export class RexourceEffect {
       )
     })
 
-    rexourceRedirect$ = createEffect(() => {
+    pageRedirect$ = createEffect(() => {
       return this.actions$.pipe(
-        ofType(REXOURCE_SUCCESS),
+        ofType(PAGE_SUCCESS),
           tap((action) => {
             this.router.navigate([window.location.pathname])
           })
@@ -77,12 +83,12 @@ export class RexourceEffect {
     }, { dispatch: false }) 
   
 
-    newRexource$ = createEffect(() => {
+    newPage$ = createEffect(() => {
       return this.actions$.pipe(
-        ofType(CREATE_REXOURCE),
+        ofType(CREATE_PAGE),
           switchMap((action) => 
            {
-            return this.rexorceService.create(action.name, action.description)
+            return this.pageService.create(action.name, action.description)
              .pipe(
                 tap(
                   {
@@ -90,7 +96,7 @@ export class RexourceEffect {
                     { 
                       this.toastr.success(data?.message),                      
                       this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200, page: 'rexource' } })) 
-                      this.store.dispatch(START_REXOURCE({ page: action.page, limit: action.perPage }))
+                      this.store.dispatch(START_PAGE({ page: action.page, limit: action.perPage }))
                     },
                     error: (err) => { 
                       this.toastr.error( err?.error?.message, 'Error create new resource'),
@@ -106,12 +112,12 @@ export class RexourceEffect {
     }, { dispatch: false, functional: true })
   
 
-    upateRexource$ = createEffect(() => {
+    upatePage$ = createEffect(() => {
       return this.actions$.pipe(
-        ofType(UPDATE_REXOURCE),
+        ofType(UPDATE_PAGE),
           switchMap((action) => 
            {
-            return this.rexorceService.update(action.rexource, action.name, action.description)
+            return this.pageService.update(action.pagee, action.name, action.description)
              .pipe(
                 tap(
                   {
@@ -119,7 +125,7 @@ export class RexourceEffect {
                     { 
                       this.toastr.success(data?.message),                      
                       this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200 } })) 
-                      this.store.dispatch(START_REXOURCE({ page: action.page, limit: action.perPage }))
+                      this.store.dispatch(START_PAGE({ page: action.page, limit: action.perPage }))
                     },
                     error: (err) => { 
                       this.toastr.error( err?.error?.message, 'Error updating resource'),
@@ -135,19 +141,19 @@ export class RexourceEffect {
     }, { dispatch: false, functional: true })
 
 
-    removeRexource$ = createEffect(() => {
+    removePage$ = createEffect(() => {
       return this.actions$.pipe(
-        ofType(REMOVE_REXOURCE),
+        ofType(REMOVE_PAGE),
           switchMap((action) => 
            {
-            return this.rexorceService.remove(action.rexource)
+            return this.pageService.remove(action.pagee)
              .pipe(
                 tap(
                   {
                     next: (data) => { 
                       this.toastr.success(data?.message)
                       this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200  } }))
-                      this.store.dispatch(START_REXOURCE({ page: action.page, limit: action.limit }))
+                      this.store.dispatch(START_PAGE({ page: action.page, limit: action.limit }))
                       },
                     error: (err) => { 
                       this.toastr.error( err?.error?.message, 'Error deleting')
@@ -161,6 +167,36 @@ export class RexourceEffect {
            }
         )
       )
-    }, { dispatch: false, functional: true })     
-
+    }, { dispatch: false, functional: true })    
+    
+  
+    connectPageToResource$ = createEffect(() => {
+      return this.actions$.pipe(
+        ofType(CONNECT_PAGE_TO_RESOURCE),
+          switchMap((action) => 
+           {
+            return this.pageService.connectPageToResource(action?.resource, action?.pagee)
+             .pipe(
+                tap(
+                  {
+                    next: (data) => { 
+                      this.toastr.success(data?.message)
+                      this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200  } }))
+                      // this.store.dispatch(START_PAGE({ page: action.page, limit: action.limit }))
+                      this.store.dispatch(START_REXOURCE({ page: action.page, limit: action.limit }))
+                      },
+                    error: (err) => { 
+                      console.log(err)
+                      this.toastr.error( err?.error?.message, 'Error deleting')
+                    },
+                    complete: () => {
+                    
+                    },
+                  }
+                )
+              )
+           }
+        )
+      )
+    }, { dispatch: false, functional: true }) 
 }

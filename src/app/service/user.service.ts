@@ -27,4 +27,9 @@ export class UserService {
       return this._http.post<any>(`${environment.url}user/subscribe`, { email });
     }
 
+    fastForm(firstname: string, surname: string, phone: string, email: string, message: string) : Observable<any> 
+    {
+      return this._http.post<any>(`${environment.url}user/fast-response`, { firstname, surname, phone, email, message });
+    }
+
 }

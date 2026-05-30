@@ -1,76 +1,100 @@
-<div 
-   class='container mx-auto mt-1 md:mt-1 mb-7 flex-col md:flex'
->
+@if(isLoading()  === true)
+{
   <div 
-    class="w-12/12 md:w-12/12 px-2 py-1 md:p-1"
+    class="h-[400px] box-shadow w-full flex justify-center items-center"
   >
+    <app-loader></app-loader>
+  </div>
+}
 
+@if(isLoading() === false)
+{
     <div 
-      class="d-flex-col mb-3 gap-5 w-2/2 text-gray-700"
+      class='container mx-auto mt-1 md:mt-1 mb-7 flex-col md:flex'
     >
-       <p
-         class="mb-5 text-lg text-gray-600 pl-4"
-       >
-          Connect Page To Resource
-       </p>
+      <div 
+        class="w-12/12 md:w-12/12 px-2 py-1 md:p-1"
+      >
 
-       <div 
-          class="p-1"
-       >
-         <div 
-          class="grid md:grid-cols-12 grid-cols-6 gap-5 md:p-3 mt-2 mb-5 justify-center items-center md:p-10"
-         >
-           @for(rexource of options; track rexource.text)
-           {
-             <div 
-               class="col-span-3 bg-white"
-             >
+        <div 
+          class="d-flex-col mb-3 gap-5 w-2/2 text-gray-700"
+        >
+          <p
+            class="mb-5 text-md text-gray-600 pl-4"
+          >
+              Connect Page To Resource - {{ selectedPage().id }}
+          </p>
+          <p
+            class="mb-5 text-md text-gray-600 pl-4"
+          >
+              <!-- {{ You are about to connect }}   {{ to a resource }} -->
+          </p>
+
+          <div 
+              class="p-1"
+          >
+            <div 
+              class="grid md:grid-cols-12 grid-cols-6 gap-5 md:p-3 mt-2 mb-5 justify-center items-center md:p-10"
+            >
+              @for(rexource of resources(); track rexource)
+              {
                 <div 
-                    class="p-4 transition-shadow border rounded-lg shadow-sm hover:shadow-lg"
+                  class="col-span-3 bg-white"
                 >
                     <div 
-                        class="flex items-start justify-between"
-                        (click)="''"
+                        class="p-4 transition-shadow border rounded-lg shadow-sm hover:shadow-lg"
                     >
                         <div 
-                            class="flex flex-col space-y-2"
+                            class="flex items-start justify-between"
                         >
-                            <span 
-                                class="text-sm"
+                            <div 
+                                class="flex flex-col space-y-2"
                             >
-                                {{rexource?.text}}
-                            </span>
-                            <span 
-                                class="text-lg font-semibold"
-                            >
-                                {{rexource?.nos}}
-                            </span>
+                                <span 
+                                    class="text-sm"
+                                >
+                                    {{rexource?.name}} 
+                                </span>
+                            </div>
+                            <!-- @if(box == 'false')
+                            { -->
+                            @if(selectedRexourceId() === rexource?._id && selectedPage().id === pageIds())
+                            {
+                              <button 
+                                (click)="connectPageToResource(rexource?._id, selectedPage().id)"
+                                class="p-2 rounded-md bg-red-600 cursor-pointer z-5 text-sm font-bold text-white"
+                              >
+                                Remove
+                              </button>
+                            }
+                            @else 
+                            {
+                              <button 
+                                (click)="connectPageToResource(rexource?._id, selectedPage().id)"
+                                class="p-2 rounded-md bg-green-600 cursor-pointer z-5 text-sm font-bold text-white"
+                                [disabled]="selectedRexourceId() "
+                              >
+                                Add
+                              </button>
+                            }
+
+                            <!-- } -->
+                            
                         </div>
-                        <!-- @if(box == 'false')
-                        { -->
-                          <div 
-                           (click)="''"
-                           class="p-2 rounded-md bg-green-600 cursor-pointer z-5 text-sm font-bold text-white"
-                          >
-                            Add
-                          </div>
-
-                        <!-- } -->
-                        
+                        <!-- <div class="flex flex-row col-span-12 justify-start">
+                            <span class="col-span-6 w-full inline-block text-sm text-black bg-green-00 rounded text-left">14%</span>
+                            <span class="col-span-6 w-full text-sm text-right">from 2019</span>
+                        </div> -->
                     </div>
-                    <!-- <div class="flex flex-row col-span-12 justify-start">
-                        <span class="col-span-6 w-full inline-block text-sm text-black bg-green-00 rounded text-left">14%</span>
-                        <span class="col-span-6 w-full text-sm text-right">from 2019</span>
-                    </div> -->
                 </div>
-             </div>
-           }
-           
+              }
+              
 
-         </div>
-       </div>
-       
-     </div>   
+            </div>
+          </div>
+          
+        </div>   
 
-   </div>
-</div>   
+      </div>
+    </div> 
+}  

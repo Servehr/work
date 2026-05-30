@@ -129,6 +129,20 @@
 </app-modal>
 
 <app-modal 
+  [isOpen]="thePages" 
+  title="title" 
+  [modalWidth]="modalWidth"
+  (closeModal)="thePages = false"
+  (close)="onConfirm()"
+>
+  <app-rexource-pages
+    (close)="thePages = false"
+    [rexourcePages]="rxcPages()"
+  >
+  </app-rexource-pages>
+</app-modal>
+
+<app-modal 
   [isOpen]="writeRexource" 
   title="title" 
   [modalWidth]="modalWidth"

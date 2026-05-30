@@ -10,16 +10,6 @@
         {{ title }}
       </p>
       
-
-    <div
-    >
-    <!-- <app-alert 
-      [statusCode]="statusCode" 
-      [message]="message"
-    >
-    </app-alert> -->
-    
-    </div>
       <form 
           [formGroup]="pageForm"
           class="flex flex-col space-y-5"
@@ -33,7 +23,7 @@
                 [name]="'pageName'"
                 [placeholder]="'Enter Resource Name'"
                 [type]="'pageName'"
-                [value]="''"
+                [value]="dataToUpdate()?.data?.name"
                 formControlName="pageName"
                 [customErrorMessages]="errorMessages"
             >
@@ -48,6 +38,7 @@
               [cols]="cols"
               formControlName="pageDescription"
               [customErrorMessages]="errorMessages"
+              [value]="dataToUpdate()?.data?.description"
             >
             </app-text-area>
           </div>

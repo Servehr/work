@@ -1,4 +1,4 @@
-import { Component, Input, signal } from '@angular/core'
+import { Component, Input, output, signal } from '@angular/core'
 import {
   createAngularTable,
   getCoreRowModel,
@@ -23,6 +23,7 @@ import { RemoveRexourceComponent } from '../remove-rexource/remove-rexource.comp
 import { LoaderComponent } from '../../../../../../components/loader/loader.component';
 import { PaginationComponent } from '../../../../../../components/pagination/pagination.component';
 import { BoteenComponent } from '../../../../../../util/icons/boteen/boteen.component';
+import { RexourcePagesComponent } from '../rexource-pages/rexource-pages.component';
 
 type Person = { name: string; description: string; pages: number }
 
@@ -32,7 +33,7 @@ type Person = { name: string; description: string; pages: number }
   imports: [
               FlexRenderDirective, NgIcon,
               ModalComponent, LoaderComponent, PaginationComponent,
-              WriteRexourceComponent, RemoveRexourceComponent
+              WriteRexourceComponent, RemoveRexourceComponent, RexourcePagesComponent
            ],
   templateUrl: './rexource.component.html',
   styleUrl: './rexource.component.scss'
@@ -46,6 +47,8 @@ export class RexourceComponent
   addIcon: any = bootstrapPlusCircleFill
   dataToUpdate = signal<any>(null)
   removeData = signal<any>(null)
+  rxcPages = signal<any>([])
+  thePages: boolean = false
 
    
   isModalOpen: boolean = false
@@ -80,7 +83,7 @@ export class RexourceComponent
     this.store.select(getSpinnerStatus).subscribe((data: any) => 
     {
       this.isLoading.set(data?.loader?.loading)
-      if(!data?.loader?.loading && data?.loader?.page === 'rexource')
+      if(data?.loader?.statusCode === 200 && data?.loader?.page === 'rexource')
       {
         this.isModalOpen = false
         this.isLoading.set(data?.loader?.loading)
@@ -90,11 +93,11 @@ export class RexourceComponent
     this.store.select(getAllRexource).subscribe((rexrc: any) => 
     {
       this.isLoading.set(false)
-      this.data.set(rexrc?.departments)
-      this.currentPage.set(rexrc?.departments?.pagination?.currentPage)
-      this.totalPages.set(rexrc?.departments?.pagination?.totalPages)
-      this.hasPrevPage.set(rexrc?.departments?.pagination?.hasPrevPage)
-      this.hasNextPage.set(rexrc?.departments?.pagination?.hasNextPage)
+      this.data.set(rexrc?.rexources)
+      this.currentPage.set(rexrc?.rexources?.pagination?.currentPage)
+      this.totalPages.set(rexrc?.rexources?.pagination?.totalPages)
+      this.hasPrevPage.set(rexrc?.rexources?.pagination?.hasPrevPage)
+      this.hasNextPage.set(rexrc?.rexources?.pagination?.hasNextPage)
     })    
   }
 
@@ -115,6 +118,7 @@ export class RexourceComponent
       cell: (context) => 
       {
          const rowId: string = context.row.original?._id as string
+         const pages: any = context.row.original?.pages
          return flexRenderComponent(
             BoteenComponent, {
               inputs: {
@@ -123,7 +127,7 @@ export class RexourceComponent
                 boteenCssClass: this.unLinkCss,
               },
               outputs: {
-                // clickEvent: (division) => this.categoryDivisions(rowId)
+                clickEvent: () => this.pagesUnderResource(pages)
               }
             }
           )
@@ -201,6 +205,12 @@ export class RexourceComponent
     this.dataToUpdate.set({ id: "", data: { name: '', description: '' } })
     this.writeRexource = false
   }  
+
+  pagesUnderResource = (pages: any) => 
+  {
+    this.rxcPages.set(pages)
+    this.thePages = true
+  }
 
   change(cellData: any): void 
   {

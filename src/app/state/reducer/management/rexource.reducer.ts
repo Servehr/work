@@ -22,15 +22,15 @@ const _rexource = createReducer(InitialState,
     on(START_REXOURCE, (state:any, action: any) => 
     {
         return {
-            ...state,
-            departments: action
+          ...state,
+          rexources: action
         }
     }),
     on(REXOURCE_SUCCESS, (state: any, action: any) => 
     {
        return {
           ...state,
-          departments: action?.rexources
+          rexources: action?.rexources
        }
     }) 
 )
