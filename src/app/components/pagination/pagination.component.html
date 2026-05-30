@@ -35,17 +35,40 @@
   }
 
 
-  <!-- @if((currentPage - 1) > 0)
+  <!-- @if(decrease().length  > 0)
   {
-    @for(search of results(); track search._id)
+    @for(search of decrease(); track search)
     {
-
+       <button 
+          key={search} 
+          (click)="show(search)"
+          class="rounded-full border border-blue-500 bg-blue-800 hover:bg-blue-300 text-gray-300 hover:text-black px-3 py-1 mr-1 text-[14px] text-black cursor-pointer"
+       >
+        {{ search }}
+      </button> 
     }
   } -->
+ 
+ <button 
+    class="rounded-full border border-blue-600 bg-white px-3 py-1 text-[14px] text-black cursor-default ml-1 mr-1"
+ >
+  {{currentPage()}} 
+ </button>
 
  
- <button class="rounded-full border border-blue-600 bg-white px-3 py-1 text-[14px] text-black cursor-default">{{currentPage()}} </button> 
- <!-- {{currentPage()+1}} -->
+  <!-- @if(increase().length  > 0)
+  {
+    @for(search of increase(); track search)
+    {
+       <button 
+          key={search} 
+          (click)="show(search)"
+          class="rounded-full border border-blue-500 bg-blue-800 hover:bg-blue-300 text-gray-300 hover:text-black px-3 py-1 mr-1 text-[14px] text-black cursor-pointer"
+       >
+        {{ search }}
+      </button> 
+    }
+  } -->
 
   @if(hasNextPage())
   {

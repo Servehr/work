@@ -5,6 +5,7 @@ interface ILoader
 {
    loading: boolean
    statusCode: number
+   page?: string
 }
 export const SetLoadingStatus = createAction(SPINNING_STARTED, props<{ loader: ILoader }>())
 

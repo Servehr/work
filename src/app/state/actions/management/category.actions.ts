@@ -1,5 +1,4 @@
 import { createAction, props } from "@ngrx/store";
-import { JOB_START, JOB_CREATION_SUCCESS, CATEGORY_SEARCH_START, CATERGORY_SEARCH_SUCCESS } from "../../constants/jobs";
 import { CATEGORY_CREATION, CATEGORY_CREATION_SUCCESS, CATEGORY_REMOVE, CATEGORY_START, CATEGORY_UPDATE } from "../../constants/management/category";
 
 
@@ -13,7 +12,8 @@ interface ICategories
 export const START_CATEGORY = createAction(CATEGORY_START, props<{page: number, limit: number}>())
 export const CATEGORY_SUCCESS = createAction(CATEGORY_CREATION_SUCCESS, props<{ category: any}>())
 
-export const REMOVE = createAction(CATEGORY_REMOVE, props<{ path: string, model: string}>())
+export const REMOVE = createAction(CATEGORY_REMOVE, props<{ data: any }>())
+export const REMOVE_CATEGORY = createAction(CATEGORY_REMOVE, props<{category: string, page: number, limit: number}>())
 
 // export const RETRIEVE_CATEGORY = createAction(CATEGORY_SEARCH_START)
 // export const CATEGORY_SUCCESS = createAction(CATERGORY_SEARCH_SUCCESS, props<{user: any}>())

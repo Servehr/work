@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, effect, EventEmitter, inject, input, Input, OnInit, Output, signal, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import AppState from '../../../../../../state/app.state';
 import { getResponseMessage, getSpinnerStatus } from '../../../../../../state/selectors/spinner.selector';
@@ -10,6 +10,7 @@ import { ModalComponent } from '../../../../../../components/modal/modal.compone
 import { SetErrorMessage, SetLoadingStatus } from '../../../../../../state/actions/spinner.action';
 import { delay, of } from 'rxjs';
 import { TextAreaComponent } from '../../../../../../components/controls/text-area/text-area.component';
+import { CREATE_REXOURCE, UPDATE_REXOURCE } from '../../../../../../state/actions/management/rexource.actions';
 
 export const rexourceNameRequired = (control: AbstractControl): ValidationErrors | null => 
 {
@@ -34,11 +35,19 @@ export class WriteRexourceComponent implements OnInit {
 
    @Input() title: string = ''
    @Input() buttonName: string = ''
-   @Output() close: EventEmitter<void> = new EventEmitter()
+   @Output() close: EventEmitter<void> = new EventEmitter() 
+
+   dataToUpdate = input<any>(null)
+   currentPage = input<number>()
+   perPage = input<number>()
+   placeholder: string = ''
+
+   id = signal<string>('')
+   name = signal<string>('')
+   description = signal<string>('')   
 
    rows: number = 7
    cols: number = 20
-
     
    pageTitle: string = ''
    isLoading: boolean = false
@@ -48,7 +57,7 @@ export class WriteRexourceComponent implements OnInit {
      'background-color' : '#be9d18',
      'color': 'black',
      'padding': '20px'
-   }
+   }   
   
    errorMessages = 
    { 
@@ -73,14 +82,41 @@ export class WriteRexourceComponent implements OnInit {
          this.statusCode = statusCode
       })
 
+      effect(() => 
+      {
+         if(this.dataToUpdate())
+         {
+            this.name.set(this.dataToUpdate()?.data?.name)
+            this.rexourceForm.get('rexourceName')?.setValue(this.dataToUpdate()?.data?.name)
+            this.rexourceForm.get('rexourceDescription')?.setValue(this.dataToUpdate()?.data?.description)
+         } else {
+            this.rexourceForm.get('rexourceName')?.setValue("")
+            this.rexourceForm.get('rexourceDescription')?.setValue("")
+         }
+      }, { allowSignalWrites: true })       
+
    }
 
    ngOnInit(): void 
    {
-     this.store.select(getSpinnerStatus).subscribe((data: any) => {
-      //  this.isLoading = status
-     })
+     this.store.select(getSpinnerStatus).subscribe((data: any) => 
+      {
+        this.isLoading = data?.loader?.loading
+        if(!data?.loader?.loading)
+        {
+          this.closeModal()
+        }
+      }
+     )
    }
+
+  ngOnChanges(changes: SimpleChanges)
+   {
+     if(!changes['dataToUpdate'])
+     {
+         this.name.set(this.dataToUpdate()?.data?.name)
+     }
+  }     
 
    ChangeOnButtonHoverIn()
    {
@@ -107,23 +143,33 @@ export class WriteRexourceComponent implements OnInit {
 
     closeModal()
     {
-       this.close.emit()
+      this.rexourceForm.reset()
+      this.rexourceForm.get('rexourceName')?.setValue("")
+      this.rexourceForm.get('rexourceDescription')?.setValue("")
+      this.close.emit()
     }
     
     write = async () => 
     {
       this.store.dispatch(SetLoadingStatus({ loader: { loading: true, statusCode: 0 }}))
-      if(this.rexourceForm.valid)
+      if(this.rexourceForm.valid === true)
       {
         of(this.rexourceForm.value)
         .pipe(delay(1000))
         .subscribe(dept => 
           {
-            const rexsourceName = dept['rexsourceName']!
-            const rexourceDescription = dept['rexourceDescription']!      
-            // this.store.dispatch(START_LOGIN({ rexsourceName, rexourceDescription }))
+            if(this.dataToUpdate() === null)
+            {     
+                const rexourceName = dept['rexourceName']!
+                const rexourceDescription = dept['rexourceDescription']!
+                this.store.dispatch(CREATE_REXOURCE({ name: rexourceName, description: rexourceDescription, page: Number(this.currentPage()), perPage: Number(this.perPage()) }))
+            } else {              
+               const rexourceName = dept['rexourceName']!
+               const rexourceDescription = dept['rexourceDescription']!
+               this.store.dispatch(UPDATE_REXOURCE({ rexource: this.dataToUpdate().id, name: rexourceName, description: rexourceDescription, page: Number(this.currentPage()), perPage: Number(this.perPage()) }))
+            }
           }
-        )
+        )        
       } else {
          this.rexourceForm.markAllAsTouched()
          this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 0 }}))

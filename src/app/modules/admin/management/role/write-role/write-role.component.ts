@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, effect, EventEmitter, inject, input, Input, OnInit, Output, signal, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import AppState from '../../../../../state/app.state';
 import { getResponseMessage, getSpinnerStatus } from '../../../../../state/selectors/spinner.selector';
@@ -10,6 +10,8 @@ import { ModalComponent } from '../../../../../components/modal/modal.component'
 import { SetErrorMessage, SetLoadingStatus } from '../../../../../state/actions/spinner.action';
 import { delay, of } from 'rxjs';
 import { TextAreaComponent } from '../../../../../components/controls/text-area/text-area.component';
+import { CREATE_ROLE, UPDATE_ROLE } from '../../../../../state/actions/management/role.actions';
+import { CREATE_DEPARTMENT } from '../../../../../state/actions/management/department.actions';
 
 export const roleNameRequired = (control: AbstractControl): ValidationErrors | null => 
 {
@@ -36,6 +38,15 @@ export class WriteRoleComponent implements OnInit {
    @Input() buttonName: string = ''
    @Output() close: EventEmitter<void> = new EventEmitter()
 
+   dataToUpdate = input<any>(null)
+   currentPage = input<number>()
+   perPage = input<number>()
+   placeholder: string = ''   
+
+   id = signal<string>('')
+   name = signal<string>('')
+   description = signal<string>('')    
+
    rows: number = 7
    cols: number = 20
     
@@ -58,7 +69,7 @@ export class WriteRoleComponent implements OnInit {
    roleForm: FormGroup
 
    constructor()
-   {
+   {console.log(this.dataToUpdate())
       this.roleForm = new FormGroup(
         {
           roleName: new FormControl('', [roleNameRequired]),
@@ -72,14 +83,42 @@ export class WriteRoleComponent implements OnInit {
          this.statusCode = statusCode
       })
 
+
+      effect(() => 
+      {console.log(this.dataToUpdate())
+         if(this.dataToUpdate())
+         {
+            this.name.set(this.dataToUpdate()?.data?.name)
+            this.roleForm.get('roleName')?.setValue(this.dataToUpdate()?.data?.name)
+            this.roleForm.get('roleDescription')?.setValue(this.dataToUpdate()?.data?.description)
+         } else {
+            this.roleForm.get('roleName')?.setValue("")
+            this.roleForm.get('roleDescription')?.setValue("")
+         }
+      }, { allowSignalWrites: true })        
+
    }
 
    ngOnInit(): void 
    {
-     this.store.select(getSpinnerStatus).subscribe((data: any) => {
-      //  this.isLoading = status
-     })
+     this.store.select(getSpinnerStatus).subscribe((data: any) => 
+      {
+        this.isLoading = data?.loader?.loading
+        if(!data?.loader?.loading)
+        {
+          this.closeModal()
+        }
+      }
+     )
    }
+
+  ngOnChanges(changes: SimpleChanges)
+   {
+     if(!changes['dataToUpdate'])
+     {
+         this.name.set(this.dataToUpdate()?.data?.name)
+     }
+  }    
 
    ChangeOnButtonHoverIn()
    {
@@ -112,15 +151,24 @@ export class WriteRoleComponent implements OnInit {
     write = async () => 
     {
       this.store.dispatch(SetLoadingStatus({ loader: { loading: true, statusCode: 0 }}))
-      if(this.roleForm.valid)
+      if(this.roleForm.valid === true)
       {
         of(this.roleForm.value)
         .pipe(delay(1000))
-        .subscribe(dept => 
+        .subscribe(role => 
           {
-            const departmentName = dept['departmentName']!
-            const departmentDescription = dept['departmentDescription']!      
-            // this.store.dispatch(START_LOGIN({ departmentName, departmentDescription }))
+            if(this.dataToUpdate() === null)
+            {    
+               console.log('Creating')
+               const roleName = role['roleName']!
+               const roleDescription = role['roleDescription']!
+               this.store.dispatch(CREATE_ROLE({ name: roleName, description: roleDescription, page: Number(this.currentPage()), perPage: Number(this.perPage()) }))
+            } else {                       
+               console.log('Updating')                  
+               const roleName = role['roleName']!
+               const roleDescription = role['roleDescription']!
+               this.store.dispatch(UPDATE_ROLE({ role: this.dataToUpdate().id, name: roleName, description: roleDescription, page: Number(this.currentPage()), perPage: Number(this.perPage()) }))
+            }
           }
         )
       } else {

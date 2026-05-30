@@ -1,4 +1,4 @@
-import { Component, Input, signal } from '@angular/core'
+import { Component, Input, output, signal } from '@angular/core'
 import {
   createAngularTable,
   getCoreRowModel,
@@ -13,39 +13,95 @@ import { EditComponent } from '../../../../../../util/icons/edit/edit.component'
 import { bootstrapPlusCircleFill } from '@ng-icons/bootstrap-icons';
 import { NgIcon } from '@ng-icons/core';
 import { WriteRexourceComponent } from '../write-rexource/write-rexource.component';
-import { RemoveComponent } from '../../../../../../shared/remove/remove.component';
+import { Store } from '@ngrx/store';
+import AppState from '../../../../../../state/app.state';
+import { sleepWait } from '../../../../../../util/sleep';
+import { getSpinnerStatus } from '../../../../../../state/selectors/spinner.selector';
+import { getAllRexource } from '../../../../../../state/selectors/admin/management/rexource.selector';
+import { START_REXOURCE } from '../../../../../../state/actions/management/rexource.actions';
+import { RemoveRexourceComponent } from '../remove-rexource/remove-rexource.component';
+import { LoaderComponent } from '../../../../../../components/loader/loader.component';
+import { PaginationComponent } from '../../../../../../components/pagination/pagination.component';
+import { BoteenComponent } from '../../../../../../util/icons/boteen/boteen.component';
+import { RexourcePagesComponent } from '../rexource-pages/rexource-pages.component';
 
 type Person = { name: string; description: string; pages: number }
 
 @Component({
   selector: 'app-rexource',
   standalone: true,
-  imports: [FlexRenderDirective, ModalComponent, NgIcon, WriteRexourceComponent, RemoveComponent],
+  imports: [
+              FlexRenderDirective, NgIcon,
+              ModalComponent, LoaderComponent, PaginationComponent,
+              WriteRexourceComponent, RemoveRexourceComponent, RexourcePagesComponent
+           ],
   templateUrl: './rexource.component.html',
   styleUrl: './rexource.component.scss'
 })
 export class RexourceComponent 
 {
   PageTitle: string = 'Resources'
-  title: string = ''
   @Input() buttonName: string = ''
   writeRexource: boolean = false
+  isLoading = signal<boolean>(false)
   addIcon: any = bootstrapPlusCircleFill
+  dataToUpdate = signal<any>(null)
+  removeData = signal<any>(null)
+  rxcPages = signal<any>([])
+  thePages: boolean = false
+
    
   isModalOpen: boolean = false
+  title: string = ''
   modalWidth: string = 'w-[700px]'
 
+  // pagination
+  currentPage = signal<number>(1)
+  perPage  = signal<number>(10)
+  totalPages = signal<number>(5)
+  totalDocs =  signal<number>(10)
+  hasNextPage =  signal<boolean>(true)
+  hasPrevPage =  signal<boolean>(true)
 
-  // 2. Define data
-  data = signal<Person[]>(
-    [ 
-        { name: 'Dashboard', description: 'Dashboard', pages: 30 },
-        { name: 'Management', description: 'Management', pages: 30 },
-        { name: 'Administration', description: 'Administration', pages: 19 },
-        { name: 'Technicians', description: 'Technicians', pages: 20 },
-        { name: 'Vendors', description: 'Vendors', pages: 28 },
-    ]
-  ) 
+  boteenStyle: any = {
+    'color': 'black',
+    'border': '2px solid #3e4095',
+    'border-radius': '10px'
+  }
+  linkCss: string = "text-black border-2 bg-gray-200 hover:bg-[#3e4095] hover:text-white"
+  unLinkCss: string = "text-black border-2 bg-yellow-200 hover:bg-gray-600 hover:text-white"
+  boteeName: string = 'Link'   
+
+  constructor(private store: Store<AppState>){} 
+
+  async ngOnInit()
+  {
+    this.store.dispatch(START_REXOURCE({ page: Number(this.currentPage()), limit: Number(this.perPage()) }))
+    this.isLoading.set(true)    
+    this.buttonName = 'Save'
+    await sleepWait(500)
+    this.store.select(getSpinnerStatus).subscribe((data: any) => 
+    {
+      this.isLoading.set(data?.loader?.loading)
+      if(data?.loader?.statusCode === 200 && data?.loader?.page === 'rexource')
+      {
+        this.isModalOpen = false
+        this.isLoading.set(data?.loader?.loading)
+      }
+    }) 
+
+    this.store.select(getAllRexource).subscribe((rexrc: any) => 
+    {
+      this.isLoading.set(false)
+      this.data.set(rexrc?.rexources)
+      this.currentPage.set(rexrc?.rexources?.pagination?.currentPage)
+      this.totalPages.set(rexrc?.rexources?.pagination?.totalPages)
+      this.hasPrevPage.set(rexrc?.rexources?.pagination?.hasPrevPage)
+      this.hasNextPage.set(rexrc?.rexources?.pagination?.hasNextPage)
+    })    
+  }
+
+  data = signal<any>([])
 
   columns: ColumnDef<any>[] = [
     {
@@ -57,17 +113,34 @@ export class RexourceComponent
        header: 'Description'
     },
     {
-       accessorKey: 'pages',
-       header: 'No Of Pages'
-    },
+      accessorKey: 'rexourcePages',
+      header: 'No Of Pages',
+      cell: (context) => 
+      {
+         const rowId: string = context.row.original?._id as string
+         const pages: any = context.row.original?.pages
+         return flexRenderComponent(
+            BoteenComponent, {
+              inputs: {
+                value: context.getValue<{ count: number, data: any }>(),
+                boteenStyle: this.boteenStyle,
+                boteenCssClass: this.unLinkCss,
+              },
+              outputs: {
+                clickEvent: () => this.pagesUnderResource(pages)
+              }
+            }
+          )
+       }       
+    }, 
     {
-       accessorKey: '...',
+       accessorKey: 'change',
        header: '',
        cell: (context) => {
         
-        //  const name: string = context.row.getValue('name')
-        //  const description: string = context.row.getValue('description')
-         const rowData: any =  { name: '', description: '' }
+         const name: string = context.row.getValue('name')
+         const description: string = context.row.getValue('description')
+         const rowData: any =  { name, description }
 
          return flexRenderComponent(
             EditComponent, {
@@ -83,19 +156,19 @@ export class RexourceComponent
               }
             }
          )
-       }         
+       }       
     },
     {
-       accessorKey: 'firstName',
+       accessorKey: 'remove',
        header: '',
-       cell: (context) => {
+       cell: (context,) => {
          return flexRenderComponent(
             DeleteComponent, {
               inputs: {
                 value: context.getValue<string>()
               },
               outputs: {
-                clickEvent: (value) => this.handleClick(value, 'delete')
+                clickEvent: (value) => this.remove(value)
               }
             }
          )
@@ -126,10 +199,31 @@ export class RexourceComponent
         this.isModalOpen = true
      }
   }
-
-  change(value: any): void 
+  
+  closeRexource = () => 
   {
-     this.isModalOpen = true
+    this.dataToUpdate.set({ id: "", data: { name: '', description: '' } })
+    this.writeRexource = false
+  }  
+
+  pagesUnderResource = (pages: any) => 
+  {
+    this.rxcPages.set(pages)
+    this.thePages = true
+  }
+
+  change(cellData: any): void 
+  {
+    this.title = 'Update Category'
+    this.buttonName = 'Update'
+    this.dataToUpdate.set(cellData)
+     this.writeRexource = true
+  } 
+
+  remove(value: string): void 
+  {
+    this.removeData.set({ department: value, currentPage: this.currentPage(), pagePage: this.perPage() })
+    this.isModalOpen = true
   }  
 
   // 4. Create the table instance
@@ -143,6 +237,14 @@ export class RexourceComponent
   {
       alert("Yeah!! Good")
   }
+
+  getData = async (event: any) => 
+  {
+    this.currentPage.set(Number(event.page))
+    this.isLoading.set(true)  
+    await sleepWait(500)
+    this.store.dispatch(START_REXOURCE({ page: Number(this.currentPage()), limit: Number(this.perPage()) }))
+  }  
 
 
 }

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, signal, CUSTOM_ELEMENTS_SCHEMA, inject  } from '@angular/core';
+import { Component, Inject, OnInit, signal, CUSTOM_ELEMENTS_SCHEMA, inject, input, Input  } from '@angular/core';
 import { InputFieldComponent } from '../../../components/controls/input-field/input-field.component';
 import { BotinComponent } from '../../../components/controls/botin/botin.component';
 import { liveQuery } from 'dexie';
@@ -6,7 +6,6 @@ import { DatabaseService } from '../../../service/db/database.service';
 import { AsyncPipe, KeyValuePipe, NgFor, NgIf } from '@angular/common';
 import { bootstrapEyeFill, bootstrapStarFill, bootstrapThreeDotsVertical, bootstrapXCircleFill } from '@ng-icons/bootstrap-icons';
 import { NgIcon } from '@ng-icons/core';
-import { Router } from '@angular/router';
 import { SuggestionComponent } from '../../../components/suggestion/suggestion.component';
 import { UserCardComponent } from '../../../components/user-card/user-card.component';
 import { ImageComponent } from '../../../components/controls/image/image.component';
@@ -16,6 +15,10 @@ import { Store } from '@ngrx/store';
 import AppState from '../../../state/app.state';
 import { NewsletterComponent } from '../../section/newsletter/newsletter.component';
 import { ToastrService } from 'ngx-toastr';
+import { SkillSearchComponent } from './skill-search/skill-search.component';
+import { WhatsappComponent } from './whatsapp/whatsapp.component';
+import { FastResponseFormComponent } from './fast-response-form/fast-response-form.component';
+import { ModalComponent } from '../../../components/modal/modal.component';
 
 
 @Component({
@@ -23,8 +26,8 @@ import { ToastrService } from 'ngx-toastr';
   standalone: true,
   imports: [
                NgIf, NgFor, AsyncPipe, KeyValuePipe, NgFor, NgIcon, ReactiveFormsModule,
-               InputFieldComponent, BotinComponent, SuggestionComponent, 
-               UserCardComponent, ImageComponent, TestimonialComponent, NewsletterComponent                
+               InputFieldComponent, BotinComponent, SuggestionComponent, SkillSearchComponent, ModalComponent,
+               UserCardComponent, ImageComponent, TestimonialComponent, NewsletterComponent, WhatsappComponent, FastResponseFormComponent                
             ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -39,6 +42,9 @@ export class HomeComponent implements OnInit
    view: any = bootstrapEyeFill
    threeDot: any = bootstrapThreeDotsVertical
    rating: any = bootstrapStarFill
+   modalWidth = signal<string>('w-[750px]')
+   openFastForm = signal<boolean>(false)
+
    subscribe: FormGroup;
    style: any = {
       'background-color' : '#be9d18',
@@ -119,8 +125,8 @@ export class HomeComponent implements OnInit
    ])
 
    sliders = signal([
-      "https://ps.w.org/ml-slider/assets/banner-1544x500.png?rev=2907610",
-      "https://cdn2.mageplaza.com/media/general2/H4BvhSS.jpg"
+     "https://ps.w.org/ml-slider/assets/banner-1544x500.png?rev=2907610",
+     "https://cdn2.mageplaza.com/media/general2/H4BvhSS.jpg"
       
    ])
 
@@ -194,6 +200,16 @@ export class HomeComponent implements OnInit
          token: "PODfdfdfdf"
       }      
       await this.dbService.newUser(user)
+   }
+
+   sendFastForm = () => 
+   {
+      this.openFastForm.set(true)
+   }  
+
+   closeForm = () => 
+   {
+      this.openFastForm.set(false)
    }
 
 }

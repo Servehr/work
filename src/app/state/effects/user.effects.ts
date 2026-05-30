@@ -6,7 +6,7 @@ import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { SetErrorMessage, SetLoadingStatus } from "../actions/spinner.action";
 import AppState from "../app.state";
-import { PROFILE_SUCCESS, SEARCH_SUCCESS, SERARCH_USER, START_PROFILE, SUBSCRIBE } from "../actions/user.actions";
+import { FastForm, PROFILE_SUCCESS, SEARCH_SUCCESS, SERARCH_USER, START_PROFILE, SUBSCRIBE } from "../actions/user.actions";
 import { UserService } from "../../service/user.service";
 import { USER_PROFILE_SUCCESS, USER_SEARCH_START } from "../constants/user";
 import { ToastrService } from "ngx-toastr";
@@ -101,6 +101,36 @@ export class UserEffect {
                     next: (data) => { this.toastr.success(data?.message) },
                     error: (err) => { 
                       this.toastr.error( err?.error?.message, 'Error subscribing'),
+                      this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 400  } }))
+                    },
+                    complete: () => { 
+                        this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200 } })) 
+                    }
+                  }
+                )
+                // finalize(() => 
+                //   {
+                    
+                //   }
+                // )
+              )
+           }
+        )
+      )
+    }, { dispatch: false })
+
+    fastResponse$ = createEffect(() => {
+      return this.actions$.pipe(
+        ofType(FastForm),
+          switchMap((action) => 
+           {
+            return this.userService.fastForm(action.firstname, action.surname, action.phone, action.email, action.message)
+             .pipe(
+                tap(
+                  {
+                    next: (data) => { this.toastr.success(data?.message) },
+                    error: (err) => { 
+                      this.toastr.error( err?.error?.message, 'Message failed'),
                       this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 400  } }))
                     },
                     complete: () => { 

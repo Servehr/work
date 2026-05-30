@@ -17,21 +17,28 @@ import { AddComponent } from '../../../../../../util/icons/add/add.component';
 import { bootstrapPlusCircleFill } from '@ng-icons/bootstrap-icons';
 import { WritePageComponent } from '../write-page/write-page.component';
 import { NgIcon } from '@ng-icons/core';
-import { RemoveComponent } from '../../../../../../shared/remove/remove.component';
 import { ConnectRexourceComponent } from '../connect-rexource/connect-rexource.component';
 import { DisconnectRexourceComponent } from '../disconnect-rexource/disconnect-rexource.component';
 import { LabelComponent } from '../../../../../../components/controls/label/label.component';
 import { WriteActionComponent } from '../write-action/write-action.component';
 import { ActionComponent } from '../action/action.component';
+import { START_PAGE } from '../../../../../../state/actions/management/page.actions';
+import AppState from '../../../../../../state/app.state';
+import { Store } from '@ngrx/store';
+import { getSpinnerStatus } from '../../../../../../state/selectors/spinner.selector';
+import { sleepWait } from '../../../../../../util/sleep';
+import { getAllPage } from '../../../../../../state/selectors/admin/management/page.selector';
+import { LoaderComponent } from '../../../../../../components/loader/loader.component';
+import { PaginationComponent } from '../../../../../../components/pagination/pagination.component';
+import { RemovePageComponent } from '../remove-page/remove-page.component';
 
-type Person = { name: string; description: string; resources: number }
 
 @Component({
   selector: 'app-pages',
   standalone: true,
   imports: [ 
-              FlexRenderDirective, ModalComponent, NgIcon, 
-              WriteActionComponent, WritePageComponent, LabelComponent, RemoveComponent, ConnectRexourceComponent, DisconnectRexourceComponent, ActionComponent
+              FlexRenderDirective, ModalComponent, NgIcon, LoaderComponent, PaginationComponent,
+              WriteActionComponent, WritePageComponent, LabelComponent, RemovePageComponent, ConnectRexourceComponent, DisconnectRexourceComponent, ActionComponent
            ],
   templateUrl: './pages.component.html',
   styleUrl: './pages.component.scss'
@@ -39,18 +46,29 @@ type Person = { name: string; description: string; resources: number }
 export class PagesComponent 
 {
   PageTitle: string = 'Pages'
+  isLoading = signal<boolean>(false)
   buttonName: string = ''
   writePage: boolean = false
   connectPage: boolean = false
-  disconnectPage: boolean = false
+  disconnectPage: boolean = false 
   pageAction: boolean = false
+  selectedPage = signal<{ id: string, name: string}>({ id: '', name: '' })
   actions: boolean = false
   addIcon: any = bootstrapPlusCircleFill
 
   title: string = ''
-
   isModalOpen: boolean = false
   modalWidth: string = 'w-[750px]'
+  dataToUpdate = signal<any>(null)
+  removeData = signal<any>(null)
+
+  // pagination
+  currentPage = signal<number>(1)
+  perPage  = signal<number>(10)
+  totalPages = signal<number>(5)
+  totalDocs =  signal<number>(10)
+  hasNextPage =  signal<boolean>(true)
+  hasPrevPage =  signal<boolean>(true)
 
   boteenStyle: any = {
     'color': 'black',
@@ -61,16 +79,36 @@ export class PagesComponent
   unLinkCss: string = "text-black border-2 bg-yellow-200 hover:bg-gray-600 hover:text-white"
   boteeName: string = 'Link'
 
-  // 2. Define data
-  data = signal<Person[]>(
-    [ 
-        { name: 'Dashboard', description: 'Dashboard', resources: 30 },
-        { name: 'Management', description: 'Management', resources: 30 },
-        { name: 'Administration', description: 'Administration', resources: 19 },
-        { name: 'Technicians', description: 'Technicians', resources: 20 },
-        { name: 'Vendors', description: 'Vendors', resources: 28 },
-    ]
-  ) 
+  data = signal<any>([])
+
+  constructor(private store: Store<AppState>){}   
+
+  async ngOnInit()
+  {
+    this.store.dispatch(START_PAGE({ page: Number(this.currentPage()), limit: Number(this.perPage()) }))
+    this.isLoading.set(true)    
+    this.buttonName = 'Save'
+    await sleepWait(500)
+    this.store.select(getSpinnerStatus).subscribe((data: any) => 
+    {
+      this.isLoading.set(data?.loader?.loading)
+      if(!data?.loader?.loading)
+      {
+        this.isModalOpen = false
+        this.isLoading.set(data?.loader?.loading)
+      }
+    }) 
+
+    this.store.select(getAllPage).subscribe((pg: any) => 
+    {
+      this.isLoading.set(false)
+      this.data.set(pg?.pages)
+      this.currentPage.set(pg?.pages?.pagination?.currentPage)
+      this.totalPages.set(pg?.pages?.pagination?.totalPages)
+      this.hasPrevPage.set(pg?.pages?.pagination?.hasPrevPage)
+      this.hasNextPage.set(pg?.pages?.pagination?.hasNextPage)
+    })    
+  }
 
   columns: ColumnDef<any>[] = [
     {
@@ -81,12 +119,12 @@ export class PagesComponent
        accessorKey: 'description',
        header: 'Description'
     },
+    // {
+    //    accessorKey: 'resources',
+    //    header: 'No Of Pages'
+    // },
     {
-       accessorKey: 'resources',
-       header: 'No Of Pages'
-    },
-    {
-       accessorKey: '...',
+       accessorKey: 'disconnect',
        header: 'Disconnect',
        cell: (context) => {
          return flexRenderComponent(
@@ -102,23 +140,24 @@ export class PagesComponent
        }       
     },
     {
-       accessorKey: '...',
+       accessorKey: 'connect',
        header: 'Connect',
        cell: (context) => {
+         const name: string = context.row.getValue('name')
          return flexRenderComponent(
             ArrowRightComponent, {
               inputs: {
                 value: context.getValue<number>()
               },
               outputs: {
-                clickEvent: (value) => this.connectPageToResource(value)
+                clickEvent: (value) => this.connectPageToResource(value?.toString(), name)
               }
             }
          )
        }       
     },
     {
-       accessorKey: '...',
+       accessorKey: 'action',
        header: 'Create Action',
        cell: (context) => {
          return flexRenderComponent(
@@ -134,7 +173,7 @@ export class PagesComponent
        }       
     },
     {
-       accessorKey: '...',
+       accessorKey: 'modify',
        header: 'Modify Action',
        cell: (context) => {
          return flexRenderComponent(
@@ -153,13 +192,13 @@ export class PagesComponent
        }       
     },
     {
-       accessorKey: '...',
+       accessorKey: 'change',
        header: 'Update Page',
        cell: (context) => {
         
-        //  const name: string = context.row.getValue('name')
-        //  const description: string = context.row.getValue('description')
-         const rowData: any =  { name: '', description: '' }
+         const name: string = context.row.getValue('name')
+         const description: string = context.row.getValue('description')
+         const rowData: any =  { name, description }
 
          return flexRenderComponent(
             EditComponent, {
@@ -178,7 +217,7 @@ export class PagesComponent
        }        
     },
     {
-       accessorKey: 'firstName',
+       accessorKey: 'remove',
        header: 'Remove Page',
        cell: (context) => {
          return flexRenderComponent(
@@ -187,7 +226,7 @@ export class PagesComponent
                 value: context.getValue<string>()
               },
               outputs: {
-                clickEvent: (value) => this.handleClick(value, 'delete')
+                clickEvent: (value) => this.remove(value)
               }
             }
          )
@@ -207,11 +246,13 @@ export class PagesComponent
     this.writePage = true
   } 
 
-  connectPageToResource(status: number): void
+  connectPageToResource(status: string, name: string): void
   {
     this.title = 'connect Page To Resource'
     this.buttonName = 'Save'
-    this.connectPage = true     
+    this.selectedPage.set({ id: status, name: name })
+    console.log(this.selectedPage())
+    this.connectPage = true 
   }
 
   disconnectPageToResource(status: number): void
@@ -247,22 +288,28 @@ export class PagesComponent
       alert("Yeah!! Good")
   }
 
-  handleClick(value: string, action: string): void 
+  remove(value: string): void 
   {
-     if(action === 'update')
-     {
-        this.title = 'Update Page'
-        this.buttonName = 'Update'
-        this.ToggleWithTitle(this.title)
-     } else {
-        this.isModalOpen = true
-     }
+    this.removeData.set({ department: value, currentPage: this.currentPage(), pagePage: this.perPage() })
+    this.isModalOpen = true
   }
 
-  change(value: any): void 
+  change(cellData: any): void 
   {
-     this.isModalOpen = true
-  }  
+    this.title = 'Update Category'
+    this.buttonName = 'Update'
+    this.dataToUpdate.set(cellData)
+    console.log(cellData)
+    this.writePage = true
+  }   
+    
+  getData = async (event: any) => 
+  {
+    this.currentPage.set(Number(event.page))
+    this.isLoading.set(true)  
+    await sleepWait(500)
+    this.store.dispatch(START_PAGE  ({ page: Number(this.currentPage()), limit: Number(this.perPage()) }))
+  }
 
 
 }

@@ -1,91 +1,8 @@
-<div
-  class="bg-blue-50 px-5 pt-3 pb-3 md:py-7"
+<app-skill-search
 >
-  <div 
-    class='container mx-auto px-3 pt-3 py-4  md:p-10 flex-cols justify-center items-center'
-  >
-      <div 
-        class="w-full d-flex justify-content-between md:flex md:w-11/12 md:gap-0 mx-auto border-1 md:shadow-lg md:border-gray-200 md:rounded-full md:overflow-hidden"
-      >
-        <div 
-          class="w-12/12 md:w-7/12 mb-2 md:mb-0"
-        >
-          <input-field
-            [id]="'search'"
-            #search
-            [name]="'search'"
-            [placeholder]="'e.g plumber'"
-            [type]="'text'"
-            [value]="''"
-          >
-          </input-field>
-        </div>
-        <div 
-          class="w-12/12 md:w-5/12 mb-2 md:mb-0"
-        >
-          <input-field
-            [id]="'search'"
-            #search
-            [name]="'search'"
-            [placeholder]="'e.g lagos'"
-            [type]="'text'"
-            [value]="''"
-          >
-          </input-field>
-        </div>
-        <!-- <div 
-          class="w-12/12 md:w-3/ mb-3 md:mb-0"
-        >
-          <input-field
-            [id]="'search'"
-            #search
-            [name]="'search'"
-            [placeholder]="'e.g 10,000 - 50,000'"
-            [type]="'text'"
-            [value]="'value'"
-          >
-          </input-field>
-        </div> -->
-        <div 
-          class="w-12/12 md:w-2/12 mb-2 md:mb-0 mt-3 md:mt-0"
-        >
-          <app-botin
-            (ChangeOnButtonHoverIn)="ChangeOnButtonHoverIn()" 
-            (ChangeOnButtonHoverOut)="ChangeOnButtonHoverOut()"
-            [disabled]="disabled"
-            [style]="style"
-          >
-            <div
-              class="flex flex-col space-y-1 items-center justify-between"
-            >
-              <h3>Search</h3>
-            </div>
-          </app-botin>
-        </div>        
-      </div>
 
-      <!-- <div 
-        class="flex justify-center items-center mt-5 gap-2"
-      >
-          <p 
-            class="text-white text-[11px] font-semi-bold bg-blue-800 rounded-md flex justify-center items-center cursor-pointer px-2 py-1 hover:rounded-md hover:text-white hover:bg-yellow-600"
-          >
-            Location
-          </p>
-          <p 
-            class="text-white text-[11px] font-semi-bold bg-blue-800 rounded-md flex justify-center items-center cursor-pointer px-2 py-1 hover:rounded-md hover:text-white hover:bg-yellow-600"
-          >
-            Skill
-          </p>
-          <p 
-            class="text-white text-[11px] font-semi-bold bg-blue-800 rounded-md flex justify-center items-center cursor-pointer px-2 py-1 hover:rounded-md hover:text-white hover:bg-yellow-600"
-          >
-            Payment Range
-          </p>
-      </div> -->
+</app-skill-search>
 
-  </div>
-</div>
 
 <div 
    class='container mx-auto mb-5'
@@ -360,5 +277,32 @@
 <app-newsletter
 >
 </app-newsletter>
+
+<div 
+    class="fixed flex justify-center hover:border-gray-400 items-center rounded-xl right-0 top-1/4 z-50 -translate-y-1/2 flex flex-col gap-2 px-2 py-2 bg-white shadow-lg rounded-r-xl border border-l-0"
+>
+  <a 
+    class="bg-yellow-100 cursor-pointer hover:text-blue-900 rounded-lg py-2 px-2 pl-3 hover:bg-blue-800 hover:text-white"
+    (click)="sendFastForm()"
+  >
+    Fast Response Form
+  </a>
+</div>
+
+<app-whatsapp
+>
+</app-whatsapp>
+
+<app-modal 
+  [isOpen]="openFastForm()" 
+  [title]="'Quick Response'" 
+  [modalWidth]="modalWidth()"
+  (closeModal)="closeForm()"
+>
+  <app-fast-response-form
+    (close)="closeForm()"
+  >
+  </app-fast-response-form>
+</app-modal>
 
   

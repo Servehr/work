@@ -195,35 +195,37 @@
         </div>
     </section>
 
+    <div 
+        class="bg-blue-50"
+    >
+      <div 
+        class='container mx-auto p-3 flex justify-between item-center'
+      >
+        <ng-container>
+            @for (name of header; track $index) 
+            {
+                <ul 
+                class="text-white flex gap-2"
+                >                     
+                <li 
+                    [routerLink]="[name.route]"
+                    class="flex justify-center whitespace-nowrap items-center font-bold md:text-[12px] lg:text-md text-[#3e4095] cursor-pointer p-2 hover:text-[#be9d18]"
+                    (click)="harmburger()"
+                    [ngClass]="{'cursor-pointer' : isHover != $index}" 
+                >
+                    {{ name?.page?.toUpperCase() }}
+                </li>
+                </ul>  
+            }
+            </ng-container>        
+        </div>
+    </div>  
+
     
 </div>
 
-    <!-- ////// -->
-<div 
-    class="bg-blue-50"
->
-    <div 
-      class='container mx-auto p-3 flex justify-between item-center'
-    >
-      <ng-container>
-          @for (name of header; track $index) 
-          {
-            <ul 
-              class="text-white flex gap-2"
-            >                     
-               <li 
-                 [routerLink]="[name.route]"
-                 class="flex justify-center whitespace-nowrap items-center font-bold md:text-[12px] lg:text-md text-[#3e4095] cursor-pointer p-2 hover:text-[#be9d18]"
-                 (click)="harmburger()"
-                 [ngClass]="{'cursor-pointer' : isHover != $index}" 
-               >
-                  {{ name?.page?.toUpperCase() }}
-               </li>
-            </ul>  
-          }
-        </ng-container>        
-    </div>
-</div>   
+<!-- ////// -->
+ 
 
 
 <app-modal 

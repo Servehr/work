@@ -7,9 +7,8 @@ import { Store } from "@ngrx/store";
 import AppState from "../../app.state";
 import { CategoryService } from "../../../service/management/category.service";
 import { SetErrorMessage, SetLoadingStatus } from "../../actions/spinner.action";
-import { CATEGORY_SUCCESS, CREATE_CATEGORY, CREATE_UPDATE, START_CATEGORY } from "../../actions/management/category.actions";
+import { CATEGORY_SUCCESS, CREATE_CATEGORY, CREATE_UPDATE, REMOVE_CATEGORY, START_CATEGORY } from "../../actions/management/category.actions";
 import { ToastrService } from "ngx-toastr";
-import { CATEGORY_START } from "../../constants/management/category";
 
 
 @Injectable({
@@ -103,7 +102,7 @@ export class CategoryEffect {
               )
           })
       )
-    })
+    }, { dispatch: false, functional: true })
   
 
     upateCategory$ = createEffect(() => {
@@ -134,5 +133,36 @@ export class CategoryEffect {
           })
       )
     }, { dispatch: false, functional: true })
+
+
+    remove$ = createEffect(() => {
+      return this.actions$.pipe(
+        ofType(REMOVE_CATEGORY),
+          switchMap((action) => 
+           {
+            return this.categoryService.remove(action.category)
+             .pipe(
+                tap(
+                  {
+                    next: (data) => { 
+                      this.toastr.success(data?.message)
+                      this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200  } }))
+                      this.store.dispatch(START_CATEGORY({ page: action.page, limit: action.limit }))
+                      },
+                    error: (err) => { 
+                      this.toastr.error( err?.error?.message, 'Error deleting')
+                      // this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 400  } }))
+                    },
+                    complete: () => {
+                      // this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200 } })) 
+                      // this.store.dispatch(LOAD_DIVISIONS({ category: this.divisions(), page: Number(this.currentPage()), limit: Number(this.perPage()) }))
+                    },
+                  }
+                )
+              )
+           }
+        )
+      )
+    }, { dispatch: false, functional: true })     
 
 }

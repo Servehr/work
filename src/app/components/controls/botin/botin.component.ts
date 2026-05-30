@@ -39,7 +39,7 @@ export class BotinComponent {
 
     submit = () =>
     {
-        this.sendData.emit()
+      this.sendData.emit()
     }
 
 }

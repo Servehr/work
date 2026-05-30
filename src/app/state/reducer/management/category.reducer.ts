@@ -17,26 +17,10 @@ const InitialState: ICategory =
     category: []
 }
 
-////
-// export const InitialState: ISpinnerState = {
-//     loader: {
-//         loading: false,
-//         statusCode: 0
-//     }
-// }
-
-// export interface ISpinnerState 
-// {
-//     loader: {
-//         loading: boolean
-//         statusCode: number
-//     }
-// }
-/////////////
 
 const _category = createReducer(InitialState,    
     on(START_CATEGORY, (state:any, action: any) => {
-        console.log(action)
+        
         return {
             ...state,
             category: action
