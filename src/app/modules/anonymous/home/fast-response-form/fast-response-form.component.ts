@@ -56,7 +56,7 @@ export class FastResponseFormComponent {
      'padding': '20px'
    }
 
-   rows: number = 7
+   rows: number = 4
    cols: number = 20
 
    errorMessages = 
