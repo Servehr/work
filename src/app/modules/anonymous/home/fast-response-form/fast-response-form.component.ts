@@ -146,6 +146,7 @@ export class FastResponseFormComponent {
       } else {
          this.fastResponseForm.markAllAsTouched()  
          this.message.set("Attend to all fields")
+         this.isLoading.set(false)
          this.store.dispatch(SetErrorMessage({ msg: this.message(), statusCode: 400, operation: "send-fast-formr"  }))
       }     
     }    
