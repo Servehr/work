@@ -64,7 +64,7 @@
      </div>
 
      <div 
-       class="w-12/12 md:w-5/12 shadow-lg mx-auto"
+       class="w-12/12 md:w-5/12 shadow-lg mx-auto mt-6 md:mt-0"
      >
         <iframe 
           class="min-w-[440px] md:w-[630px] h-[315px]"
@@ -88,14 +88,14 @@
   class="container mx-auto"
 >
   <p
-      class="text-sm md:text-md mb-5 mt-5 text-[#be9d18] font-bold text-left"
+      class="text-sm md:text-md mb-5 mt-5 text-[#be9d18] font-bold text-left px-1 md:px-0"
     >
        Top Engagers
     </p>
 </div>
 
 <div 
-    class="container mx-auto grid grid-cols-2 md:grid-cols-6 gap-7 mb-5"
+    class="container mx-auto grid grid-cols-2 md:grid-cols-6 gap-2 md:gap-5 mb-5 px-1 md:px-0"
 >    
    @if(users().length > 0)
    {
@@ -105,14 +105,6 @@
         <div 
           class="border-2 shadow-md d-flex justify-center items-center relative"
         >
-          <!-- <ng-icon 
-            [svg]="threeDot" 
-            [size]="'22'" 
-            [color]="'black'" 
-            [ngClass]="{'circle-over' : isHamburgOver}"
-            (mouseover)="overBurger()"
-            class="z-50 cursor-pointer top-3 right-1 absolute"
-          /> -->
         <div 
           class="group absolute inline-block z-500 right-0 top-0"
         >
@@ -135,6 +127,11 @@
             <li 
               class="px-2 py-1 hover:bg-[#f6e7a0] border-b-2 border-gray-200 cursor-pointer"
             >
+              Portfolio
+            </li>
+            <li 
+              class="px-2 py-1 hover:bg-[#f6e7a0] border-b-2 border-gray-200 cursor-pointer"
+            >
               Rate & Reviews
             </li>
             <li 
@@ -148,22 +145,8 @@
               Fake Profile
             </li>
           </ul>
-        </div>
-        
-        
-          <!-- <div 
-            class="w-full h-[150px] hover:bg-yellow-100 absolute opacity-60 flex justify-center item-center z-30 cursor-pointer"
-            (click)="''"
-          >
-            <ng-icon 
-              [svg]="view" 
-              [size]="'22'" 
-              [color]="'black'" 
-              [ngClass]="{'circle-over' : isHamburgOver}"
-              (mouseover)="overBurger()"
-              class="z-50 cursor-pointer top-20 absolute"
-            /> 
-          </div> -->
+        </div>        
+      
           <app-image
             [src]="user.image"
             [alt]="user.alt"

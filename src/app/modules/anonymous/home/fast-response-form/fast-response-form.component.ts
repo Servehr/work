@@ -27,7 +27,10 @@ export const PhoneRequired = (control: AbstractControl): ValidationErrors | null
 {
    return control.value?.length === 0 || control.value === null ? { phoneNumberRequired : 'phoneNumberRequired' } :  null
 }
-
+export const fastResponseDescriptionRequired = (control: AbstractControl): ValidationErrors | null => 
+{
+   return control.value?.length === 0 || control.value === null ? { roleDescriptionRequired : 'roleDescriptionRequired' } :  null
+}
 
 @Component({
   selector: 'app-fast-response-form',
@@ -66,7 +69,8 @@ export class FastResponseFormComponent {
       phoneNumberRequired: 'Enter phone number',
       passwordLength: 'Minimum password length is 8',
       required: 'Enter email',
-      email: 'Enter a valid email'
+      email: 'Enter a valid email',
+      fastResponseDescriptionRequired: 'Enter message'
    }  
 
    fastResponseForm: FormGroup
@@ -79,7 +83,7 @@ export class FastResponseFormComponent {
           surname: new FormControl(null, [SurnameRequired]),
           phone: new FormControl(null, [PhoneRequired]),
           email: new FormControl('', [Validators.required, Validators.email]),
-          message: new FormControl(null)
+          message: new FormControl('', [fastResponseDescriptionRequired])
         }
       )
    }

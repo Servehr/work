@@ -54,6 +54,7 @@ export class HeaderComponent implements OnInit {
         { page: 'Event & Seminars', route: '/events' },
         { page: 'certification/Training', route: '/training' },
         { page: 'Partners', route: '/partner' },
+        { page: 'Market Place', route: '/market-place' },
         { page: 'jobs', route: '/jobs' },
         { page: 'community', route: '/community' },
         { page: 'plan', route: '/plan' },
