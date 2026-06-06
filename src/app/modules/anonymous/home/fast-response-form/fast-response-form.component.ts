@@ -127,7 +127,7 @@ export class FastResponseFormComponent {
       this.fastResponseForm.get('phone')?.setValue("")
       this.fastResponseForm.get('email')?.setValue("")
       this.fastResponseForm.get('message')?.setValue("")
-      // this.close.emit()
+      this.close.emit()
     }    
 
     write = async () => 
