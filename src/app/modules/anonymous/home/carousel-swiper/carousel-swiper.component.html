@@ -1,0 +1,38 @@
+      <swiper-container 
+        navigation="true" 
+        pagination="true"
+        autoplay="true" 
+        delay="3000" 
+        disable-on-interaction="false"
+        loop="true"
+      >
+        @for(slide of sliders(); track slide)
+        { 
+          <!-- <swiper-slide>
+            <app-image
+              [src]="slide"
+              [alt]="slide"
+            >
+            </app-image>
+          </swiper-slide> -->
+          <swiper-slide>
+            <img [src]="slide" />
+          </swiper-slide>
+        }
+      </swiper-container>  
+    
+    <!-- <swiper-container 
+      navigation="true" 
+      pagination="true"
+    >
+      @for(slide of sliders(); track slide)
+      {          
+        <swiper-slide>
+          <app-image
+            [src]="slide"
+            [alt]="slide"
+          >
+          </app-image>
+        </swiper-slide>
+      }
+    </swiper-container> -->

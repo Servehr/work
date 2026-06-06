@@ -19,6 +19,8 @@ import { SkillSearchComponent } from './skill-search/skill-search.component';
 import { WhatsappComponent } from './whatsapp/whatsapp.component';
 import { FastResponseFormComponent } from './fast-response-form/fast-response-form.component';
 import { ModalComponent } from '../../../components/modal/modal.component';
+import { CarouselSwiperComponent } from './carousel-swiper/carousel-swiper.component';
+import { TopEngagersComponent } from './top-engagers/top-engagers.component';
 
 
 @Component({
@@ -26,8 +28,8 @@ import { ModalComponent } from '../../../components/modal/modal.component';
   standalone: true,
   imports: [
                NgIf, NgFor, AsyncPipe, KeyValuePipe, NgFor, NgIcon, ReactiveFormsModule,
-               InputFieldComponent, BotinComponent, SuggestionComponent, SkillSearchComponent, ModalComponent,
-               UserCardComponent, ImageComponent, TestimonialComponent, NewsletterComponent, WhatsappComponent, FastResponseFormComponent                
+               InputFieldComponent, BotinComponent, SuggestionComponent, SkillSearchComponent, ModalComponent, CarouselSwiperComponent,
+               UserCardComponent, ImageComponent, TestimonialComponent, TopEngagersComponent, NewsletterComponent, WhatsappComponent, FastResponseFormComponent                
             ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -40,8 +42,8 @@ export class HomeComponent implements OnInit
    disabled: boolean = false
    close: any =  bootstrapXCircleFill
    view: any = bootstrapEyeFill
-   threeDot: any = bootstrapThreeDotsVertical
-   rating: any = bootstrapStarFill
+   threeDot: any = bootstrapThreeDotsVertical  // remove
+   rating: any = bootstrapStarFill             // remove
    modalWidth = signal<string>('w-[750px]')
    openFastForm = signal<boolean>(false)
 
@@ -53,7 +55,6 @@ export class HomeComponent implements OnInit
    }
    
    isHamburgOver: boolean = false
-
 
    errorMessages = 
    { 
@@ -138,10 +139,7 @@ export class HomeComponent implements OnInit
            email: new FormControl('', [Validators.required, Validators.email])
         }
       )
-      // this.toastr.error('Logged in successfully!', 'Success')
-   }   
-
-    
+   }       
 
    ngOnInit() 
    {
