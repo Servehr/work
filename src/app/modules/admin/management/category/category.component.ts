@@ -274,14 +274,6 @@ export class CategoryComponent {
      this.store.dispatch(START_CATEGORY({ page: Number(this.currentPage()), limit: Number(this.perPage()) }))
      this.actions = false
   }
-
-  // getData = async (event: any) => 
-  // {
-  //   this.currentPage.set(Number(event.page))
-  //   this.isLoading.set(true)  
-  //   await sleepWait(500)
-  //   this.store.dispatch(START_CATEGORY({ page: Number(this.currentPage()), limit: Number(this.perPage()) }))
-  // }
   
 
 }
