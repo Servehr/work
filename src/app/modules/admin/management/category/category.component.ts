@@ -95,6 +95,7 @@ export class CategoryComponent {
 
   async ngOnInit()
   {
+    console.log("preeeeeeventing")
     this.store.dispatch(START_CATEGORY({ page: Number(this.currentPage()), limit: Number(this.perPage()) }))
     this.isLoading.set(true)    
     this.buttonName = 'Save'
