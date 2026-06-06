@@ -269,11 +269,11 @@ export class CategoryComponent {
   {
   }
 
-  // closeModal = () => 
-  // {
-  //    this.store.dispatch(START_CATEGORY({ page: Number(this.currentPage()), limit: Number(this.perPage()) }))
-  //    this.actions = false
-  // }
+  closeModal = () => 
+  {
+     this.store.dispatch(START_CATEGORY({ page: Number(this.currentPage()), limit: Number(this.perPage()) }))
+     this.actions = false
+  }
 
   // getData = async (event: any) => 
   // {
