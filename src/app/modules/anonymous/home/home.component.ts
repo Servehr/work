@@ -21,6 +21,7 @@ import { FastResponseFormComponent } from './fast-response-form/fast-response-fo
 import { ModalComponent } from '../../../components/modal/modal.component';
 import { CarouselSwiperComponent } from './carousel-swiper/carousel-swiper.component';
 import { TopEngagersComponent } from './top-engagers/top-engagers.component';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -45,7 +46,8 @@ export class HomeComponent implements OnInit
    threeDot: any = bootstrapThreeDotsVertical  // remove
    rating: any = bootstrapStarFill             // remove
    modalWidth = signal<string>('w-[750px]')
-   openFastForm = signal<boolean>(false)
+   // openFastForm = signal<boolean>(false)
+   openFastForm: boolean = false
 
    subscribe: FormGroup;
    style: any = {
@@ -132,7 +134,7 @@ export class HomeComponent implements OnInit
    ])
 
 
-   constructor(private store: Store<AppState>, private dbService: DatabaseService) 
+   constructor(private store: Store<AppState>, private router: Router, private dbService: DatabaseService) 
    { 
      this.subscribe = new FormGroup(
         {
@@ -202,12 +204,14 @@ export class HomeComponent implements OnInit
 
    sendFastForm = () => 
    {
-      this.openFastForm.set(true)
+      // this.openFastForm.set(false)
+      this.openFastForm = true
    }  
 
    closeForm = () => 
    {
-      this.openFastForm.set(false)
+      // this.openFastForm.set(false)
+      this.openFastForm = false
    }
 
 }

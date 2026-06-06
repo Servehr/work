@@ -51,6 +51,7 @@ export class FastResponseFormComponent {
    message = signal<string>('')
    isLoading = signal<boolean>(false)
    close = output<void>()
+   responseStatus: number = 0
 
    statusCode!: number
    style: any = {
@@ -92,10 +93,17 @@ export class FastResponseFormComponent {
    {
      this.store.select(getSpinnerStatus).subscribe((data: any) => 
       {
-        this.isLoading.set(data?.loader?.loading)
-        if(!data?.loader?.loading)
+        this.responseStatus = data?.loader?.statusCode
+        if(this.responseStatus === 200)
         {
-          this.closeModal()
+          this.isLoading.set(false)
+          this.fastResponseForm.reset()
+          this.fastResponseForm.get('fistname')?.setValue("")
+          this.fastResponseForm.get('surname')?.setValue("")
+          this.fastResponseForm.get('phone')?.setValue("")
+          this.fastResponseForm.get('email')?.setValue("")
+          this.fastResponseForm.get('message')?.setValue("")
+          this.close.emit()
         }
       }
      )
@@ -132,6 +140,7 @@ export class FastResponseFormComponent {
 
     write = async () => 
     {
+      this.isLoading.set(true)
       this.store.dispatch(SetLoadingStatus({ loader: { loading: true, statusCode: 0 }}))
       if(this.fastResponseForm.valid === true)
       {
