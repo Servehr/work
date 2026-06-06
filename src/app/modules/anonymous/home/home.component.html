@@ -90,10 +90,10 @@
 >
 </app-whatsapp>
 
-@if(openFastForm())
-{
+<!-- @if(openFastForm === true)
+{ -->
   <app-modal 
-    [isOpen]="openFastForm()" 
+    [isOpen]="openFastForm" 
     [title]="'Quick Response'" 
     [modalWidth]="modalWidth()"
     (closeModal)="closeForm()"
@@ -103,7 +103,7 @@
     >
     </app-fast-response-form>
 </app-modal>
-}
+<!-- } -->
 
 
   
