@@ -121,13 +121,13 @@ export class FastResponseFormComponent {
 
     closeModal()
     {
-      // this.fastResponseForm.reset()
-      // this.fastResponseForm.get('fistname')?.setValue("")
-      // this.fastResponseForm.get('surname')?.setValue("")
-      // this.fastResponseForm.get('phone')?.setValue("")
-      // this.fastResponseForm.get('email')?.setValue("")
-      // this.fastResponseForm.get('message')?.setValue("")
-      // this.close.emit()
+      this.fastResponseForm.reset()
+      this.fastResponseForm.get('fistname')?.setValue("")
+      this.fastResponseForm.get('surname')?.setValue("")
+      this.fastResponseForm.get('phone')?.setValue("")
+      this.fastResponseForm.get('email')?.setValue("")
+      this.fastResponseForm.get('message')?.setValue("")
+      this.close.emit()
     }    
 
     write = async () => 
