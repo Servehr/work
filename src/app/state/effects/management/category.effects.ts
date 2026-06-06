@@ -31,6 +31,9 @@ export class CategoryEffect {
         ofType(START_CATEGORY),
           switchMap((action) => 
            {
+            console.log("action action action action action action action action")
+            console.log(action)
+            console.log("action action action action action action action action")
             return this.categoryService.categories(action?.page, action?.limit)
              .pipe(
                 map((data) => 
