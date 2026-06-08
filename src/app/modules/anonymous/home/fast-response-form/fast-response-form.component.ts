@@ -94,6 +94,7 @@ export class FastResponseFormComponent {
      this.store.select(getSpinnerStatus).subscribe((data: any) => 
       {
         this.responseStatus = data?.loader?.statusCode
+        console.log(this.responseStatus)
         if(this.responseStatus === 200)
         {
           this.isLoading.set(false)
@@ -103,7 +104,7 @@ export class FastResponseFormComponent {
           this.fastResponseForm.get('phone')?.setValue("")
           this.fastResponseForm.get('email')?.setValue("")
           this.fastResponseForm.get('message')?.setValue("")
-          // this.close.emit()
+          this.close.emit()
         }
       }
      )
