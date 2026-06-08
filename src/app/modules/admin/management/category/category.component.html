@@ -107,6 +107,7 @@
       [noOfPages]="totalPages()"
       [hasNextPage]="hasNextPage()"
       [hasPreviousPage]="hasPrevPage()"
+      (pageData)="getData($event)"
     >
     </app-pagination>
   </div>
