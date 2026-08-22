@@ -69,4 +69,34 @@ export class InputFileValueAcessorDirective<T> implements ControlValueAccessor, 
   
   setDisabledState(isDisabled: boolean): void { this.disabled = isDisabled; }
 
+  onFileSelect(event: any): void 
+  {
+    const selectedFile: File = event.target.files[0];
+    this.onTouched();
+
+    if (!selectedFile) {
+      this.file = null;
+      this.onChange(null);
+      return;
+    }
+
+    // Validation logic (e.g., max size 2MB and PDF only)
+    const maxSize = 2 * 1024 * 1024;
+    if (selectedFile.size > maxSize) {
+      // this.errorMessage = 'File size must be less than 2MB.';
+      this.onChange(null);
+      return;
+    }
+
+    if (selectedFile.type !== 'application/pdf') {
+      // this.errorMessage = 'Only PDF files are allowed.';
+      this.onChange(null);
+      return;
+    }
+
+   //  this.errorMessage = null;
+    this.file = selectedFile;
+    this.onChange(this.file);
+  }
+
 }

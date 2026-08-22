@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideZoneChangeDetection, isDevMode, APP_INITIALIZER } from '@angular/core';
-import { provideRouter, withRouterConfig } from '@angular/router';
+import { provideRouter, withInMemoryScrolling, withRouterConfig } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideStore } from '@ngrx/store';
@@ -55,7 +55,12 @@ export const appConfig: ApplicationConfig = {
       preventDuplicates: true,
     }),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes, withRouterConfig({ onSameUrlNavigation: 'reload' })),
+    provideRouter(routes, 
+                  withRouterConfig({ onSameUrlNavigation: 'reload' }),
+                  withInMemoryScrolling({
+                    scrollPositionRestoration: 'top',
+                  })
+                ),
     provideStore(AppReducer),
     provideEffects(
         [

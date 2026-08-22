@@ -13,12 +13,15 @@
 
     <div
     >
-    <app-alert 
-      [statusCode]="statusCode" 
-      [message]="message"
-    >
-    </app-alert>
-    
+      @if(loginForm.touched)
+      {
+        <app-alert 
+          [statusCode]="statusCode" 
+          [message]="message"
+          [timeOut]="1"
+        >
+        </app-alert>
+      }    
     </div>
       <form 
           [formGroup]="loginForm"

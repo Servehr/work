@@ -10,11 +10,18 @@
         {{ title }}
       </p>
       
-      <app-alert 
-        [statusCode]="statusCode" 
-        [message]="message"
+      <div
       >
-      </app-alert>
+        @if(registerForm.touched)
+        {
+          <app-alert 
+            [statusCode]="statusCode" 
+            [message]="message"
+            [timeOut]="1"
+          >
+          </app-alert>
+        }    
+      </div>
 
       <form 
         [formGroup]="registerForm"
@@ -178,7 +185,7 @@
           </div>
         </div>
 
-        <div 
+        <!-- <div 
             class="w-full flex justify-between mx-auto gap-10"
         >
           <div 
@@ -190,7 +197,7 @@
              >
              </app-input-file>
           </div>
-        </div>
+        </div> -->
         
 
         <div
@@ -206,11 +213,11 @@
               <div
                 class="flex flex-col space-y-1 items-center justify-between"
               >
-                @if(!isLoading())
+                @if(isLoading())
                 {
                    <p class="font-bold text-white"> ... submitting </p>
                 }
-                @if(isLoading())
+                @if(!isLoading())
                 {
                   <h3>Register</h3>
                 }

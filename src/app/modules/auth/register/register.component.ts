@@ -199,7 +199,8 @@ export class RegisterComponent
     {
       this.store.select(getSpinnerStatus).subscribe((data: any) => 
       {
-         this.isLoading.update((currentValue: boolean) => !currentValue)
+         // this.isLoading.update((currentValue: boolean) => !currentValue)
+         this.isLoading.set(data?.loader?.loading)
        })
        this.store.select(getResponseMessage).subscribe((data) => 
          {

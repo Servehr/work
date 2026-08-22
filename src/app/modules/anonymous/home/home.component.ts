@@ -22,6 +22,7 @@ import { ModalComponent } from '../../../components/modal/modal.component';
 import { CarouselSwiperComponent } from './carousel-swiper/carousel-swiper.component';
 import { TopEngagersComponent } from './top-engagers/top-engagers.component';
 import { Router } from '@angular/router';
+import { SetErrorMessage } from '../../../state/actions/spinner.action';
 
 
 @Component({
@@ -141,6 +142,7 @@ export class HomeComponent implements OnInit
            email: new FormControl('', [Validators.required, Validators.email])
         }
       )
+      this.store.dispatch(SetErrorMessage({ msg: "", statusCode: 200, operation: "all-category"  }))
    }       
 
    ngOnInit() 
@@ -151,6 +153,7 @@ export class HomeComponent implements OnInit
       // console.log(this.dbService.getUser())
       // console.log(this.router?.url)
       // console.log(window.location.hostname)
+      this.store.dispatch(SetErrorMessage({ msg: "", statusCode: 200, operation: "all-category"  }))
    }
 
    harmburger()

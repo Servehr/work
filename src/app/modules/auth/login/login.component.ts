@@ -72,10 +72,11 @@ export class LoginComponent
 
     constructor(private router: Router, private store: Store<AppState>) 
     { 
+      this.message = ''
       this.loginForm = new FormGroup(
        {
          email: new FormControl('', [Validators.required, Validators.email]),
-         password: new FormControl(''  )
+         password: new FormControl('', [PasswordRequiredAndLength])
        }
       ) 
       this.store.select(getResponseMessage).subscribe((data) => 
