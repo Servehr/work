@@ -14,6 +14,7 @@ import { RoleReducer } from "./reducer/management/role.reducer.";
 import { DepartmentReducer } from "./reducer/management/department.reducer";
 import { RexourceReducer } from "./reducer/management/rexource.reducer";
 import { PageReducer } from "./reducer/management/page.reducer";
+import { AboutReducer } from "./reducer/cms/about.reducer";
 
 
 export default interface AppState 
@@ -30,6 +31,7 @@ export default interface AppState
    department: any
    rexources: any
    pages: any
+   aboutus: any
 }
 
 
@@ -46,6 +48,6 @@ export const AppReducer =
    roleState: RoleReducer,
    departmentState: DepartmentReducer,
    rexourceState: RexourceReducer,
-   pageState: PageReducer
-
+   pageState: PageReducer,
+   aboutState: AboutReducer
 }

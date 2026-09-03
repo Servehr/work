@@ -1,159 +1,128 @@
-import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import { Component, EventEmitter, forwardRef, inject, Input, Output, signal } from '@angular/core';
 import { DragDropDirective } from '../../directives/drag-and-drop/drag-drop.directive';
 import { ImageComponent } from '../controls/image/image.component';
+import { NgIcon } from '@ng-icons/core';
+import { AbstractControl, ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, NgControl, ReactiveFormsModule, ValidationErrors, Validator } from '@angular/forms';
+import { CommonModule, NgIf } from '@angular/common';
+import { InputFileValidationComponent } from '../../validations/input-file-validation/input-file-validation.component';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { IFileHandler } from '../../interface/FileHandler';
-import { Store } from '@ngrx/store';
-import AppState from '../../state/app.state';
-import { bootstrapTrash } from '@ng-icons/bootstrap-icons';
-import { NgIcon } from '@ng-icons/core';
-import { reduceImageSize } from '../../util/image';
+import { InputFileValueAcessorDirective } from '../../directives/input-file/input-file-value-acessor.directive';
 
 @Component({
   selector: 'app-image-upload',
   standalone: true,
-  imports: [DragDropDirective, ImageComponent, NgIcon],
+  imports: [InputFileValidationComponent, DragDropDirective, NgIf, ImageComponent, NgIcon, ReactiveFormsModule, CommonModule],
   templateUrl: './image-upload.component.html',
-  styleUrl: './image-upload.component.scss'
-})
-export class ImageUploadComponent {
-
-  imageUpload: any[] = []
-  isLoading = signal(false)
-  ChangeOnHover: boolean = false
-  deleteIcon: any = bootstrapTrash
-  
-  style: any = {
-    'background-color' : '#be9d18',
-    'color': 'black',
-    'padding': '20px'
-  }
-  imageStyle: any = {
-    'border-radius' : '20%'
-  }
-  
-  @Output() sendFile: EventEmitter<string> = new EventEmitter()
-  
-  constructor(private saniter: DomSanitizer, private store: Store<AppState>){} 
-
-  // @Input() maxSizeMB: number = 2;
-  // @Input() allowedTypes: string[] = ['image/png', 'image/jpeg'];
-  // file: File | null = null;
-  // private onValidatorChange: () => void = () => {};
-
-  //   onFileChange(event: Event): void {
-  //   const input = event.target as HTMLInputElement;
-  //   if (input.files && input.files.length > 0) {
-  //     const selectedFile = input.files[0];
-  //     const error = this.validateFile(selectedFile);
-
-  //     if (error) {
-  //       this.errorMessage = error.message;
-  //       this.file = null;
-  //       this.onChange(null);
-  //     } else {
-  //       this.errorMessage = null;
-  //       this.file = selectedFile;
-  //       this.onChange(selectedFile);
-  //     }
-  //   }
-  //   this.onTouched();
-  //   this.onValidatorChange();
-  // }
-
-  // private validateFile(file: File): ValidationErrors | null {
-  //   if (!this.allowedTypes.includes(file.type)) {
-  //     return { invalidType: { message: 'Invalid file type selected.' } };
-  //   }
-  //   if (file.size > this.maxSizeMB * 1024 * 1024) {
-  //     return { maxExceeded: { message: `File size must be under ${this.maxSizeMB}MB.` } };
-  //   }
-  //   return null;
-  // }
-
-  // Validator method
-  // validate(control: AbstractControl): ValidationErrors | null {
-  //   if (!control.value && control.touched) {
-  //     return { required: true };
-  //   }
-  //   return this.file ? this.validateFile(this.file) : null;
-  // }
-
-  // registerOnValidatorChange(fn: () => void): void {
-  //   this.onValidatorChange = fn;
-  // }  
-
-  onFileSelectedChange = async (event: any) =>
-  {
-    const file: any = event?.target?.files[0]
-
-    const imageString = await this.toBase64(file)
-    const base64Image: any = imageString
-    
-    const baseImage64: unknown | string = await reduceImageSize(base64Image)
-    const base64 = baseImage64?.toString()!
-      
-    const fileHandler: IFileHandler = 
+  styleUrl: './image-upload.component.scss',
+  providers: [
     {
-      file: file,
-      url: this.saniter?.bypassSecurityTrustUrl(window.URL.createObjectURL(file)),
-      base64: base64
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ImageUploadComponent),
+      multi: true
     }
-    this.imageUpload = []
-    this.imageUpload.push(fileHandler?.url)
-    this.sendFile.emit(fileHandler?.base64)
-  }
+  ]
+})
+export class ImageUploadComponent<T> extends InputFileValueAcessorDirective<T> {
+
   
-  removeImages = (remove: string) =>
+  isDragOver = false;
+
+  saniter = inject(DomSanitizer)
+
+  @Input() customErrorMessages: Record<string, string> = { }
+
+  async base64ToFileUsingFetch (base64String: string, filename: string): Promise<File> 
   {
-    this.imageUpload = []
-    return false
+    // Fetch the data URL directly
+    const response = await fetch(base64String);
+    // Convert the response into a binary Blob
+    const blob = await response.blob();
+    // Return the constructed File object
+    return new File([blob], filename, { type: 'image/jpg' });
   }
-     
-  dropFile = async (upload: IFileHandler) => 
+
+
+  // ++++++++++++++++++++++++++++++++++++++++++++
+  dropFile = async (upload: IFileHandler, type: string) => 
   {
-    const SafeUrlToFileObject = await this.safeUrlToFile(upload?.url, 'uploadImage')
-    const base64 = await this.toBase64(SafeUrlToFileObject)
-  
-    this.convertFileToBase64(SafeUrlToFileObject).then(base64 => 
-    {
-      this.imageUpload = []
-      this.imageUpload.push(upload?.url)
-      this.sendFile.emit(upload?.base64)
-    }).catch(error => {
-        console.error('Error converting file:', error);
-    })
+      // console.log(upload?.url)
+      this.previewUrl = upload.url;
+      
+      const now: Date = new Date();
+      const isoString: string = now.toISOString();
+      const file = await this.base64ToFileUsingFetch(String(this.previewUrl), isoString)
+      this.onChange(file)
+      // const SafeUrlToFileObject = await this.safeUrlToFile(upload?.url, 'uploadImage')
+      // const base64 = await this.toBase64(SafeUrlToFileObject);
+      // this.convertFileToBase64(SafeUrlToFileObject).then(base64 => 
+      // {
+      //   if(type === 'nin')
+      //   {
+      //     // this.NIN = []
+      //     // this.NIN.push(upload?.url)
+      //     // this.base64NinImage = base64
+      //   }
+
+      //   if(type === 'passport')
+      //   {
+      //     // this.passportPhotograph = []
+      //     // this.passportPhotograph.push(upload?.url)
+      //     // this.base64PassportImage = base64
+      //   }
+      // }).catch(error => {
+      //    console.error('Error converting file:', error);
+      // })
   }
-  
+
   toBase64 = (file: any) => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
   })
-  
+
   private convertFileToBase64(file: File): Promise<string | ArrayBuffer | null> 
-  {
-    return new Promise((resolve, reject) => 
-    {
-      const reader = new FileReader()
-      reader.readAsDataURL(file)
-      reader.onload = () => resolve(reader.result)
-      reader.onerror = (error) => reject(error)
-    })
+   {
+      return new Promise((resolve, reject) => 
+      {
+         const reader = new FileReader()
+         reader.readAsDataURL(file)
+        //  console.log(file)
+        //  console.log(reader.result)
+         reader.onload = () => resolve(reader.result)
+         reader.onerror = (error) => reject(error)
+      })
   }
-  
+
   async safeUrlToFile(safeUrl: SafeUrl, fileName: string): Promise<File> 
-  {
-    // 1. Unwrap the SafeUrl to get raw string
-    const rawUrl = this.saniter.sanitize(0, safeUrl) || ''
-        
-    // 2. Fetch the URL as a blob
-    const response = await fetch(rawUrl)
-    const blob = await response.blob()
-        
-    // 3. Create file from blob
-    return new File([blob], fileName, { type: 'image/jpeg' });
-  }
+   {
+      // 1. Unwrap the SafeUrl to get raw string
+      const rawUrl = this.saniter.sanitize(0, safeUrl) || ''
+      // console.log(rawUrl)
+      
+      // 2. Fetch the URL as a blob
+      const response = await fetch(rawUrl);
+      // console.log(response)
+      const blob = await response.blob();
+      // console.log(blob)
+      
+      // 3. Create file from blob
+      return new File([blob], fileName, { type: 'image/jpeg' });
+  }   
+
+  // onFileSelected(event: Event) 
+  // {
+  //    const element = event.currentTarget as HTMLInputElement;
+  //    const fileList: FileList | null = element.files;
+  //    console.log(fileList)
+  //    if (fileList && fileList.length > 0) 
+  //    {
+  //     //  this.file = fileList[0];
+  //     //  this.onChange(this.file); // Notifies Angular of the new value
+  //    }
+  // }
+  
+  
 
 }

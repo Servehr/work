@@ -55,9 +55,8 @@ export class PageEffect {
                     hasNextPage: data?.data?.hasNextPage,
                     hasPrevPage: data?.data?.hasPrevPage
                   }
-                  console.log(transformed)
-                  this.store.dispatch(SetErrorMessage({ msg: "successful", statusCode: 200, operation: "all-resource"  }))
-                  this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200, page: 'rexource' }}))
+                  this.store.dispatch(SetErrorMessage({ msg: "successful", statusCode: 200, operation: "all-page"  }))
+                  this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200, page: 'page' }}))
                   return PAGE_SUCCESS({ pages: transformed });
                 }
               ),

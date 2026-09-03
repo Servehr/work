@@ -8,18 +8,17 @@ import { NgIcon } from '@ng-icons/core';
   imports: [NgIcon],
   templateUrl: './add.component.html',
   styleUrl: './add.component.scss',
-  host: {
-    '(click)': 'sendData.emit($event)'
-  }
 })
 export class AddComponent {
   
   addIcon: any = bootstrapPlusCircleFill
-  readonly value = input.required<number>()
+  size = input<string>('16')
+  readonly value = input<number>()
   readonly clickEvent = output<number>()
 
-  onClick(): void {
-    this.clickEvent.emit(this.value())
+  onClick(): void 
+  {
+    this.clickEvent.emit(this.value()!)
   }
 
 

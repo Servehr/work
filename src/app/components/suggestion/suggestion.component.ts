@@ -49,7 +49,7 @@ export class    SuggestionComponent implements OnInit
 
     this.store.select(getSearchSugesstions).subscribe((search: any) => 
     {
-        console.log(search)
+      
     }) 
 
     this.showSuggestion.set(false)
@@ -63,7 +63,6 @@ export class    SuggestionComponent implements OnInit
         //  }
         // )
         this.isSearching.set(true)
-        console.log(value)
         if(value?.length > 0)
         {
           // this.results.set([])

@@ -101,7 +101,7 @@ export class WritePageComponent implements OnInit {
    {
      this.store.select(getSpinnerStatus).subscribe((data: any) => 
       {
-        this.isLoading = data?.loader?.loading
+        this.isLoading = data?.loader?.loading 
         if(!data?.loader?.loading)
         {
           this.closeModal()
@@ -113,8 +113,9 @@ export class WritePageComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges)
    {
      if(!changes['dataToUpdate'])
-     {console.log(changes['dataToUpdate'])
-         this.name.set(this.dataToUpdate()?.data?.name)
+     {
+      //  console.log(changes['dataToUpdate'])
+       this.name.set(this.dataToUpdate()?.data?.name)
      }
   }     
 
@@ -151,21 +152,22 @@ export class WritePageComponent implements OnInit {
     
   write = async () => 
     {
-      this.store.dispatch(SetLoadingStatus({ loader: { loading: true, statusCode: 0 }}))
+      console.log(this.pageForm.value)
       if(this.pageForm.valid)
       {
+        this.store.dispatch(SetLoadingStatus({ loader: { loading: true, statusCode: 0, page: 'page' }}))
         of(this.pageForm.value)
         .pipe(delay(1000))
-        .subscribe(dept => 
+        .subscribe(pg => 
           {
             if(this.dataToUpdate() === null)
             { 
-              const pageName = dept['pageName']!
-              const pageDescription = dept['pageDescription']!
+              const pageName = pg['pageName']!
+              const pageDescription = pg['pageDescription']!
               this.store.dispatch(CREATE_PAGE({ name: pageName, description: pageDescription, page: Number(this.currentPage()), perPage: Number(this.perPage()) }))
             } else {              
-               const pageName = dept['pageName']!
-               const pageDescription = dept['pageDescription']!
+               const pageName = pg['pageName']!
+               const pageDescription = pg['pageDescription']!
                this.store.dispatch(UPDATE_PAGE({ pagee: this.dataToUpdate().id, name: pageName, description: pageDescription, page: Number(this.currentPage()), perPage: Number(this.perPage()) })) 
             }
           }          

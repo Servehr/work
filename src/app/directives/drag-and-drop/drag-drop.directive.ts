@@ -2,6 +2,7 @@ import { Directive, EventEmitter, HostBinding, HostListener, Input, Output } fro
 import { IFileHandler } from '../../interface/FileHandler';
 import { DomSanitizer } from '@angular/platform-browser';
 import { reduceImageSize } from '../../util/image';
+import { FormControl } from '@angular/forms';
 
 @Directive({
   selector: '[appDragDrop]',
@@ -14,9 +15,11 @@ export class DragDropDirective {
 
   @Output() dropFile: EventEmitter<IFileHandler> = new EventEmitter()
 
-  @HostBinding("style.background") private background = "#eee"
+  @HostBinding("style.background") private background = "#fff"
 
   @Input() uploadType: string = 'single'
+
+  @Input() imgName: string = ''
 
   constructor(private saniter: DomSanitizer) { }
 
@@ -25,7 +28,8 @@ export class DragDropDirective {
   {
      event.preventDefault()
      event.stopPropagation()
-     this.background = "#999"
+   //   this.background = "#999"
+     this.background = '#2083bd'
   }
 
   @HostListener("dragLeave", ["$event"])
@@ -33,7 +37,7 @@ export class DragDropDirective {
   {
      event.preventDefault()
      event.stopPropagation()
-     this.background = "#eee"
+     this.background = "#fff"
   }
 
   @HostListener("drop", ["$event"])
@@ -41,7 +45,7 @@ export class DragDropDirective {
   {
     event.preventDefault()
     event.stopPropagation()
-    this.background = "#eee"
+    this.background = "#fff"
      
     let fileHandler: IFileHandler
 
@@ -85,6 +89,13 @@ export class DragDropDirective {
      if(this.uploadType === 'single')
      {
        const file = event?.dataTransfer?.files[0]!
+
+      //  const uploadFileName: string = file?.name
+      //  const uploadFileSize: number = file?.size
+      //  const uploadFileType: string = file?.type
+
+      //  console.log({uploadFileName, uploadFileSize, uploadFileType})
+              
        const imageString = await this.toBase64(file)
        const base64Image: any = imageString
          
@@ -94,6 +105,9 @@ export class DragDropDirective {
        const base64 = baseImage64?.toString()!
          
        fileHandler = { file, url, base64 }
+
+      //  control.setValue(file);
+      //  control.updateValueAndValidity();
        this.dropFile.emit(fileHandler)
      }    
   }

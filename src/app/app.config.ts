@@ -29,6 +29,7 @@ import { DepartmentEffect } from './state/effects/management/department.effects'
 import { RoleEffect } from './state/effects/management/role.effects';
 import { RexourceEffect } from './state/effects/management/rexource.effects';
 import { PageEffect } from './state/effects/management/page.effects';
+import { AboutUsEffect } from './state/effects/cms/about.effects';
 
 
 export function initializeLocation(locationService: LocationService) 
@@ -64,7 +65,7 @@ export const appConfig: ApplicationConfig = {
     provideStore(AppReducer),
     provideEffects(
         [
-          AuthEffect, UserEffect, JobEffect, 
+          AuthEffect, UserEffect, JobEffect, AboutUsEffect,
           CategoryEffect, RemoveEffect, DivisionEffect, DepartmentEffect, RoleEffect, RexourceEffect, PageEffect
         ]
     ),

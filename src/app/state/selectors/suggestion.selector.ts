@@ -6,6 +6,5 @@ const getSearchSuggestion = createFeatureSelector<Suggestion>(SUGGESTION_STATE_N
 
 export const getSearchSugesstions = createSelector(getSearchSuggestion, state => 
 {
-    console.log(state.results)
     return state?.results
 })

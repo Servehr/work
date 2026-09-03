@@ -165,6 +165,7 @@ export class WriteCategoryComponent implements OnInit {
           }
         )
       } else {
+         console.log(this.categoryForm.value)
          this.categoryForm.markAllAsTouched()  
          this.message = "Attend to all fields"
          this.store.dispatch(SetErrorMessage({ msg: this.message, statusCode: 400, operation: "authenticate-user"  }))

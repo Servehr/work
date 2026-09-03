@@ -1,0 +1,92 @@
+<div 
+  class="flex mb-4 border-2 border-gray-200 pb-4 pt-2"
+>
+   <div 
+     class="w-2/12 flex items-center justify-center"
+   >
+     <app-image
+       [src]="event().logo"
+       [alt]="event().alt"
+       [height]="height()"
+       [width]="width()"
+       class="cursor-none"
+     >
+     </app-image> 
+   </div>
+   <div 
+     class="w-7/12 px-4 py-2"
+   >
+      <!-- <span class="text-[12px] font-bold text-[#e1b207]">{{ 'Tag Line' }}</span> -->
+      <p class="text-[28px] -mt-2">{{ event().title }}</p>
+
+      <!-- <app-topic
+        [color]="'blue'"
+      >
+        {{ event().title }}
+      </app-topic> -->
+
+      <!-- <span class="text-[12px] font-bold text-[#e1b207]">{{ 'Location' }}</span> -->
+      <app-location
+         [color]="'red'"
+      >
+         {{ event().location }}
+      </app-location>
+
+      <app-calendar
+        [color]="'black'"
+      >
+        {{ event().date }}
+      </app-calendar>
+      
+      <app-time
+         [color]="'black'"
+      >
+        {{ event().time }}
+      </app-time>
+
+      <div class="h-[30px]"></div>
+
+      <app-botin
+        (ChangeOnButtonHoverIn)="ChangeOnButtonHoverIn()" 
+        (ChangeOnButtonHoverOut)="ChangeOnButtonHoverOut()"
+        (sendData)="detail()"
+        [style]="style"
+      >
+        <div
+          class="flex flex-col space-y-1 items-center justify-between"
+        >
+          <h3 class="text-red-600 text-[14px]">See Detail</h3>
+        </div>
+      </app-botin>
+
+   </div>
+   <div 
+     class="w-3/12 pt-4 d-flex justify-center items-center justify-evenly"
+   >
+      <div 
+        class="w-full h-full"
+      >
+        <div class="w-full flex -ml-6 justify-center items-center text-[12x] text-[#2c0e82] mt-2 mb-4 font-bold"
+        >
+          <p class="text-[14px]">{{ 'Watch Live' }}</p>
+        </div>
+        <div 
+          class="flex"
+        >
+          <app-facebook></app-facebook>
+          <app-youtube></app-youtube>
+          <app-tiktok></app-tiktok>
+          <app-instagram></app-instagram>
+          <app-twitch></app-twitch>
+          <app-twitter></app-twitter>
+        </div>
+      </div>
+
+      <div 
+        class="w-full h-full right-0 bottom-0"
+      >
+
+      </div>
+
+  </div>
+</div>

@@ -7,3 +7,28 @@
   </div>
 
 <app-footer></app-footer>
+
+
+<div 
+    class="fixed flex justify-center hover:border-gray-400 items-center rounded-xl right-0 top-1/4 z-30 -translate-y-1/2 flex flex-col gap-2 px-2 py-2 bg-white shadow-lg rounded-r-xl border border-l-0"
+>
+  <a 
+    class="bg-yellow-100 text-[13px] cursor-pointer hover:text-blue-900 rounded-lg py-2 px-8 pl-3 hover:bg-blue-800 hover:text-white"
+    (click)="sendFastForm()"
+  >
+    Fast Response Form
+  </a>
+</div>
+
+
+  <app-modal 
+    [isOpen]="openFastForm" 
+    [title]="'Quick Response'" 
+    [modalWidth]="modalWidth()"
+    (closeModal)="closeForm()"
+  >
+    <app-fast-response-form
+      (close)="closeForm()"
+    >
+    </app-fast-response-form>
+</app-modal>

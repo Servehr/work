@@ -13,7 +13,10 @@ import { NgIcon } from '@ng-icons/core';
 export class DeleteComponent {
   
   deleteIcon: any = bootstrapTrash
-  readonly value = input.required<string>()
+  size = input<string>('16')
+  color = input<string>('red')
+  readonly value = input<string>()  
+  readonly data = input<any>()
   readonly clickEvent = output<string>()
   editColor: string = 'red'
   style: any = {
@@ -22,7 +25,7 @@ export class DeleteComponent {
 
   onClick(): void 
   {
-    this.clickEvent.emit(this.value())
+    this.clickEvent.emit(this.value()!)
   }
 
   ChangeOnButtonHoverIn()

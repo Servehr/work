@@ -52,7 +52,11 @@
         <div 
             class="w-6/12 md:w-2/12 px-2 flex-none"
         >
-            <app-logo></app-logo>
+            <a 
+              [routerLink]="'/'"
+            >
+              <app-logo></app-logo>
+            </a>
         </div>
         <!-- text-[#3e4095] cursor-pointer p-2 hover:text-[#be9d18]" -->
         <div 
@@ -210,10 +214,10 @@
                 class="text-white flex gap-2"
                 >                     
                 <li 
-                    [routerLink]="[name.route]"
-                    class="flex justify-center whitespace-nowrap items-center font-bold text-[12px] lg:text-md text-[#3e4095] cursor-pointer p-2 hover:text-[#be9d18]"
-                    (click)="harmburger()"
-                    [ngClass]="{'cursor-pointer' : isHover != $index}" 
+                  [routerLink]="[name.route]"
+                  class="flex justify-center whitespace-nowrap items-center font-bold text-[12px] lg:text-md text-[#3e4095] cursor-pointer p-2 hover:text-[#be9d18]"
+                  (click)="harmburger()"
+                  [ngClass]="{'cursor-pointer' : isHover != $index}" 
                 >
                     {{ name?.page?.toUpperCase() }}
                 </li>

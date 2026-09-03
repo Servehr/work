@@ -1,10 +1,52 @@
 <div 
-   class='container mx-auto pb-30 mt-1 md:mt-1 mb-7 shadow-md'
+   class='container mx-auto pt-7 px-5 h-[650px]'
 >
-   <div 
-     class="w-12/12 md:w-12/12 border-2 h-[800px] p-3"
+   <!-- <div 
+     class="d-flex w-12/12 md:w-12/12 border-2"
    >
-     <p>About Us</p>
 
-   </div>
+   </div> -->
+
+
+  @if(isLoading())
+  {
+    <div 
+      class="h-[400px] box-shadow w-full flex justify-center items-center"
+    >
+      <app-loader></app-loader>
+    </div>
+  }
+
+
+  @if(!isLoading())
+  {
+    <div 
+      class="d-flex space-y-4"
+    >
+      @for (tell of content(); track $index)
+      {
+         <!-- {{'Great'}} -->
+         <div 
+            class="d-flex border-2 border-gray-100 w-full pl-2 mb-3"
+         >
+            <div 
+              class="px-3 pt-3 font-bold text-[14px] flex items-center"
+            >
+                <p 
+                  class="px-2 py-2 -ml-2 -mt-1 text-[15px]"
+                >
+                  {{ tell?.title }} 
+                </p>
+            </div>
+            <div 
+              class="px-3 py-2 pb-5 text-[18px]"
+            >
+                {{ tell?.aboutus }}
+            </div>
+         </div>
+      }
+    </div>    
+  }
+
+
 </div>

@@ -3,7 +3,7 @@ import { LogoComponent } from '../../../components/logo/logo.component';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { bootstrapList, bootstrapXLg, bootstrapGrid1x2Fill, bootstrapHouseDoorFill, bootstrapFacebook, bootstrapTwitter, bootstrapInstagram, bootstrapYoutube, bootstrapTiktok, bootstrapPersonFill, bootstrapPersonPlusFill, bootstrapPower } from '@ng-icons/bootstrap-icons';
 import { CommonModule, NgIf } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterLink, RouterModule } from '@angular/router';
 import { delay, from, of, Subscription, switchMap, timer } from 'rxjs';
 import { AuthService } from '../../../service/auth.service';
 import { Store } from '@ngrx/store';
@@ -20,7 +20,7 @@ import { PostComponent } from '../../../modules/user/post/post.component';
   selector: 'app-header',
   standalone: true,
   imports: [
-              CommonModule, NgIcon, RouterModule, NgIf, 
+              CommonModule, NgIcon, RouterModule, NgIf, RouterLink,
               LogoComponent, LoaderComponent, ModalComponent, PostComponent
            ],
   templateUrl: './header.component.html',

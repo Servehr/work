@@ -23,6 +23,8 @@ import { CarouselSwiperComponent } from './carousel-swiper/carousel-swiper.compo
 import { TopEngagersComponent } from './top-engagers/top-engagers.component';
 import { Router } from '@angular/router';
 import { SetErrorMessage } from '../../../state/actions/spinner.action';
+import { ImageListingScrollingComponent } from './image-listing-scrolling/image-listing-scrolling.component';
+import { FeaturedCompanyComponent } from './featured-company/featured-company.component';
 
 
 @Component({
@@ -30,8 +32,8 @@ import { SetErrorMessage } from '../../../state/actions/spinner.action';
   standalone: true,
   imports: [
                NgIf, NgFor, AsyncPipe, KeyValuePipe, NgFor, NgIcon, ReactiveFormsModule,
-               InputFieldComponent, BotinComponent, SuggestionComponent, SkillSearchComponent, ModalComponent, CarouselSwiperComponent,
-               UserCardComponent, ImageComponent, TestimonialComponent, TopEngagersComponent, NewsletterComponent, WhatsappComponent, FastResponseFormComponent                
+               InputFieldComponent, BotinComponent, SuggestionComponent, SkillSearchComponent, CarouselSwiperComponent,
+               UserCardComponent, ImageComponent, TestimonialComponent, TopEngagersComponent, NewsletterComponent, WhatsappComponent, ImageListingScrollingComponent, FeaturedCompanyComponent               
             ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -46,9 +48,6 @@ export class HomeComponent implements OnInit
    view: any = bootstrapEyeFill
    threeDot: any = bootstrapThreeDotsVertical  // remove
    rating: any = bootstrapStarFill             // remove
-   modalWidth = signal<string>('w-[750px]')
-   // openFastForm = signal<boolean>(false)
-   openFastForm: boolean = false
 
    subscribe: FormGroup;
    style: any = {
@@ -131,7 +130,6 @@ export class HomeComponent implements OnInit
    sliders = signal([
      "https://ps.w.org/ml-slider/assets/banner-1544x500.png?rev=2907610",
      "https://cdn2.mageplaza.com/media/general2/H4BvhSS.jpg"
-      
    ])
 
 
@@ -203,18 +201,6 @@ export class HomeComponent implements OnInit
          token: "PODfdfdfdf"
       }      
       await this.dbService.newUser(user)
-   }
-
-   sendFastForm = () => 
-   {
-      // this.openFastForm.set(false)
-      this.openFastForm = true
-   }  
-
-   closeForm = () => 
-   {
-      // this.openFastForm.set(false)
-      this.openFastForm = false
    }
 
 }
