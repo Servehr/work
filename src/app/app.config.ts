@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideZoneChangeDetection, isDevMode, APP_INITIALIZER } from '@angular/core';
-import { provideRouter, withRouterConfig } from '@angular/router';
+import { provideRouter, withInMemoryScrolling, withRouterConfig } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideStore } from '@ngrx/store';
@@ -29,6 +29,7 @@ import { DepartmentEffect } from './state/effects/management/department.effects'
 import { RoleEffect } from './state/effects/management/role.effects';
 import { RexourceEffect } from './state/effects/management/rexource.effects';
 import { PageEffect } from './state/effects/management/page.effects';
+import { AboutUsEffect } from './state/effects/cms/about.effects';
 
 
 export function initializeLocation(locationService: LocationService) 
@@ -55,11 +56,16 @@ export const appConfig: ApplicationConfig = {
       preventDuplicates: true,
     }),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes, withRouterConfig({ onSameUrlNavigation: 'reload' })),
+    provideRouter(routes, 
+                  withRouterConfig({ onSameUrlNavigation: 'reload' }),
+                  withInMemoryScrolling({
+                    scrollPositionRestoration: 'top',
+                  })
+                ),
     provideStore(AppReducer),
     provideEffects(
         [
-          AuthEffect, UserEffect, JobEffect, 
+          AuthEffect, UserEffect, JobEffect, AboutUsEffect,
           CategoryEffect, RemoveEffect, DivisionEffect, DepartmentEffect, RoleEffect, RexourceEffect, PageEffect
         ]
     ),

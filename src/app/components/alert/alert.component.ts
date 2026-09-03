@@ -14,6 +14,7 @@ export class AlertComponent {
 
     @Input() statusCode!: number
     @Input() message!: string
+    @Input() timeOut: number = 10000
 
     show: Boolean = true
 
@@ -22,7 +23,7 @@ export class AlertComponent {
       setTimeout(() => 
       {
          this.store.dispatch(SetClearErrorMessage({ msg: "", statusCode: 400, operation: "authenticate-user"  }))
-      }, 10000)
+      }, this.timeOut)
     }
 
 }

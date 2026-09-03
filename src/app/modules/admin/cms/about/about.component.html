@@ -2,39 +2,119 @@
   class="container px-5 min-h-700 max-h-screen"
 >
 
-  <div 
-    class="mt-5 mb-5 text-sm font-bold"
-  >
-   {{ sectionTitle }}
-  </div>
-
-  
-  <app-wysiwyg 
-    [content]="content"
-  >
-  </app-wysiwyg>
-
-  <div class="p-5"></div>
-
-  <div
-    class="md:flex z-30 mb-5"
-  >
-    <app-botin
-      (ChangeOnButtonHoverIn)="ChangeOnButtonHoverIn()" 
-      (ChangeOnButtonHoverOut)="ChangeOnButtonHoverOut()"
-      (sendData)="register()"
-      [disabled]="disabled"
-      [style]="style"
+  @if(isLoading())
+  {
+    <div 
+      class="h-[400px] box-shadow w-full flex justify-center items-center"
     >
-      <div
-        class="flex flex-col space-y-1 items-center justify-between"
-      >
-        <h3>Save</h3>
-      </div>
-     </app-botin>
-  </div>
+      <app-loader></app-loader>
+    </div>
+  }
 
-  <div class="p-5"></div>
+  @if(!isLoading())
+  {
+    <div 
+      class="mt-5 mb-5 text-sm font-bold flex justify-between"
+    >
+      <div 
+        class="text-[13px] uppercase w-full"
+      >
+        {{ 'All information on about page' }} 
+      </div>
+      <div 
+        class="w-full flex justify-end"
+      >
+        <app-add
+         [size]="'20'"
+         (clickEvent)="tellMe()"
+        >
+        </app-add>
+      </div>
+    </div>
+
+    <div 
+      class="d-flex space-y-4"
+    >
+      @for (tell of about(); track $index)
+      {
+         <!-- {{'Great'}} -->
+         <div 
+            class="d-flex border-2 border-gray-100 w-full pl-2 mb-3"
+         >
+            <div 
+              class="px-3 pt-3 font-bold text-[14px] flex items-center"
+            >
+                <p 
+                  class="px-2 py-2 -ml-2 -mt-1 text-[14px]"
+                >
+                  {{ tell?.title }} 
+                </p>
+                <app-edit
+                  [size]="'18'"
+                  [color]="'blue'"
+                  [value]="tell?._id"
+                  [data]="tell"
+                  (clickEvent)="modifyAbout($event)"
+                >
+                </app-edit>
+            </div>
+            <div 
+              class="px-3 py-2 pb-5 text-[16px]"
+            >
+                {{ tell?.aboutus }}
+            </div>
+
+            <div 
+              class="w-full flex justify-left px-1 py-2"
+            >
+              <app-delete
+                [size]="'20'"
+                [color]="'red'"
+                [value]="tell?._id"
+                [data]="tell"
+                (clickEvent)="removeData($event)"
+              >
+              </app-delete>
+            </div>
+
+         </div>
+      }
+    </div>
+
+
+    <div class="p-5"></div>
+  }
 
 </div>
+
+
+<app-modal 
+  [isOpen]="tellUs()" 
+  title="sectionTitle" 
+  [modalWidth]="'w-[900px]'"
+  (closeModal)="closeAboutMe()"
+  (confirmAction)="onConfirm()"
+>
+   <app-write-about
+      [buttonName]="buttonName()"
+      [dataToUpdate]="dataToUpdate()"
+      (closeWriteAbout)="closeAboutMe()"
+   >
+   </app-write-about>
+</app-modal>
+
+<app-modal 
+  [isOpen]="removeWriteAbout()" 
+  title="title" 
+  [modalWidth]="modalWidth"
+  (closeModal)="closeAboutMe()"
+  (close)="onConfirm()"
+>
+  <app-remove-about
+    [removeData]="dataToRemove()"
+    (closeRemoveWriteAbout)="closeRemove()"
+  >
+    You are about to delete about
+  </app-remove-about>
+</app-modal>
 

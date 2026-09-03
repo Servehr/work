@@ -17,22 +17,49 @@ export class ImageComponent {
   @Input()
   width: number = 0
   
-  @Input()
-  alt: string = 'company-logo'
+  // @Input()
+  // alt: string = 'company-logo'
   
-  @Input()
-  imageStyle: any = {
-       'border-radius' : '0%'
-  }
+  // @Input()
+  // imageStyle: any = {
+  //      'border-radius' : '0%'
+  // }
   
-  @Input()
-  src: string = '../../../../../Technicians Logo.png'
+  // @Input()
+  // src: string = '../../../../../Technicians Logo.png'
 
-  constructor(private router: Router){}
+  // constructor(private router: Router){}
 
-  redirect = () => 
-  {
-    this.router.navigate(['/'])
+  // redirect = () => 
+  // {
+  //   this.router.navigate(['/'])
+  // }
+
+
+  @Input({ required: true }) src!: string;
+  @Input({ required: true }) alt!: string;
+
+  // Layout toggles
+  @Input() fullWidth: boolean = false;
+  @Input() fullHeight: boolean = false;
+
+  // Performance Optimization
+  @Input() lazy: boolean = true;
+
+  // Tailwind customization hooks
+  @Input() objectFit: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down' = 'cover';
+  @Input() customClass: string = '';
+
+  // Helper to map object-fit string to Tailwind utility classes
+  get objectFitClass(): string {
+    const maps = {
+      'cover': 'object-cover',
+      'contain': 'object-contain',
+      'fill': 'object-fill',
+      'none': 'object-none',
+      'scale-down': 'object-scale-down'
+    };
+    return maps[this.objectFit] || 'object-cover';
   }
 
 }

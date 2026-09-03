@@ -240,18 +240,18 @@ export class ContactComponent {
     {
        accessorKey: 'firstName',
        header: 'First Name',
-       cell: (context) => {
-         return flexRenderComponent(
-            AddComponent, {
-              inputs: {
-                value: context.getValue<number>()
-              },
-              outputs: {
-                clickEvent: (value) => this.handleClick(value)
-              }
-            }
-         )
-       }       
+      //  cell: (context) => {
+      //    return flexRenderComponent(
+      //       AddComponent, {
+      //         inputs: {
+      //           value: context.getValue<number>()
+      //         },
+      //         outputs: {
+      //           clickEvent: (value) => this.handleClick(value)
+      //         }
+      //       }
+      //    )
+      //  }       
     }
   ]
 

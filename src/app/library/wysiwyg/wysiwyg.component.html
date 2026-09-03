@@ -1,5 +1,9 @@
 <quill-editor 
    [styles]="{height: '300px'}" 
    [(ngModel)]="content"
+   [placeholder]="placeHolder"
+   (onContentChanged)="handleBlur()"
+   format="html"
+   (onEditorCreated)="onEditorCreated($event)"
 >
 </quill-editor>

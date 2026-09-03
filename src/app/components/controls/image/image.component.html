@@ -1,4 +1,4 @@
-<img 
+<!-- <img 
    [src]="src" 
    [alt]="alt" 
    [height]="height" 
@@ -6,4 +6,27 @@
    (click)="redirect()"
    [ngClass]="'cursor-pointer'"
    [ngStyle]="imageStyle"
-/>
+/> -->
+
+
+<div 
+   class="relative overflow-hidden"
+   [ngClass]="{
+     'w-full': fullWidth,
+     'h-full': fullHeight,
+     'inline-block': !fullWidth && !fullHeight
+   }"
+>
+   <img
+     [src]="src"
+     [alt]="alt"
+     [loading]="lazy ? 'lazy' : 'eager'"
+     class="transition-all duration-300"
+     [ngClass]="[
+        objectFitClass,
+        customClass,
+        fullWidth ? 'w-full' : '',
+        fullHeight ? 'h-full' : ''
+     ]"
+   />
+</div>

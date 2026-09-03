@@ -54,7 +54,6 @@ export class TextAreaValueAccessorDirective<T> implements ControlValueAccessor, 
     writeValue(value: T): void 
     {
       // this.control ? this.control?.setValue(value) : (this.control = new FormControl(value) )
-      // console.log(this.control)
       if (value !== this.control.value) 
       { 
          // Only update if different

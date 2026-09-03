@@ -4,8 +4,6 @@
 @import 'quill/dist/quill.core.css';
 @import 'quill/dist/quill.snow.css';
 
-
-
 .table-row {
    padding: 4px 0px 4px 0px;
 }
@@ -31,12 +29,16 @@
   font-weight: bold;
 }
 
+p {
+  margin-top: 20px;
+  marging-bottom: 30px;
+}
+
 
 /* You can add global styles to this file, and also import other style files */
 @tailwind base;
 @tailwind components;
 @tailwind utilities
-
 
 
 

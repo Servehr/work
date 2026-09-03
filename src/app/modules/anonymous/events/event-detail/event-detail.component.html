@@ -1,0 +1,120 @@
+<div 
+   class='container mx-auto h-full pb-30 pt-2 mb-7'
+>
+   <div 
+     class="w-full flex pb-10 px-4 gap-3"
+   >
+   
+      <div 
+         class="w-6/12 h-fit d-flex pb-14"
+      >
+         <app-image 
+           src="https://as2.ftcdn.net/v2/jpg/09/00/71/65/1000_F_900716548_8U5Jw7wHXJ5aBXEeDqlqQckA1Ern1iPH.jpg" 
+           alt="Abstract art banner"
+           [fullWidth]="true"
+           [fullHeight]="true"
+           objectFit="cover"
+         />
+         
+        <div 
+          class="bg-white shadow-md p-4 static"
+        >
+          <p class="text-[26px] text-black -mt-2">{{ 'Daily Intelligence Studies Rewired incidents' }}</p>
+          <!-- <p>Ongoing Events</p> -->
+        </div> 
+         
+        <div 
+           class="w-full flex py-6 space-x-8 justify-left items-left mt-2 -mb-5"
+        >
+          <p class="text-[14px] text-[#3e4095] font-bold ml-2">Hosted By:</p>
+          <p class="text-[18px] -mt-1">Benjamin Mustapha</p>
+        </div>
+        
+         <p class="w-full mt-4 text-[14px] text-[#3e4095] font-bold ml-2 -mb-2">About</p>
+
+         <p class="w-full mt-4 text-[15px] ml-2">The International Conference on Data Science, AI, and Applications (ICDSAIA 2026) is a premier global forum that brings together data scientists, AI researchers, industry professionals, and business leaders to explore the transformative impact of data science and artificial intelligence in business and society. This two-day event will feature keynote speeches from leading experts, technical paper presentations, industry panels, and workshops focused on cutting-edge research and real-world applications.</p>
+
+         <p class="w-full mt-4 text-[15px] ml-2">Artificial Intelligence (AI) is a rapidly advancing field of technology that has the potential to revolutionize many aspects of our lives. From healthcare to finance, transportation to education, AI has the potential to transform the way we live, work, and interact with each other. </p>
+
+
+         <!-- Speakers -->
+         <p class="w-full mt-4 text-[14px] ml-1 text-[#3e4095] font-bold mt-4 mb-2">Speaker(s)</p>
+            
+         <div 
+            class="grid grid-cols-12 flex gap-4 -ml-3"
+         >
+            @for (speaker of speakers(); track speaker.name)
+            {
+               <div 
+                  class="col-span-6"
+               >
+                  <app-basic-card
+                     [speaker]="speaker"
+                  >
+                  </app-basic-card>       
+               </div>  
+            }         
+         </div>
+
+      </div>
+      
+      <div 
+         class="w-6/12 h-fit shadow-md"
+      >
+         <div 
+            class="d-flex space-y-8 px-2 py-2"
+         >
+            <app-location
+               [color]="'red'"
+            >
+               {{ location() }}
+            </app-location>
+
+            <app-calendar
+            [color]="'black'"
+            >
+               {{ date() }}
+            </app-calendar>
+            
+            <app-time
+               [color]="'black'"
+            >
+               {{ time() }}
+            </app-time>
+
+            <div class="h-[4px]"></div>
+         </div>
+
+         <app-image 
+           src="../../../../../../Screenshot 2026-08-31 195048.png" 
+           alt="Abstract art banner"
+           [fullWidth]="true"
+           [fullHeight]="true"
+           objectFit="cover"
+         />  
+         
+         <div 
+            class="d-flex pb-8 pt-4"
+         >
+            <div class="flex mr-10 justify-end [12x] text-[#2c0e82] mt-2 mb-2 font-bold"
+            >
+               <p class="text-[14px]">{{ 'Follow & Watch Live' }}</p>
+            </div>
+            <div 
+               class="flex justify-end"
+            >
+               <app-facebook></app-facebook>
+               <app-youtube></app-youtube>
+               <app-tiktok></app-tiktok>
+               <app-instagram></app-instagram>
+               <app-twitch></app-twitch>
+               <app-twitter></app-twitter>
+            </div>
+         </div>
+
+               
+      </div>
+
+   </div>
+
+</div>

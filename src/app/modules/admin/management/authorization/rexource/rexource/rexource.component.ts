@@ -81,8 +81,8 @@ export class RexourceComponent
     this.buttonName = 'Save'
     await sleepWait(500)
     this.store.select(getSpinnerStatus).subscribe((data: any) => 
-    {
-      this.isLoading.set(data?.loader?.loading)
+    {       
+      // this.isLoading.set(data?.loader?.loading)
       if(data?.loader?.statusCode === 200 && data?.loader?.page === 'rexource')
       {
         this.isModalOpen = false
@@ -92,7 +92,6 @@ export class RexourceComponent
 
     this.store.select(getAllRexource).subscribe((rexrc: any) => 
     {
-      this.isLoading.set(false)
       this.data.set(rexrc?.rexources)
       this.currentPage.set(rexrc?.rexources?.pagination?.currentPage)
       this.totalPages.set(rexrc?.rexources?.pagination?.totalPages)

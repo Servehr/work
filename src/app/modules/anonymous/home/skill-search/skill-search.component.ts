@@ -6,6 +6,7 @@ import { BotinComponent } from '../../../../components/controls/botin/botin.comp
 import { ModalComponent } from '../../../../components/modal/modal.component';
 import { Route, Router } from '@angular/router';
 import { ProfessionalLocationComponent } from '../professional-location/professional-location.component';
+import { NgClass } from '@angular/common';
 
 export const professionNameRequired = (control: AbstractControl): ValidationErrors | null => 
 {
@@ -15,7 +16,7 @@ export const professionNameRequired = (control: AbstractControl): ValidationErro
 @Component({
   selector: 'app-skill-search',
   standalone: true,
-  imports: [ReactiveFormsModule, InputFieldComponent, SelectComponent, BotinComponent, ModalComponent, ProfessionalLocationComponent],
+  imports: [ReactiveFormsModule, NgClass, InputFieldComponent, SelectComponent, BotinComponent, ModalComponent, ProfessionalLocationComponent],
   templateUrl: './skill-search.component.html',
   styleUrl: './skill-search.component.scss'
 })

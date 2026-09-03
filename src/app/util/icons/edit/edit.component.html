@@ -4,9 +4,10 @@
 >
   <ng-icon 
     [svg]="editIcon" 
-    [size]="'15'" 
     (mouseover)="ChangeOnButtonHoverIn()" 
     (mouseout)="ChangeOnButtonHoverOut()"
     [ngStyle]="style"
+    [size]="size()" 
+    [color]="color()"
   />
 </div>

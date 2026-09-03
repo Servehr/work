@@ -27,6 +27,6 @@ export class TextAreaValidationComponent<T> extends TextAreaValueAccessorDirecti
           {
              ...this.errorMessages, ...customErrorMessages.currentValue
           }
-       } 
+       }
     }
 }

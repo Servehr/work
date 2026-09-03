@@ -1,6 +1,6 @@
 import { NgStyle } from '@angular/common';
 import { Component, signal } from '@angular/core';
-import { FormGroup, FormControl, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors, FormBuilder, ValidatorFn } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { BotinComponent } from '../../../components/controls/botin/botin.component';
 import { InputFieldComponent } from '../../../components/controls/input-field/input-field.component';
@@ -22,6 +22,7 @@ import { AlertComponent } from '../../../components/alert/alert.component';
 import { ImageUploadComponent } from '../../../components/image-upload/image-upload.component';
 import { reduceImageSize } from '../../../util/image';
 import { InputFileComponent } from '../../../components/controls/input-file/input-file.component';
+import { InputFileValidationComponent } from '../../../validations/input-file-validation/input-file-validation.component';
 
 
 export const FirstnameRequired = (control: AbstractControl): ValidationErrors | null => 
@@ -92,11 +93,66 @@ export const ConfirmPasswordRequired = (control: AbstractControl): ValidationErr
                                     : { passwordRequired : "Enter Password" }
 }
 
+export const PassportRequired = (control: AbstractControl): ValidationErrors | null => 
+{
+   const passportDocument = control?.parent?.get('passportImage')?.value
+   console.log(passportDocument)
+   return control.value
+
+  //  return control.value.length >  0 ? 
+  //                                     control.value.length < 8 ? { passwordLength : 'passwordLength' } : pswd !== cPswd ? { confirmPasswordRequired: 'confirmPasswordRequired' } : null
+  //                                   : { passwordRequired : "Enter Password" }
+}
+
+interface MeMe {
+   [key: string] : string
+}
+
+export function fileValidator(location: string, maxSizeInBytes: number, allowedExtensions: string[]): ValidatorFn 
+{
+  return (control: AbstractControl): ValidationErrors | null => {
+   const file = control.value as File;
+   
+
+   const formControl = control as FormControl;
+   console.log(formControl)
+   const passPort = formControl.get('passportImage');
+   console.log("Boundary")
+   console.log(passPort)
+
+    // If no file is selected, pass validation (let 'Validators.required' handle empty states)
+   if (!file) 
+   {
+     const documentToUpload: MeMe = {}
+     documentToUpload[location] = location
+     return documentToUpload
+   }
+
+   // Validate File Size
+   if (file.size > maxSizeInBytes) 
+   {
+     // return { fileSizeExceeded: { max: maxSizeInBytes, actual: file.size } };
+     return { fileSizeExceeded:  'fileSizeExceeded' };
+   }
+
+   // Validate File Extension
+   const fileType = file.type
+   const extension = fileType.split("/")
+   if (!allowedExtensions.includes(extension[1])) 
+   {
+     // return { invalidExtension: { allowed: allowedExtensions, actual: fileExtension } };
+     return { invalidExtension: 'invalidExtension' };
+   }
+
+    return null; // Return null if the control value passes validation
+  };
+}
+
 @Component({
   selector: 'app-register',
   standalone: true,
   imports: [
-             RouterModule, InputFieldValidationComponent, ReactiveFormsModule, InputFieldComponent, InputFileComponent,
+             RouterModule, InputFieldValidationComponent, InputFileValidationComponent, ReactiveFormsModule, InputFieldComponent, InputFileComponent,
              BotinComponent, NgStyle, SelectComponent, DragDropDirective, ImageComponent, NgIcon, AlertComponent, ImageUploadComponent
            ],
   templateUrl: './register.component.html',
@@ -156,8 +212,12 @@ export class RegisterComponent
       email: 'Enter a valid email',
       selectionRequired: 'Make Selection',
       passwordRequired: 'Enter Pasword',
-      confirmPasswordRequired: 'Password do not match'
+      passportRequired: 'Kindly upload your passport photograph',
+      ninRequired: 'Kindly upload your Nin document',
+      fileSizeExceeded: 'File maximum upload exceeded',
+      invalidExtension: 'Only file types is allowed (png)'  
    } 
+   // passportRequired: 'Kindly upload your passport photograph'
 
    // errorMessages = 
    // { 
@@ -174,10 +234,15 @@ export class RegisterComponent
    //    location: 'Enter Location',
    //    selectionRequired: 'Make Selection'
    // } 
+
+   // Constraints: 2MB Max (2 * 1024 * 1024), only PDFs and PNGs
+   private readonly MAX_SIZE = 2097152; 
+   private readonly ALLOWED_EXT = ['jpeg', 'jpg', 'png'];
+   // private readonly ALLOWED_EXT = ['png'];
     
     registerForm: FormGroup;
 
-    constructor(private saniter: DomSanitizer, private store: Store<AppState>) 
+    constructor(private saniter: DomSanitizer, private store: Store<AppState>, private fb: FormBuilder) 
     { 
        this.registerForm = new FormGroup(
         {
@@ -187,19 +252,18 @@ export class RegisterComponent
           phone: new FormControl('', [PhoneRequired]),
           email: new FormControl('', [Validators.required, Validators.email]),
           password: new FormControl('', [PasswordRequired]),
-          cPassword: new FormControl('', [ConfirmPasswordRequired]),
-         //  myFile: new FormControl('', [Validators.required]),
-         //  nin: new FormControl('', [Validators.required]),
-         //  plan: new FormControl('', [Validators.required]),
-        }
-       )
-    }   
+          cPassword: new FormControl('', [ConfirmPasswordRequired]),          
+          passportImage: new FormControl(null, fileValidator('passportRequired', this.MAX_SIZE, this.ALLOWED_EXT)),
+          ninImage: new FormControl(null, fileValidator('ninRequired', this.MAX_SIZE, this.ALLOWED_EXT))
+        })       
+    }  
 
     ngOnInit()
     {
       this.store.select(getSpinnerStatus).subscribe((data: any) => 
       {
-         this.isLoading.update((currentValue: boolean) => !currentValue)
+         // this.isLoading.update((currentValue: boolean) => !currentValue)
+         this.isLoading.set(data?.loader?.loading)
        })
        this.store.select(getResponseMessage).subscribe((data) => 
          {
@@ -228,25 +292,26 @@ export class RegisterComponent
        } 
     }
 
-    register = () =>
+    register = async () =>
    {
      this.store.dispatch(SetLoadingStatus({ loader: { loading: true, statusCode: 0 }}))
      if(this.registerForm.valid)
      {
+       const passportDocument: File = this.registerForm.value.passportImage;
+       const passport = await this.toBase64(passportDocument)
+
+       const ninDocument: File = this.registerForm.value.ninImage;
+       const nin = await this.toBase64(ninDocument)
+
        of(this.registerForm.value)
        .pipe(delay(1000))
        .subscribe(UserDetail => 
-         {  
-            // const data: any = 
-            // {
-            //    firstname: UserDetail['firstname']!,                 
-            //    surname: UserDetail['surname']!,  
-            //    phone: UserDetail['phone']!,    
-            //    email: UserDetail['email']!,    
-            //    cpassword: UserDetail['cpassword']!,
-            //    password: UserDetail['password']!,
-            // }  
+         {   
             console.log("Crazy")
+            UserDetail['passport'] = passport
+            UserDetail['nin'] = nin
+
+            console.log(UserDetail)
             const firstname: string = UserDetail['firstname']!                
             const surname: string  = UserDetail['surname']!  
             const phone: string  = UserDetail['phone']!    
@@ -256,10 +321,17 @@ export class RegisterComponent
             const category: string  = UserDetail['category']!
             const ninImage: string = this.base64NinImage?.toString()!
             const passportImage: string = this.base64PassportImage?.toString()!
-            this.store.dispatch(START_REGISTER({ firstname, surname, phone, email, category, password, cPassword, ninImage, passportImage }))
+            console.log("Done")
+            // this.store.dispatch(START_REGISTER({ firstname, surname, phone, email, category, password, cPassword, ninImage, passportImage }))
+            
+            this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 0 }}))
+
          }
        )
      } else {
+        console.log(this.registerForm.errors)
+        console.log("********")
+        console.log(this.registerForm.value)
         this.registerForm.markAllAsTouched()
         this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 0 }}))
         //   setTimeout(() => {           
@@ -268,115 +340,26 @@ export class RegisterComponent
         this.message = "Attend to all fields"
         this.store.dispatch(SetErrorMessage({ msg: this.message, statusCode: 400, operation: "user-onboarding"  }))
      }        
-    }
+   }
 
-    onFileSelectedChange = async (event: any, type: string) =>
+   toBase64 = (file: any) => new Promise((resolve, reject) => 
    {
-      const file: any = event?.target?.files[0]
-      
-      const fileHandler: IFileHandler = {
-         file: file,
-         url: this.saniter?.bypassSecurityTrustUrl(window.URL.createObjectURL(file)),
-         base64: ''
-      }
-
-      const url = this.saniter?.bypassSecurityTrustUrl(window.URL.createObjectURL(file))
-
-      console.log(fileHandler.url)
-      if(type === 'nin')
-      {
-        this.NIN = []
-        this.NIN.push(fileHandler?.url)
-      }
-
-      if(type === 'passport')
-      {
-        this.passportPhotograph = []
-        this.passportPhotograph.push(fileHandler?.url)
-      }
-    }
-
-    removeImages = (remove: string) =>
-   {
-      if(remove === 'nin')
-      {
-         this.NIN = []
-      }
-      if(remove === 'passport')
-      {
-         this.passportPhotograph = []
-      }
-    }
+     const reader = new FileReader();
+     reader.readAsDataURL(file);
+     reader.onload = () => resolve(reader.result);
+     reader.onerror = (error) => reject(error);
+   })
    
-    dropFile = async (upload: IFileHandler, type: string) => 
-   {
-      console.log(upload?.url)
-      const SafeUrlToFileObject = await this.safeUrlToFile(upload?.url, 'uploadImage')
-      console.log(SafeUrlToFileObject)
-      const base64 = await this.toBase64(SafeUrlToFileObject);
-      console.log(base64)
-      console.log(typeof SafeUrlToFileObject)
-
-      this.convertFileToBase64(SafeUrlToFileObject).then(base64 => 
-      {
-         console.log(base64)
-        if(type === 'nin')
-        {
-          this.NIN = []
-          this.NIN.push(upload?.url)
-          this.base64NinImage = base64
-        }
-
-        if(type === 'passport')
-        {
-          this.passportPhotograph = []
-          this.passportPhotograph.push(upload?.url)
-          this.base64PassportImage = base64
-        }
-      }).catch(error => {
-         console.error('Error converting file:', error);
-      })
-    }
-
-    toBase64 = (file: any) => new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    })
-
-    private convertFileToBase64(file: File): Promise<string | ArrayBuffer | null> 
+   private convertFileToBase64(file: File): Promise<string | ArrayBuffer | null> 
    {
       return new Promise((resolve, reject) => 
       {
-         const reader = new FileReader()
-         reader.readAsDataURL(file)
-         console.log(file)
-         console.log(reader.result)
-         reader.onload = () => resolve(reader.result)
-         reader.onerror = (error) => reject(error)
+         const reader = new FileReader();
+         reader.readAsDataURL(file);
+         reader.onload = () => resolve(reader.result);
+         reader.onerror = (error) => reject(error);
       })
-    }
-
-    async safeUrlToFile(safeUrl: SafeUrl, fileName: string): Promise<File> 
-   {
-      // 1. Unwrap the SafeUrl to get raw string
-      const rawUrl = this.saniter.sanitize(0, safeUrl) || ''
-      
-      // 2. Fetch the URL as a blob
-      const response = await fetch(rawUrl);
-      console.log(response)
-      const blob = await response.blob();
-      console.log(blob)
-      
-      // 3. Create file from blob
-      return new File([blob], fileName, { type: 'image/jpeg' });
-    }
-
-    saveFile(fileToSave: string, type: string)
-    {
-      console.log({ fileToSave, type })
-    }
+   }
     
      
 }

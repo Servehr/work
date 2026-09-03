@@ -5,42 +5,62 @@
 
 
 <div 
-   class='container mx-auto mb-5'
+    class="bg-blue-50"
 >
-   <div 
-     class="w-full flex-cols md:flex gap-4"
-   >
-     <div 
-       class="w-12/12 md:w-7/12 shadow-lg border-2"
-     >
-     
-       <app-carousel-swiper
-          [sliders]="sliders()"
-       >
-       </app-carousel-swiper>
+  <div 
+    class='container mx-auto' style="padding-bottom: 50px"
+  >
+    <div 
+      class="w-full flex-cols md:flex gap-4"
+    >
+      <div 
+        class="w-12/12 md:w-7/12 shadow-lg border-2"
+      >
+      
+        <app-carousel-swiper
+            [sliders]="sliders()"
+        >
+        </app-carousel-swiper>
 
-     </div>
+      </div>
 
-     <div 
-       class="w-12/12 md:w-5/12 shadow-lg mx-auto mt-6 md:mt-0"
-     >
-        <iframe 
-          class="min-w-[440px] md:w-[630px] h-[315px]"
-          src="https://www.youtube.com/embed/SRNKPxr9uR8" 
-          title="YouTube video player" 
-          frameborder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-          referrerpolicy="strict-origin-when-cross-origin" 
-          allowfullscreen>
-        </iframe>
+      <div 
+        class="w-12/12 md:w-5/12 shadow-lg mx-auto mt-6 md:mt-0"
+      >
+          <iframe 
+            class="min-w-[440px] md:w-[630px] h-[315px]"
+            src="https://www.youtube.com/embed/SRNKPxr9uR8" 
+            title="YouTube video player" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            referrerpolicy="strict-origin-when-cross-origin" 
+            allowfullscreen>
+          </iframe>
 
-        <!-- <app-suggestion></app-suggestion> -->
-        
-     </div>
+          <!-- <app-suggestion></app-suggestion> -->
+          
+      </div>
 
-   </div>
+    </div>
+  </div>
 </div>
 
+
+<!-- <app-featured-company></app-featured-company> -->
+
+<div 
+  class="bg-[#f2f7df] w-full pt-1"
+>  
+  <div 
+    class="container mx-auto pt-3"
+  >
+    <span class="font-bold text-xl -mb-20 text-gray-500">Partners</span>
+    <app-image-listing-scrolling 
+      speed="15s"
+    >
+    </app-image-listing-scrolling>
+  </div>
+</div>
 
 <app-top-engagers
   [users]="users()"
@@ -75,16 +95,16 @@
 </app-newsletter>
 
 
-<div 
+<!-- <div 
     class="fixed flex justify-center hover:border-gray-400 items-center rounded-xl right-0 top-1/4 z-30 -translate-y-1/2 flex flex-col gap-2 px-2 py-2 bg-white shadow-lg rounded-r-xl border border-l-0"
 >
   <a 
-    class="bg-yellow-100 cursor-pointer hover:text-blue-900 rounded-lg py-2 px-2 pl-3 hover:bg-blue-800 hover:text-white"
+    class="bg-yellow-100 text-[13px] cursor-pointer hover:text-blue-900 rounded-lg py-2 px-8 pl-3 hover:bg-blue-800 hover:text-white"
     (click)="sendFastForm()"
   >
     Fast Response Form
   </a>
-</div>
+</div> -->
 
 <app-whatsapp
 >
@@ -92,17 +112,7 @@
 
 <!-- @if(openFastForm === true)
 { -->
-  <app-modal 
-    [isOpen]="openFastForm" 
-    [title]="'Quick Response'" 
-    [modalWidth]="modalWidth()"
-    (closeModal)="closeForm()"
-  >
-    <app-fast-response-form
-      (close)="closeForm()"
-    >
-    </app-fast-response-form>
-</app-modal>
+
 <!-- } -->
 
 

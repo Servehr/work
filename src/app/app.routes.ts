@@ -38,6 +38,7 @@ import { StaffComponent } from './modules/admin/administration/user/staff/staff.
 import { UserDetailComponent } from './modules/admin/user-search/user-detail/user-detail.component';
 import { UserSearchComponent } from './modules/admin/user-search/user-search.component';
 import { PlanComponent } from './modules/anonymous/plan/plan.component';
+import { EventDetailComponent } from './modules/anonymous/events/event-detail/event-detail.component';
 
 export const routes: Routes = [
    { 
@@ -48,7 +49,14 @@ export const routes: Routes = [
         { path: '', component: HomeComponent  },
         { path: 'home', component: HomeComponent  },
         { path: 'about', component: AboutComponent  },
-        { path: 'events', component: EventsComponent  },
+        { 
+          path: 'events', 
+          component: EventsComponent,
+         //  children: [
+         //    { path: 'details', component: EventDetailComponent },
+         //  ]  
+        },
+        { path: 'events-details', component: EventDetailComponent },
         { path: 'training', component: TrainingComponent  },
         { path: 'jobs', component: JobsComponent  },
         { path: 'community', component: CommunityComponent  },

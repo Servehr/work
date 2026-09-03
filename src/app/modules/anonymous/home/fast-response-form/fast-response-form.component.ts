@@ -27,9 +27,9 @@ export const PhoneRequired = (control: AbstractControl): ValidationErrors | null
 {
    return control.value?.length === 0 || control.value === null ? { phoneNumberRequired : 'phoneNumberRequired' } :  null
 }
-export const fastResponseDescriptionRequired = (control: AbstractControl): ValidationErrors | null => 
+export const FastResponseDescriptionRequired = (control: AbstractControl): ValidationErrors | null => 
 {
-   return control.value?.length === 0 || control.value === null ? { roleDescriptionRequired : 'roleDescriptionRequired' } :  null
+   return control.value?.length === 0 || control.value === null ? { fastResponseDescriptionRequired : 'fastResponseDescriptionRequired' } :  null
 }
 
 @Component({
@@ -84,7 +84,7 @@ export class FastResponseFormComponent {
           surname: new FormControl(null, [SurnameRequired]),
           phone: new FormControl(null, [PhoneRequired]),
           email: new FormControl('', [Validators.required, Validators.email]),
-          message: new FormControl('', [fastResponseDescriptionRequired])
+          message: new FormControl('', [FastResponseDescriptionRequired])
         }
       )
    }

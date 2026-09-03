@@ -1,10 +1,37 @@
 <div 
-   class='container mx-auto pb-30 mt-1 md:mt-1 mb-7 shadow-md'
+   class='container mx-auto pb-30 mb-7 shadow-md'
 >
    <div 
-     class="w-12/12 md:w-12/12 border-2 h-[800px] p-3"
+     class="w-12/12 md:w-12/12 pb-2"
    >
-     <p>Events</p>
-
+     <!-- <p class="text-[40px] text-white">Upcoming Events</p>  bg-[#3e4095]-->
+    <app-image
+      [src]="eventBanner()"
+      [alt]="alt"
+      [height]="height"
+      [width]="width"
+    >
+    </app-image>
    </div>
+   <div 
+     class="w-full flex md:w-12/12 h-fit pb-10 px-4 gap-4"
+   >
+      <div class="w-9/12"
+      >
+        @for (event of events(); track event.logo)
+        {
+          <app-event-listing [event]="event"></app-event-listing>
+        }
+      </div>
+      <div class="w-3/12 border-2 h-[600px]"
+      >
+        <div 
+          class="bg-gray-200"
+        >
+           <!-- <p>Upcoming Events</p> -->
+        </div>  
+      
+      </div>
+   </div>
+
 </div>

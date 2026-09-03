@@ -1,0 +1,36 @@
+.marquee-container {
+      overflow: hidden;
+      width: 100%;
+      display: flex;
+      background: #111;
+      padding: 20px 0;
+      user-select: none;
+    }
+
+    .marquee-track {
+      display: flex;
+      gap: 20px;
+      /* Animates 50% of the total width (the original group length) */
+      animation: scroll var(--duration, 20s) linear infinite;
+    }
+
+    /* Pause animation on hover for interactive feel */
+    .marquee-container:hover .marquee-track {
+      animation-play-state: paused;
+    }
+
+    .marquee-track img {
+      height: 100px;
+      width: auto;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    @keyframes scroll {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(calc(-50% - 10px)); /* Accounts for half of the gap padding */
+      }
+    }

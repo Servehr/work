@@ -25,12 +25,13 @@ export class InputFileValidationComponent<T> extends InputFileValueAcessorDirect
        
        if(customErrorMessages)
        {
-          this.errorMessages = 
-          {
-             ...this.errorMessages, ...customErrorMessages.currentValue
-          }
+         this.errorMessages = 
+         {
+           ...this.errorMessages, ...customErrorMessages.currentValue
+         }
        }
-       console.log(changes)
+       console.log(this.errors)
+       console.log(this.previewUrl)
        console.log(this.errorMessages)
     }
 

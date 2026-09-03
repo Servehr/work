@@ -91,7 +91,6 @@ export class PagesComponent
     await sleepWait(500)
     this.store.select(getSpinnerStatus).subscribe((data: any) => 
     {
-      this.isLoading.set(data?.loader?.loading)
       if(!data?.loader?.loading)
       {
         this.isModalOpen = false
@@ -101,7 +100,7 @@ export class PagesComponent
 
     this.store.select(getAllPage).subscribe((pg: any) => 
     {
-      this.isLoading.set(false)
+      // this.isLoading.set(false)
       this.data.set(pg?.pages)
       this.currentPage.set(pg?.pages?.pagination?.currentPage)
       this.totalPages.set(pg?.pages?.pagination?.totalPages)
@@ -296,10 +295,10 @@ export class PagesComponent
 
   change(cellData: any): void 
   {
-    this.title = 'Update Category'
+    this.title = 'Update Page'
     this.buttonName = 'Update'
-    this.dataToUpdate.set(cellData)
     console.log(cellData)
+    this.dataToUpdate.set(cellData)
     this.writePage = true
   }   
     

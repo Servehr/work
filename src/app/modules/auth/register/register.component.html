@@ -10,11 +10,18 @@
         {{ title }}
       </p>
       
-      <app-alert 
-        [statusCode]="statusCode" 
-        [message]="message"
+      <div
       >
-      </app-alert>
+        @if(registerForm.touched && !registerForm.invalid)
+        {
+          <app-alert 
+            [statusCode]="statusCode" 
+            [message]="message"
+            [timeOut]="1"
+          >
+          </app-alert>
+        }    
+      </div>
 
       <form 
         [formGroup]="registerForm"
@@ -152,7 +159,14 @@
           <div 
             class="w-full md:w-4/12"
           >
-            <app-image-upload
+            <app-image-upload 
+              formControlName="passportImage"
+              [customErrorMessages]="errorMessages"
+            >
+            </app-image-upload>
+            <!-- <app-image-upload
+              [allowedTypes]="['image/png', 'image/jpeg']"
+              formControlName="passportImage"
               (sendFile)="saveFile($event, 'passport')"
             >
               <p 
@@ -160,13 +174,18 @@
               >
                 Upload Passport Photograph
               </p>
-            </app-image-upload>
+            </app-image-upload> -->
           </div>
 
           <div 
             class="w-full md:w-4/12"
           >
-            <app-image-upload                
+            <app-image-upload 
+              formControlName="ninImage"
+              [customErrorMessages]="errorMessages"
+            >
+            </app-image-upload>
+            <!-- <app-image-upload             
               (sendFile)="saveFile($event, 'nin')"
             >
               <p 
@@ -174,11 +193,11 @@
               >
                 Upload NIN
               </p>
-            </app-image-upload>
+            </app-image-upload> -->
           </div>
         </div>
 
-        <div 
+        <!-- <div 
             class="w-full flex justify-between mx-auto gap-10"
         >
           <div 
@@ -190,7 +209,7 @@
              >
              </app-input-file>
           </div>
-        </div>
+        </div> -->
         
 
         <div
@@ -206,17 +225,18 @@
               <div
                 class="flex flex-col space-y-1 items-center justify-between"
               >
-                @if(!isLoading())
+                @if(isLoading())
                 {
                    <p class="font-bold text-white"> ... submitting </p>
                 }
-                @if(isLoading())
+                @if(!isLoading())
                 {
                   <h3>Register</h3>
                 }
 
               </div>
           </app-botin>
+          <!-- <button type="submit">Save</button> -->
         </div>
 
         <div 
