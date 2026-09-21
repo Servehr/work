@@ -10,10 +10,11 @@ import { NgIcon } from '@ng-icons/core';
   templateUrl: './boteen.component.html',
   styleUrl: './boteen.component.scss'
 })
-export class BoteenComponent {
-  
-  readonly value = input.required<{ count: number, data: any }>()
-  readonly clickEvent = output<number>()
+export class BoteenComponent implements OnInit {
+    
+  readonly value = input<{ page?: string, count: number, data: any }>()
+  readonly clickEvent = output<any>()
+  actonLength = input<any>()
   boteenStyle = input.required<any>()
   readonly boteeName = input.required()
   boteenCssClass = input.required<any>()
@@ -23,8 +24,20 @@ export class BoteenComponent {
     'color': 'red'
   }
 
-  onClick(): void {
-    this.clickEvent.emit(this.value()?.data)
+  ngOnInit(): void 
+  {
+    
+  }
+
+  onClick(): void 
+  {console.log(this.value())
+    if(this.value()?.page)
+    {
+       const data = { page: this.value()?.page, data: this.value()?.data }
+       this.clickEvent.emit(data)
+    } else {
+       this.clickEvent.emit(this.value()?.data)
+    }
   }
 
   ChangeOnButtonHoverIn()
@@ -36,8 +49,9 @@ export class BoteenComponent {
 
   ChangeOnButtonHoverOut()
   {
-    this.style = {
-     'color': 'red'  
+    this.style = 
+    {
+      'color': 'red'  
     } 
   }
 

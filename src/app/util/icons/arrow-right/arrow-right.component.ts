@@ -1,6 +1,6 @@
 import { NgClass, NgStyle } from '@angular/common';
 import { Component, input, OnInit, output } from '@angular/core';
-import { bootstrapArrowRight } from '@ng-icons/bootstrap-icons';
+import { bootstrapArrowLeft, bootstrapArrowRight, bootstrapArrowUp, bootstrapCheckCircleFill } from '@ng-icons/bootstrap-icons';
 import { NgIcon } from '@ng-icons/core';
 
 @Component({
@@ -12,16 +12,24 @@ import { NgIcon } from '@ng-icons/core';
 })
 export class ArrowRightComponent {
   
-  readonly value = input.required<number>()
-  readonly clickEvent = output<number>()
-  icon: any = bootstrapArrowRight
+  readonly value = input<string>()
+  readonly clickEvent = output<string>()
+  disconnected: any = bootstrapArrowRight
+  // connected: any = bootstrapCheckCircleFill
+  connected: any = bootstrapArrowUp
 
   style: any = {
     'color': 'green'
   }
 
+  constructor()
+  {
+     console.log(this.value())
+  }
+
   onClick(): void {
-    this.clickEvent.emit(this.value())
+    console.log(this.value())
+    this.clickEvent.emit(this.value()!)
   }
 
   ChangeOnButtonHoverIn()

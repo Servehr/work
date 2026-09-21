@@ -13,7 +13,7 @@ export class LogoComponent {
   height: number = 10
   width: number = 180
   alt: string = 'image-here'
-  src: string = '../../../../../Technicians Logo.png'
+  src: string = '../../../../../technicianswoork.jpeg'
   
 }
 

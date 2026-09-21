@@ -51,7 +51,7 @@ export class FastResponseFormComponent {
    message = signal<string>('')
    isLoading = signal<boolean>(false)
    close = output<void>()
-   responseStatus: number = 0
+   responseStatus: string = ''
 
    statusCode!: number
    style: any = {
@@ -93,8 +93,8 @@ export class FastResponseFormComponent {
    {
      this.store.select(getSpinnerStatus).subscribe((data: any) => 
       {
-        this.responseStatus = data?.loader?.statusCode
-        if(this.responseStatus === 200)
+        this.responseStatus = data?.loader?.page
+        if(this.responseStatus === 'fast-response')
         {
           this.isLoading.set(false)
           this.fastResponseForm.reset()

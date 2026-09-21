@@ -2,12 +2,23 @@
   class="rounded-full py-1 px-2 text-[12px] w-fit cursor-pointer flex justify-center items-center"
   (click)="onClick()"
 >
+
+ @if(value())
+ {
   <ng-icon 
-    [svg]="icon" 
+    [svg]="disconnected" 
+    [size]="'16'" 
+    [color]="'red'"
+    (mouseover)="ChangeOnButtonHoverIn()" 
+    (mouseout)="ChangeOnButtonHoverOut()"
+  />
+ } @else {
+  <ng-icon 
+    [svg]="connected" 
     [size]="'16'" 
     [color]="'green'"
     (mouseover)="ChangeOnButtonHoverIn()" 
     (mouseout)="ChangeOnButtonHoverOut()"
-    [ngStyle]="style"
-  />
+  />   
+ }
 </div>

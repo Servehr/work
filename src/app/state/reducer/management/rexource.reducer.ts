@@ -27,7 +27,7 @@ const _rexource = createReducer(InitialState,
         }
     }),
     on(REXOURCE_SUCCESS, (state: any, action: any) => 
-    {
+    {console.log(action)
        return {
           ...state,
           rexources: action?.rexources

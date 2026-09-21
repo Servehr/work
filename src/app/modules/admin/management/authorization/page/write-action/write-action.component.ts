@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, effect, EventEmitter, inject, input, Input, model, OnInit, Output, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import AppState from '../../../../../../state/app.state';
 import { getResponseMessage, getSpinnerStatus } from '../../../../../../state/selectors/spinner.selector';
@@ -10,6 +10,8 @@ import { ModalComponent } from '../../../../../../components/modal/modal.compone
 import { SetErrorMessage, SetLoadingStatus } from '../../../../../../state/actions/spinner.action';
 import { delay, of } from 'rxjs';
 import { TextAreaComponent } from '../../../../../../components/controls/text-area/text-area.component';
+import { CREATE_AKTION, UPDATE_AKTION } from '../../../../../../state/actions/management/aktion.actions';
+import { sleepWait } from '../../../../../../util/sleep';
 
 export const actionNameRequired = (control: AbstractControl): ValidationErrors | null => 
 {
@@ -33,15 +35,25 @@ export class WriteActionComponent implements OnInit {
    private store = inject(Store<AppState>)
 
    @Input() title: string = ''
-   @Input() buttonName: string = ''
+   buttonName = model<string>('Save')
+   currentPage = input<number>()
+   perPage = input<number>(1)
+   limit = input<number>(1)
+   theCurrentPage = input<string>('')
+   dataToUpdate = input<any>(null)
+   progress = signal<string>('')
    @Output() close: EventEmitter<void> = new EventEmitter()
 
    rows: number = 7
    cols: number = 20
 
+   id = signal<string>('')
+   name = signal<string>('')
+   description = signal<string>('')  
+
     
    pageTitle: string = ''
-   isLoading: boolean = false
+   isLoading = signal<boolean>(false)
    message: string = ''
    statusCode!: number
    style: any = {
@@ -73,12 +85,30 @@ export class WriteActionComponent implements OnInit {
          this.statusCode = statusCode
       })
 
+      effect(() => 
+      {
+        if(this.dataToUpdate())
+        {
+           this.buttonName.set('Update')
+           this.actionForm.get('actionName')?.setValue(this.dataToUpdate()?.name)
+           this.actionForm.get('actionDescription')?.setValue(this.dataToUpdate()?.description)
+        } else {
+           this.actionForm.get('actionName')?.setValue("")
+           this.actionForm.get('actionDescription')?.setValue("")
+        }
+      }, { allowSignalWrites: true })       
+
    }
 
    ngOnInit(): void 
    {
-     this.store.select(getSpinnerStatus).subscribe((data: any) => {
-      //  this.isLoading = status
+     this.store.select(getSpinnerStatus).subscribe((data: any) => 
+     {
+        if(data?.loader?.page === 'new-action' || data?.loader?.page === 'updated-action')
+        {
+          this.isLoading.set(false)
+          this.closeModal()
+        }
      })
    }
 
@@ -100,11 +130,6 @@ export class WriteActionComponent implements OnInit {
        } 
     }
 
-    writeDepartment()
-    {
-
-    }
-
     closeModal()
     {
        this.close.emit()
@@ -112,19 +137,29 @@ export class WriteActionComponent implements OnInit {
     
     write = async () => 
     {
-      this.store.dispatch(SetLoadingStatus({ loader: { loading: true, statusCode: 0 }}))
       if(this.actionForm.valid)
       {
+        this.isLoading.set(true)
         of(this.actionForm.value)
         .pipe(delay(1000))
         .subscribe(dept => 
-          {
+          {            
             const actionName = dept['actionName']!
-            const actionDescription = dept['actionDescription']!      
-            // this.store.dispatch(START_LOGIN({ actionName, actionDescription }))
+            const actionDescription = dept['actionDescription']!
+            if(this.dataToUpdate() === null)
+            { 
+                this.progress.set('...saving')
+                this.store.dispatch(CREATE_AKTION({ pagee: 10, limit: this.limit(), page: this.theCurrentPage(), name: actionName, description: actionDescription }))
+            } else {              
+                this.progress.set('...updating')
+                console.log("Updating Action")
+                sleepWait(4000)
+                this.store.dispatch(UPDATE_AKTION({ currentPage: this.theCurrentPage(), limit: this.limit(), action: this.dataToUpdate()._id, name: actionName, description: actionDescription  })) 
+            }      
           }
         )
       } else {
+         this.isLoading.set(false)
          this.actionForm.markAllAsTouched()
          this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 0 }}))
          this.message = "Attend to all fields"

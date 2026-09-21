@@ -57,12 +57,12 @@
       class="w-full flex justify-between mx-auto gap-10 mb-4"
     >
       <div 
-      class="w-full"
+        class="w-full"
       >
-      <app-image-upload 
-        [customErrorMessages]="errorMessages"
-      >
-      </app-image-upload>
+        <app-image-upload 
+          [customErrorMessages]="errorMessages"
+        >
+        </app-image-upload>
       </div>
     </div>    
 
@@ -81,7 +81,7 @@
         >
           @if(isLoading())
           {
-            <p class="font-bold text-white"> ... saving </p>
+            <p class="font-bold text-white"> ... </p>
           }
           @if(!isLoading())
           {

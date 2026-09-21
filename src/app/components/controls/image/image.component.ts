@@ -1,5 +1,5 @@
 import { NgClass, NgStyle } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, input, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -11,11 +11,8 @@ import { Router } from '@angular/router';
 })
 export class ImageComponent {
 
-  @Input()
-  height: number = 0
-
-  @Input()
-  width: number = 0
+  height = input<any>(40)
+  width = input<any>(40)
   
   // @Input()
   // alt: string = 'company-logo'
@@ -34,7 +31,6 @@ export class ImageComponent {
   // {
   //   this.router.navigate(['/'])
   // }
-
 
   @Input({ required: true }) src!: string;
   @Input({ required: true }) alt!: string;

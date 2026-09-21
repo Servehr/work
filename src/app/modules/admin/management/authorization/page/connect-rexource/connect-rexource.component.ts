@@ -1,20 +1,20 @@
 import { Component, EventEmitter, inject, input, Input, Output, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import AppState from '../../../../../../state/app.state';
-import { getResponseMessage, getSpinnerStatus } from '../../../../../../state/selectors/spinner.selector';
+import { getSpinnerStatus } from '../../../../../../state/selectors/spinner.selector';
 import { BotinComponent } from '../../../../../../components/controls/botin/botin.component';
 import { LabelComponent } from '../../../../../../components/controls/label/label.component';
-import { getAllRole } from '../../../../../../state/selectors/admin/management/role.selector';
 import { LoaderComponent } from '../../../../../../components/loader/loader.component';
 import { sleepWait } from '../../../../../../util/sleep';
 import { START_REXOURCE } from '../../../../../../state/actions/management/rexource.actions';
 import { getAllRexource } from '../../../../../../state/selectors/admin/management/rexource.selector';
-import { CONNECT_PAGE_TO_RESOURCE } from '../../../../../../state/actions/management/page.actions';
+import { CONNECT_PAGE_TO_RESOURCE, DISCONNECT_PAGE_FROM_RESOURCE } from '../../../../../../state/actions/management/page.actions';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-connect-rexource',
   standalone: true,
-  imports: [BotinComponent, LabelComponent, LoaderComponent],
+  imports: [NgClass, BotinComponent, LabelComponent, LoaderComponent],
   templateUrl: './connect-rexource.component.html',
   styleUrl: './connect-rexource.component.scss'
 })
@@ -29,7 +29,7 @@ export class ConnectRexourceComponent {
   pageTitle: string = ''
   isLoading = signal<boolean>(false)
   resources = signal<any>([])
-  selectedPage = input<{ id: string, name: string}>({ id: '', name: '' })
+  selectedPage = input<{ id: string, resourceName: string, pageId: string}>({ id: '', resourceName: '', pageId: '' })
   // happening = signal<string>('You are about to connect')
   message: string = ''
   statusCode!: number
@@ -77,42 +77,20 @@ export class ConnectRexourceComponent {
 
     this.store.select(getAllRexource).subscribe((rexrc: any) => 
     {
-      console.log(rexrc?.rexources)
-      if(rexrc?.rexources)
+      if(rexrc?.rexources?.length > 0)
       {
-        console.log(rexrc?.rexources)
-        this.isLoading.set(false)
-        console.log(rexrc?.rexources)
         for (let index = 0; index < rexrc?.rexources?.length; index++) 
         {
-          console.log(rexrc?.rexources[index])
-          let selectedId = rexrc?.rexources[index]?._id
-          console.log(selectedId)
-          console.log(rexrc?.rexources[index]?.pages?.length)
+          let selectedId = this.selectedPage().id ? this.selectedPage().id : rexrc?.rexources[index]?._id
           if(rexrc?.rexources[index]?.pages?.length > 0)
           {
              this.selectedRexourceId.set(selectedId)
           }
           rexrc?.rexources[index]?.pages?.map((page: any) => 
           {
-             console.log(page?._id)
              this.pageIds.set(page?._id)
-          })
-          // if(rexrc?.rexources[index]?.pages?.legth > 0)
-          // {
-          //    console.log("@@@@@@@@@@@@@@@@@@22")
-          //    console.log(rexrc?.rexources[index]?.pages)
-          // }         
+          })       
         }
-        // rexrc?.rexources?.pages?.map((page: { _id: string }) => 
-        //   {
-        //      this.pageIds.update((p) => [...p, page?._id])
-        //   }
-        // )
-        console.log("Selected Resource")
-        console.log(this.selectedRexourceId())
-        console.log(this.pageIds())
-        console.log("Selected Resource")
         this.resources.set(rexrc?.rexources)
         this.currentPage.set(rexrc?.rexources?.pagination?.currentPage)
         this.totalPages.set(rexrc?.rexources?.pagination?.totalPages)
@@ -134,9 +112,9 @@ export class ConnectRexourceComponent {
   ChangeOnButtonHoverOut()
   {
      this.style = {
-        'background-color' : '#be9d18',
-        'color': 'black',
-        'padding': '20px'        
+       'background-color' : '#be9d18',
+       'color': 'black',
+       'padding': '20px'        
      } 
   }
   
@@ -147,12 +125,14 @@ export class ConnectRexourceComponent {
 
   connectPageToResource = (rexource: string, pagee: string) => 
   {
-     this.store.dispatch(CONNECT_PAGE_TO_RESOURCE({ resource: rexource, pagee: pagee, page: this.currentPage(), limit: this.perPage() }))
+    this.selectedPage().id = rexource
+    this.store.dispatch(CONNECT_PAGE_TO_RESOURCE({ resource: rexource, pagee: this.selectedPage().pageId, page: this.currentPage(), limit: this.perPage() }))
   }
 
-  disconnect()
+  disconnectPageFromRexource(rexource: string, pagee: string)
   {
-    
+    this.selectedPage().id = ''
+    this.store.dispatch(DISCONNECT_PAGE_FROM_RESOURCE({ resource: rexource, pagee: this.selectedPage().pageId, page: this.currentPage(), limit: this.perPage() }))
   }
 
   write()

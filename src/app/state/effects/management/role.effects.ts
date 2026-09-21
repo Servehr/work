@@ -38,7 +38,10 @@ export class RoleEffect {
                   const transformed = data?.data?.data?.map((item: any) => ({
                     ...item,
                     change: item?._id,
-                    remove: item?._id
+                    remove: item?._id,
+                    rexources: item?.rexources,
+                    role: { count: item?.rexources?.length === undefined ? 0 : item?.rexources?.length, data: item?._id, roleName: item?.name },
+                    resources: { count: item?.rexources?.length === undefined ? 0 : item?.rexources?.length, data: item?._id, roleName: item?.name },
                   }))
                   transformed.pagination = 
                   {
@@ -48,6 +51,7 @@ export class RoleEffect {
                     hasNextPage: data?.data?.hasNextPage,
                     hasPrevPage: data?.data?.hasPrevPage
                   }
+                  console.log(transformed)
                   this.store.dispatch(SetErrorMessage({ msg: "successful", statusCode: 200, operation: "all-category"  }))
                   this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200 }}))
                   return ROLE_SUCCESS({ role: transformed });

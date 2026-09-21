@@ -130,7 +130,6 @@ export class AboutComponent {
 
   closeAboutMe = () => 
   {
-    console.log("Beautiful")
     this.tellUs.set(false)    
   }
 

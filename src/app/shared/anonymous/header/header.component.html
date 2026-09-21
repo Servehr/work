@@ -1,8 +1,9 @@
 <div 
-    class="bg-[#ffca0a]"
+    class="bg-[#F86E37]"
 >
+    <!-- [#ffca0a] -->
     <div 
-        class='container mx-auto flex'
+        class='container mx-auto flex items-center'
     >
         <div 
             class="w-6/12 md:w-10/12 px-3 py-2 flex"
@@ -20,7 +21,7 @@
                 </ng-icon>
             </div> 
             <p 
-               class="text-black text-[13px] font-semibold whitespace-nowrap"
+               class="text-white text-[15px] font-semibold whitespace-nowrap font-bold"
             >
               For Support: 08039887213
             </p> 
@@ -63,24 +64,24 @@
             class="w-5/12 md:w-9/12 hidden md:flex gap-10 md:justify-between items-center mx-auto md:text-center sm:px-3  shrink-0 overflow-x-scroll scrollbar-thin scrollbar-thumb-green-600 scrollbar-track-green-600 p-2 mb-1 md:overflow-auto md:overflow-x-scroll md:scrollbar-thin md:scrollbar-thumb-green-600 md:scrollbar-track-green-600"
         >
             <div 
-                class="flex justify-center text-center cursor-pointer border-2 w-4/12 rounded-md py-1 hover:bg-[#be9d18] hover:border-[#be9d18] hover:opacity-60 hover:text-white"
+                class="flex justify-center text-center cursor-pointer border-2 w-4/12 rounded-md py-1 hover:bg-[#022893] hover:border-[#022893] hover:text-white"
             >
                 <!-- <p>Become our partner</p> -->
                  <p class="text-sm p-1">Find a Technician</p>
             </div>
             <div 
-                class="flex justify-center text-center cursor-pointer border-2 w-4/12 rounded-md py-1 hover:bg-[#be9d18] hover:border-[#be9d18] hover:opacity-60 hover:text-white"
+                class="flex justify-center text-center cursor-pointer border-2 w-4/12 rounded-md py-1 hover:bg-[#022893] hover:border-[#022893] hover:text-white"
             >
                 <!-- <p>Become an apprentice</p> -->
                  <p class="text-sm p-1">Join as a Technician</p>
             </div>
             <div 
-                class="flex justify-center text-center cursor-pointer border-2 w-4/12 rounded-md py-1 hover:bg-[#be9d18] hover:border-[#be9d18] hover:opacity-60 hover:text-white"
+                class="flex justify-center text-center cursor-pointer border-2 w-4/12 rounded-md py-1 hover:bg-[#022893] hover:border-[#022893] hover:text-white"
             >
                 <p class="text-sm p-1">Join our master class</p>
             </div>
             <div 
-                class="flex justify-center text-center cursor-pointer bg-blue-300 hover:bg-blue-800 hover:border-blue-400 w-4/12 rounded-md py-1 hover:bg-[#be9d18] hover:border-[#be9d18] hover:opacity-60 hover:text-white"
+                class="flex justify-center text-center font-bold cursor-pointer w-4/12 rounded-md py-1 border-2 border-black py-1 bg-black text-white hover:bg-[#022893] hover:border-2 hover:border-[#022893] hover:text-[#E59D5D] hover:font-bold"
                 (click)="jobPost()"
             >
                 <p class="text-sm p-1">Post Job</p>
@@ -143,6 +144,7 @@
             <div 
                 class="w-8/12 bg-[#191b5e] d-flex"
             >
+            <!-- bg-[#191b5e] -->
                 <div 
                     class="w-full flex justify-between mb-5 py-6 px-6 bg-white"
                 >
@@ -173,7 +175,7 @@
                         >                     
                             <li 
                                 [routerLink]="[name.route]"
-                                class="w-full flex border-b border-gray-600 justify-left items-center text-[11px] lg:text-md text-gray-400 pl-6 text-[11px] capitalize font-bold hover:bg-[#ffca0a] hover:text-black hover:border-r-2 cursor-pointer px-1 py-3"
+                                class="w-full flex border-b border-gray-600 justify-left items-center text-[11px] lg:text-md text-gray-400 pl-6 text-[11px] capitalize font-bold hover:bg-[#bb6417] hover:text-black hover:border-r-2 cursor-pointer px-1 py-3"
                                 (click)="harmburger()"
                                 [ngClass]="{'cursor-pointer' : isHover != $index}" 
                                 >
@@ -215,7 +217,7 @@
                 >                     
                 <li 
                   [routerLink]="[name.route]"
-                  class="flex justify-center whitespace-nowrap items-center font-bold text-[12px] lg:text-md text-[#3e4095] cursor-pointer p-2 hover:text-[#be9d18]"
+                  class="flex justify-center whitespace-nowrap items-center font-bold text-[12px] lg:text-md text-[#3e4095] cursor-pointer p-2 hover:text-[#bb6417]"
                   (click)="harmburger()"
                   [ngClass]="{'cursor-pointer' : isHover != $index}" 
                 >

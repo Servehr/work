@@ -15,6 +15,7 @@ import { DepartmentReducer } from "./reducer/management/department.reducer";
 import { RexourceReducer } from "./reducer/management/rexource.reducer";
 import { PageReducer } from "./reducer/management/page.reducer";
 import { AboutReducer } from "./reducer/cms/about.reducer";
+import { AktionReducer } from "./reducer/management/aktion.reducer";
 
 
 export default interface AppState 
@@ -32,6 +33,7 @@ export default interface AppState
    rexources: any
    pages: any
    aboutus: any
+   aktions: any
 }
 
 
@@ -49,5 +51,6 @@ export const AppReducer =
    departmentState: DepartmentReducer,
    rexourceState: RexourceReducer,
    pageState: PageReducer,
-   aboutState: AboutReducer
+   aboutState: AboutReducer,
+   aktionState: AktionReducer,
 }

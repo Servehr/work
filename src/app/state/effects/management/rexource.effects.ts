@@ -39,7 +39,8 @@ export class RexourceEffect {
                     ...item,
                     rexourcePages: { count: item?.pages?.length, data: null },
                     change: item?._id,
-                    remove: item?._id
+                    remove: item?._id,
+                    connect: item?._id
                   }))
                   transformed.pagination = 
                   {
@@ -50,6 +51,7 @@ export class RexourceEffect {
                     hasPrevPage: data?.data?.hasPrevPage
                   }
                   console.log(transformed)
+                  console.log("Bravery")
                   this.store.dispatch(SetErrorMessage({ msg: "successful", statusCode: 200, operation: "all-resource"  }))
                   this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200, page: 'rexource' }}))
                   return REXOURCE_SUCCESS({ rexources: transformed });

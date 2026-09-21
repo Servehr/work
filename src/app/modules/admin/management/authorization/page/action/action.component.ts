@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, input, Input, model, OnInit, Output, signal, SimpleChanges } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import AppState from '../../../../../../state/app.state';
@@ -6,24 +6,31 @@ import { bootstrapPlusCircleFill } from '@ng-icons/bootstrap-icons';
 import { ModalComponent } from '../../../../../../components/modal/modal.component';
 import { WriteActionComponent } from '../write-action/write-action.component';
 import { RemoveComponent } from '../../../../../../shared/remove/remove.component';
+import { getAllAktions } from '../../../../../../state/selectors/admin/management/aktion.selector';
+import { START_PAGE_AKTION } from '../../../../../../state/actions/management/page.actions';
+import { RemoveActionComponent } from '../remove-action/remove-action.component';
 
 @Component({
   selector: 'app-action',
   standalone: true,
-  imports: [ModalComponent, WriteActionComponent, RemoveComponent],
+  imports: [ModalComponent, WriteActionComponent, RemoveComponent, RemoveActionComponent],
   templateUrl: './action.component.html',
   styleUrl: './action.component.scss'
 })
-export class ActionComponent {
+export class ActionComponent implements OnInit {
 
-  title: string = 'Page Actions'
+  title: string = 'Create Action'
+  isLoading = signal<boolean>(false)
   @Input() buttonName: string = ''
   writeRexource: boolean = false
+  theCurrentPage = input<string>('')
+  toRemove = signal<any>(null)
+  dataToUpdate = signal<any>(null)
   addIcon: any = bootstrapPlusCircleFill
 
   ////////////   
-  PageTitle: string = 'Pages'
-  pageAction: boolean = false
+  PageTitle: string = 'Page Actions'
+  pageAction = signal<boolean>(false)
   pageActionDelete: boolean = false
   isModalOpen: boolean = false
   modalWidth: string = 'w-[750px]'
@@ -33,16 +40,7 @@ export class ActionComponent {
    rows: number = 3
    
 
-   actions: any[] = [
-     { actionName: 'Create Role', description: 'Create role Description' }, 
-     { actionName: 'Update Role', description: 'Update role description' },
-     { actionName: 'Update Role', description: 'Update role description' },
-     { actionName: 'Update Role', description: 'Update role description' },
-     { actionName: 'Update Role', description: 'Update role description' },
-     { actionName: 'Update Role', description: 'Update role description' },
-     { actionName: 'Update Role', description: 'Update role description' },
-     { actionName: 'Update Role', description: 'Update role description' }
-   ]
+   actions = signal<any>([])
   
    errorMessages = 
    { 
@@ -66,32 +64,66 @@ export class ActionComponent {
      )    
    }
 
-   CloseModal()
+   ngOnInit(): void 
    {
-     this.ModalState = ''
-     this.FromPackage.emit('')     
+      this.store.select(getAllAktions).subscribe((data: any) => 
+      {
+        if(data?.fromPlace?.location === 'pageAction')
+        {
+           this.actions.set(data)
+        }
+      })    
    }
 
-   CloseCurrentModal()
-   {
-     this.UpperModalState = ''
-    //  this.FromPackage.emit('')
-   }
+  ngOnChanges(changes: SimpleChanges)
+  {
+    if(changes['theCurrentPage'] && changes['theCurrentPage']['previousValue'] !== undefined || changes['theCurrentPage']['firstChange'] === true)
+    {      
+      this.isLoading.set(true)
+      this.showActions(this.theCurrentPage())
+    }
+  }    
 
-   a()
-   {
+  showActions = (page: string) => 
+  {console.log("I dispatched")
+    this.store.dispatch(START_PAGE_AKTION({ page: page }))
+  }  
 
-   }
+  updateAction = (action: any) => 
+  {
+    this.dataToUpdate.set(action)
+    this.pageAction.set(true)
+  }
 
-   onConfirm()
-   {
-     
-   }
+  closeActionModal = () => 
+  {
+    this.pageAction.set(false)
+  }
 
-   Close()
-   {
-     this.UpperModalState = ''
-    //  this.FromPackage.emit('')
-   }
+  CloseModal()
+  {
+    this.ModalState = ''
+    this.FromPackage.emit('')     
+  }
+
+  CloseCurrentModal()
+  {
+    this.UpperModalState = ''
+   //  this.FromPackage.emit('')
+  }
+
+  close = () => 
+  {
+    console.log("8*****************8")
+    this.pageActionDelete = false
+    this.toRemove.set(null)
+    this.showActions(this.theCurrentPage())
+  }
+   
+  removeAction(action: any)
+  {
+    this.toRemove.set(action)
+    this.pageActionDelete = true
+  }
 
 }

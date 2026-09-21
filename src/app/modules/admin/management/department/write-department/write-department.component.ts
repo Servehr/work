@@ -111,11 +111,11 @@ export class WriteDepartmentComponent implements OnInit {
    }
 
   ngOnChanges(changes: SimpleChanges)
-   {
-     if(!changes['dataToUpdate'])
-     {
-         this.name.set(this.dataToUpdate()?.data?.name)
-     }
+  {
+    if(!changes['dataToUpdate'])
+    {
+      this.name.set(this.dataToUpdate()?.data?.name)
+    }
   }     
 
    ChangeOnButtonHoverIn()

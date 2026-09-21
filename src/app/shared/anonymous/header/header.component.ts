@@ -49,18 +49,18 @@ export class HeaderComponent implements OnInit {
     takeOut$ = timer(1200)
     
     header: { page: string, route: string }[] = [
-        { page: 'home', route: '/' },
-        { page: 'about', route: '/about' },
-        { page: 'Event & Seminars', route: '/events' },
-        { page: 'certification/Training', route: '/training' },
-        { page: 'Partners', route: '/partner' },
-        { page: 'Market Place', route: '/market-place' },
-        { page: 'jobs', route: '/jobs' },
-        { page: 'community', route: '/community' },
-        { page: 'plan', route: '/plan' },
-        { page: 'blog', route: '/blog' },
-        { page: 'faq', route: '/faq' },
-        { page: 'contact', route: '/contact' }
+      { page: 'home', route: '/' },
+      { page: 'about', route: '/about' },
+      { page: 'Event & Seminars', route: '/events' },
+      { page: 'certification/Training', route: '/training' },
+      { page: 'Partners', route: '/partner' },
+      { page: 'Market Place', route: '/market-place' },
+      { page: 'jobs', route: '/jobs' },
+      { page: 'community', route: '/community' },
+      { page: 'plan', route: '/plan' },
+      { page: 'blog', route: '/blog' },
+      { page: 'faq', route: '/faq' },
+      { page: 'contact', route: '/contact' }
     ]
     headerIcons: any = [bootstrapHouseDoorFill, bootstrapHouseDoorFill, bootstrapHouseDoorFill, bootstrapHouseDoorFill]
     socialIcons: any =  [bootstrapFacebook, bootstrapTwitter, bootstrapInstagram, bootstrapYoutube, bootstrapTiktok]
@@ -70,7 +70,7 @@ export class HeaderComponent implements OnInit {
       { icon: bootstrapPersonFill, route: '/auth/login', status: false    },
       { icon: bootstrapPersonPlusFill, route: '/auth/register', status: false   }
     ]
-    iconSize: string = '14'
+    iconSize: string = '16'
     authIconSize: string = '20'
     socialIconColor: string = 'white'
     authIconColor: string = 'black'
@@ -126,7 +126,7 @@ export class HeaderComponent implements OnInit {
    ChangeOnButtonHoverIn()
    {
       this.style.set({
-        'background-color' : '#776005',
+        'background-color' : '#bb6417',
         'color': 'white',
         'padding': '20px'         
       })
@@ -135,7 +135,7 @@ export class HeaderComponent implements OnInit {
     ChangeOnButtonHoverOut()
     {
        this.style.set({
-          'background-color' : '#be9d18',
+          'background-color' : '#F86E37',
           'color': 'black',
           'padding': '20px'        
        }) 

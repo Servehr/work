@@ -1,4 +1,4 @@
-import { Component, Input, signal } from '@angular/core'
+import { Component, input, Input, signal } from '@angular/core'
 import {
   createAngularTable,
   getCoreRowModel,
@@ -47,24 +47,25 @@ export class PagesComponent
 {
   PageTitle: string = 'Pages'
   isLoading = signal<boolean>(false)
-  buttonName: string = ''
+  buttonName = signal<string>('')
   writePage: boolean = false
   connectPage: boolean = false
   disconnectPage: boolean = false 
-  pageAction: boolean = false
-  selectedPage = signal<{ id: string, name: string}>({ id: '', name: '' })
-  actions: boolean = false
+  pageAction = signal(false)
+  selectedPage = signal<{ id: string, resourceName: string, pageId: string}>({ id: '', resourceName: '', pageId: '' })
+  actions = signal<boolean>(false)
   addIcon: any = bootstrapPlusCircleFill
 
-  title: string = ''
+  title: string = 'x'
   isModalOpen: boolean = false
   modalWidth: string = 'w-[750px]'
   dataToUpdate = signal<any>(null)
   removeData = signal<any>(null)
 
+  theCurrentPage = signal<string>('')
   // pagination
   currentPage = signal<number>(1)
-  perPage  = signal<number>(10)
+  perPage  = input<number>(10)
   totalPages = signal<number>(5)
   totalDocs =  signal<number>(10)
   hasNextPage =  signal<boolean>(true)
@@ -87,7 +88,7 @@ export class PagesComponent
   {
     this.store.dispatch(START_PAGE({ page: Number(this.currentPage()), limit: Number(this.perPage()) }))
     this.isLoading.set(true)    
-    this.buttonName = 'Save'
+    this.buttonName.set('Save')
     await sleepWait(500)
     this.store.select(getSpinnerStatus).subscribe((data: any) => 
     {
@@ -101,11 +102,14 @@ export class PagesComponent
     this.store.select(getAllPage).subscribe((pg: any) => 
     {
       // this.isLoading.set(false)
-      this.data.set(pg?.pages)
-      this.currentPage.set(pg?.pages?.pagination?.currentPage)
-      this.totalPages.set(pg?.pages?.pagination?.totalPages)
-      this.hasPrevPage.set(pg?.pages?.pagination?.hasPrevPage)
-      this.hasNextPage.set(pg?.pages?.pagination?.hasNextPage)
+      // if(pg?.loader?.page === 'all-page')
+      // {
+        this.data.set(pg?.pages)
+        this.currentPage.set(pg?.pages?.pagination?.currentPage)
+        this.totalPages.set(pg?.pages?.pagination?.totalPages)
+        this.hasPrevPage.set(pg?.pages?.pagination?.hasPrevPage)
+        this.hasNextPage.set(pg?.pages?.pagination?.hasNextPage)
+      // }
     })    
   }
 
@@ -118,38 +122,42 @@ export class PagesComponent
        accessorKey: 'description',
        header: 'Description'
     },
+    {
+       accessorKey: 'rexourceName',
+       header: 'Resource'
+    },
     // {
-    //    accessorKey: 'resources',
-    //    header: 'No Of Pages'
+    //    accessorKey: 'disconnect',
+    //    header: 'Disconnect',
+    //    cell: (context) => {
+    //      const rexourceName = context.row.original.rexource
+    //      return flexRenderComponent(
+    //         ArrowLeftComponent, {
+    //           inputs: {
+    //             value: rexourceName
+    //           },
+    //           outputs: {
+    //             clickEvent: (value) => this.disconnectPageToResource(value)
+    //           }
+    //         }
+    //      )
+    //    }       
     // },
     {
-       accessorKey: 'disconnect',
-       header: 'Disconnect',
-       cell: (context) => {
-         return flexRenderComponent(
-            ArrowLeftComponent, {
-              inputs: {
-                value: context.getValue<number>()
-              },
-              outputs: {
-                clickEvent: (value) => this.disconnectPageToResource(value)
-              }
-            }
-         )
-       }       
-    },
-    {
        accessorKey: 'connect',
-       header: 'Connect',
+       header: 'Connect/Disconnect',
        cell: (context) => {
-         const name: string = context.row.getValue('name')
+         const rexource = context.row.original.rexource
+         const rexourceName = context.row.original.rexourceName
+         const pageId = context.getValue<string>()
+
          return flexRenderComponent(
             ArrowRightComponent, {
               inputs: {
-                value: context.getValue<number>()
+                value: rexource
               },
               outputs: {
-                clickEvent: (value) => this.connectPageToResource(value?.toString(), name)
+                clickEvent: (value) => this.connectPageToResource(value?.toString(), rexourceName, pageId)
               }
             }
          )
@@ -159,13 +167,14 @@ export class PagesComponent
        accessorKey: 'action',
        header: 'Create Action',
        cell: (context) => {
+         
          return flexRenderComponent(
             AddComponent, {
               inputs: {
                 value: context.getValue<number>()
               },
               outputs: {
-                clickEvent: (value) => this.action(value)
+                clickEvent: (value) => this.action(value.toString())
               }
             }
          )
@@ -178,7 +187,7 @@ export class PagesComponent
          return flexRenderComponent(
             BoteenComponent, {
               inputs: {
-                value: context.getValue<{ count: number, data: any }>(),
+                value: context.getValue<{ page: string, count: number, data: any }>(),
                 boteenStyle: this.boteenStyle,
                 boteeName: '5',
                 boteenCssClass: this.unLinkCss,
@@ -233,48 +242,6 @@ export class PagesComponent
     }
   ]
 
-  onConfirm = () => 
-  {
-     
-  }
-
-  ToggleWithTitle = (status: string) => 
-  {
-    this.title = status
-    this.buttonName = 'Save'
-    this.writePage = true
-  } 
-
-  connectPageToResource(status: string, name: string): void
-  {
-    this.title = 'connect Page To Resource'
-    this.buttonName = 'Save'
-    this.selectedPage.set({ id: status, name: name })
-    console.log(this.selectedPage())
-    this.connectPage = true 
-  }
-
-  disconnectPageToResource(status: number): void
-  {
-    this.title = 'Disconnect Page From Resource'
-    this.buttonName = 'Save'
-    this.disconnectPage = true     
-  }
-
-  action(status: number): void
-  {
-    this.title = 'Create Action'
-    this.buttonName = 'Save'
-    this.pageAction = true     
-  }
-
-  pageActions(status: number): void
-  {
-    this.title = 'Page Action'
-    this.buttonName = 'Save'
-    this.actions = true     
-  }
-
   // 4. Create the table instance
   table = createAngularTable(() => ({
     data: this.data(),
@@ -282,9 +249,54 @@ export class PagesComponent
     getCoreRowModel: getCoreRowModel(),
   }))
 
-  callOut = () => 
+  ToggleWithTitle = (status: string) => 
   {
-      alert("Yeah!! Good")
+    this.title = status
+    this.buttonName.set('Save')
+    this.writePage = true
+  } 
+
+  connectPageToResource(resourceId: string, resourceName: string, pageId: string): void
+  {
+    this.title = 'connect Page To Resource'
+    this.buttonName.set('Save')
+    this.selectedPage.set({ id: resourceId, resourceName: resourceName, pageId: pageId })
+    console.log(this.selectedPage())
+    this.connectPage = true 
+  }
+
+  disconnectPageToResource(status: string): void
+  {
+    this.title = 'Disconnect Page From Resource'
+    this.buttonName.set('Save')
+    this.disconnectPage = true     
+  }
+
+  action(status: string): void
+  {
+    this.title = 'Create Action'
+    this.buttonName.set('Save')
+    this.theCurrentPage.set(status)
+    console.log(status)
+    this.pageAction.set(true)     
+  }
+
+  closePageAction(): void
+  {
+    this.actions.set(false)     
+  }
+
+  pageActions(value: any): void
+  {
+    this.theCurrentPage.set(value?.page)
+    this.title = 'Page Action'
+    this.buttonName.set('Save')
+    this.actions.set(true)     
+  }
+
+  closeActions = () => 
+  {
+    this.actions.set(false)
   }
 
   remove(value: string): void 
@@ -296,18 +308,28 @@ export class PagesComponent
   change(cellData: any): void 
   {
     this.title = 'Update Page'
-    this.buttonName = 'Update'
+    this.buttonName.set('Update')
     console.log(cellData)
     this.dataToUpdate.set(cellData)
     this.writePage = true
-  }   
+  } 
+
+  closeCreateAction = () => 
+  {
+     this.pageAction.set(false)
+  }
+
+  closeIt = () => 
+  {
+     this.actions.set(false)
+  }
     
   getData = async (event: any) => 
   {
     this.currentPage.set(Number(event.page))
     this.isLoading.set(true)  
     await sleepWait(500)
-    this.store.dispatch(START_PAGE  ({ page: Number(this.currentPage()), limit: Number(this.perPage()) }))
+    this.store.dispatch(START_PAGE({ page: Number(this.currentPage()), limit: Number(this.perPage()) }))
   }
 
 

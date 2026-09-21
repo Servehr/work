@@ -14,6 +14,11 @@ export class PageService {
     {
       return this._http.get<any>(`${environment.url}page?page=${page}&limit=${limit}`);
     }
+
+    pagesActions(currentPage: string) : Observable<any> 
+    {console.log("Together")
+      return this._http.get<any>(`${environment.url}page/actions?page=${currentPage}`);
+    }    
     
     create(name: string, description: string) : Observable<any> 
     {
@@ -33,5 +38,10 @@ export class PageService {
     connectPageToResource(rexource: string, pages: string) : Observable<any>
     {
       return this._http.put<any>(`${environment.url}page/connect-page-to-resource`, { rexource, pages: [pages] })
+    }    
+
+    disconnectPageFromResource(rexource: string, pages: string) : Observable<any>
+    {
+      return this._http.put<any>(`${environment.url}page/disconnect-page-from-resource`, { rexource, pages: [pages] })
     }
 }

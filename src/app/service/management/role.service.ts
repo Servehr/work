@@ -24,9 +24,14 @@ export class RoleService {
     {
       return this._http.put<{role: string, name: string, description: string}>(`${environment.url}role/update`, { role: role, name: name, description: description });
     } 
+
+    linkResource(role: string, resource: string) : Observable<any> 
+    {
+      return this._http.put<{role: string, resource: string}>(`${environment.url}role/resource-unlink`, { role: role, resource: resource });
+    } 
     
     remove(value: string) : Observable<any> 
-    {console.log(value)
+    {
       return this._http.put<any>(`${environment.url}role/remove`, { role: value })
     }    
 }

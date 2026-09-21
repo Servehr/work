@@ -7,7 +7,7 @@
       <p 
         class="text-gray-500 font-bold mb-5 -pl-2"
       >
-        {{ title }}
+        {{ title }} - {{ theCurrentPage() }}
       </p>
       
 
@@ -33,7 +33,7 @@
                 [name]="'actionName'"
                 [placeholder]="'Enter Action Name'"
                 [type]="'actionName'"
-                [value]="''"
+                [value]="dataToUpdate()?.actionName"
                 formControlName="actionName"
                 [customErrorMessages]="errorMessages"
             >
@@ -48,6 +48,7 @@
               [cols]="cols"
               formControlName="actionDescription"
               [customErrorMessages]="errorMessages"
+              [value]="dataToUpdate()?.description"
             >
             </app-text-area>
           </div>
@@ -64,20 +65,19 @@
             <app-botin
               (ChangeOnButtonHoverIn)="ChangeOnButtonHoverIn()" 
               (ChangeOnButtonHoverOut)="ChangeOnButtonHoverOut()"
-              (sendData)="writeDepartment()"
+              (sendData)="write()"
               [style]="style"
-              (click)="write()"
             >
               <div
                 class="flex flex-col space-y-1 items-center justify-between"
               >
-                @if(isLoading)
+                @if(isLoading())
                 {
-                   <p class="font-bold text-white"> ... saving </p>
+                   <p class="font-bold text-white"> {{ progress() }} </p>
                 }
-                @if(!isLoading)
+                @if(!isLoading())
                 {
-                  <h3>{{buttonName}} </h3>
+                  <h3>{{buttonName()}} </h3>
                 }
               </div>
             </app-botin>

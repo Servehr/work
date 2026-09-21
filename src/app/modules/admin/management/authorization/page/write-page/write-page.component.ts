@@ -93,8 +93,7 @@ export class WritePageComponent implements OnInit {
             this.pageForm.get('pageName')?.setValue("")
             this.pageForm.get('pageDescription')?.setValue("")
          }
-      }, { allowSignalWrites: true })        
-
+      }, { allowSignalWrites: true })  
    }
 
    ngOnInit(): void 
@@ -102,10 +101,15 @@ export class WritePageComponent implements OnInit {
      this.store.select(getSpinnerStatus).subscribe((data: any) => 
       {
         this.isLoading = data?.loader?.loading 
-        if(!data?.loader?.loading)
+        if(!data?.loader?.page)
         {
           this.closeModal()
         }
+        // this.isLoading = data?.loader?.loading 
+        // if(data?.loader?.page === 'new-action')
+        // {
+        //   this.closeModal()
+        // }        
       }
      )
    }

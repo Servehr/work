@@ -29,7 +29,7 @@ export class SkillSearchComponent {
   causeChanges = signal<string>('')
 
   style: any = {
-    'background-color' : '#be9d18',
+    'background-color' : '#F86E37',
     'color': 'black',
     'padding': '20px'
   }
@@ -61,7 +61,7 @@ export class SkillSearchComponent {
    ChangeOnButtonHoverIn()
    {
       this.style = {
-        'background-color' : '#776005',
+        'background-color' : '#bb6417',
         'color': 'white',
         'padding': '20px'     
       }
@@ -70,8 +70,8 @@ export class SkillSearchComponent {
    ChangeOnButtonHoverOut()
    {
       this.style = {
-         'background-color' : '#be9d18',
-         'color': 'black',
+         'background-color' : '#F86E37',
+         'color': 'white',
          'padding': '20px'   
       } 
    }  

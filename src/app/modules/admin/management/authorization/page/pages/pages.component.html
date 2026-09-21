@@ -119,7 +119,6 @@
   title="title" 
   [modalWidth]="modalWidth"
   (closeModal)="isModalOpen = false"
-  (close)="onConfirm()"
 >
   <app-remove-page
     (close)="isModalOpen = false"
@@ -134,15 +133,14 @@
   title="title" 
   [modalWidth]="modalWidth"
   (closeModal)="writePage = false"
-  (confirmAction)="onConfirm()"
 >
   <app-write-page 
     [title]="title" 
-    [buttonName]="buttonName" 
-    (close)="writePage = false"
+    [buttonName]="buttonName()" 
     [dataToUpdate]="dataToUpdate()"
     [currentPage]="currentPage()"
     [perPage]="perPage()"
+    (close)="writePage = false"
   >
   </app-write-page>
 </app-modal>
@@ -155,11 +153,10 @@
     title="title" 
     [modalWidth]="'w-[1200px]'"
     (closeModal)="connectPage = false"
-    (confirmAction)="onConfirm()"
   >
     <app-connect-rexource 
       [title]="title" 
-      [buttonName]="buttonName" 
+      [buttonName]="buttonName()" 
       (close)="connectPage = false"
       [selectedPage]="selectedPage()"
     >
@@ -172,45 +169,53 @@
   title="title" 
   [modalWidth]="modalWidth"
   (closeModal)="disconnectPage = false"
-  (confirmAction)="onConfirm()"
 >
   <app-disconnect-rexource 
      [title]="title" 
-     [buttonName]="buttonName" 
+     [buttonName]="buttonName()" 
      (close)="disconnectPage = false"
   >
   </app-disconnect-rexource>
 </app-modal>
 
-<app-modal 
-  [isOpen]="pageAction" 
-  title="title" 
-  [modalWidth]="modalWidth"
-  (closeModal)="pageAction = false"
-  (confirmAction)="onConfirm()"
->
-  <app-write-action 
-     [title]="title" 
-     [buttonName]="buttonName" 
-     (close)="pageAction = false"
+@if(pageAction())
+{
+  <app-modal 
+    [isOpen]="pageAction()" 
+    title="title" 
+    [modalWidth]="modalWidth"
+    (closeModal)="closeCreateAction()"
   >
-  </app-write-action>
-</app-modal>
+    <app-write-action 
+      [tit ]="title" 
+      [buttonName]="buttonName()" 
+      [currentPage]="currentPage()"
+      (close)="closeCreateAction()"
+      [perPage]="perPage()"
+      [limit]="10"
+      [theCurrentPage]="theCurrentPage()"
+    >
+    </app-write-action>
+  </app-modal>
+}
 
-<app-modal 
-  [isOpen]="actions" 
-  title="title" 
-  [modalWidth]="modalWidth"
-  (closeModal)="actions = false"
-  (confirmAction)="onConfirm()"
->
-  <app-action 
-     [title]="title" 
-     [buttonName]="buttonName" 
-     (close)="actions = false"
+@if(actions())
+{
+  <app-modal 
+    [isOpen]="actions()" 
+    title="title" 
+    [modalWidth]="modalWidth"
+    (closeModal)="closeActions()"
   >
-  </app-action>
-</app-modal>
+    <app-action 
+      [title]="title" 
+      [buttonName]="buttonName()"
+      [theCurrentPage]="theCurrentPage()"
+      (close)="closeActions()"
+    >
+    </app-action>
+  </app-modal>
+}
 
 
 
