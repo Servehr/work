@@ -46,7 +46,7 @@
                 <div 
                   class='md:flex-col flex w-[500px] md:w-full min-h-1 h-fit pt-2 md:pb-5 border-b-2 border-blue-900 md:border-none'
                 >
-                  @for(resource of resources; track resource.id)
+                  @for(resource of resources(); track resource._id)
                   {
                     <div 
                       class="rounded-none bg-gray-100 mb-1 hover:bg-[#ffca0a] py-5 pl-2 md:pl-5 px-0 m-auto w-full text-center md:text-left font-semibold transition-colors cursor-pointer duration-300 text-sm"
@@ -63,7 +63,11 @@
             <div 
               class="w-full md:w-9/12 px-0 flex flex-col bg-white h-[40rem] overflow-y-scroll mt-6 md:mt-0"
             >
-               <app-settings-control [resource]="resource" [selectedRole]="role"></app-settings-control>
+               <app-settings-control 
+                 [resources]="resources" 
+                 [selectedResource]="selectedResource()"
+                >
+                </app-settings-control>
             </div>
           </div>
 

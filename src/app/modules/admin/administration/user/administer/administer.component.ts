@@ -88,19 +88,19 @@ export class AdministerComponentmponent  implements OnInit {
     categoryDescriptionRequired: 'Write a note about category to be created'
   }   
     
-  departments:{ id: string, name: string }[] = 
+  departments:{ _id: string, name: string }[] = 
   [
-    { id: 'Human Resource', name:'HR' },
-    { id: 'Sales', name: 'Sales' },
-    { id: 'Finance', name:'Finance' },
-    { id: 'agent', name:'Agent' },
+    { _id: 'Human Resource', name:'HR' },
+    { _id: 'Sales', name: 'Sales' },
+    { _id: 'Finance', name:'Finance' },
+    { _id: 'agent', name:'Agent' },
   ]
     
-  actions:{ id: string, name: string }[] = 
+  actions:{ _id: string, name: string }[] = 
   [
-    { id: 'Human Resource', name:'HR Manager' },
-    { id: 'Sales', name: 'Sales Manager' },
-    { id: 'Finance', name:'Finance Manager' }
+    { _id: 'Human Resource', name:'HR Manager' },
+    { _id: 'Sales', name: 'Sales Manager' },
+    { _id: 'Finance', name:'Finance Manager' }
   ]
 
   administerForm: FormGroup

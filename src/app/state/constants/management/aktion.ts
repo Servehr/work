@@ -9,3 +9,5 @@ export const AKTION_REMOVAL = '[action removal] delete action'
 
 export const AKTION_CREATION = '[action creation] create new action'
 export const AKTION_UPDATE = '[action modification] change action'
+
+export const GRANT_REVOKE = '[grant and revoke action] deciding what action a user can perform'

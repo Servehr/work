@@ -20,7 +20,6 @@ export class AddRemoveComponent {
 
   onClick(): void 
   {
-    console.log(this.value())
     this.clickEvent.emit(this.value())
   }
 

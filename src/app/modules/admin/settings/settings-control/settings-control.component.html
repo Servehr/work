@@ -1,4 +1,4 @@
-@if(resource.id === '-1')
+@if(resourcePagesActions()?.length  === 0 && selectedResourceName() === '')
 {
    <div 
      class="w-full border-2 border-gray-200 h-[450px] flex justify-center items-center"
@@ -11,39 +11,104 @@
    </div>
 }
 
-@if(resource.id != '-1')
+@if(resourcePagesActions()?.length  === 0 && selectedResourceName() !== '')
+{
+   <div 
+     class="w-full border-2 border-gray-200 h-[450px] flex justify-center items-center"
+   >
+      <p
+        class="text-md text-gray-500"
+      >
+        {{ selectedResourceName() }} has no page associated to it
+      </p>
+   </div>
+}
+
+@if(resourcePagesActions()?.length  > 0)
 {
    <div 
      class="py-1 md:px-1 relative"
    >
       <div 
-        class="md: pr-5 text-left font-bold text-md capitalize rounded-none border-gray-200 pb-2 font-bold"
+        class="md: pr-5 text-left font-bold text-md rounded-none border-gray-200 pb-2 font-bold"
       >
         <span 
-          class="font-bold w-full"
+          class="font-bold w-full capitalize"
         >
-         {{ resource.name }}
+         {{ selectedResourceName() }}
        </span>
       </div>
       <div class="py-2"></div>
-
-      <div 
-        key={index}
-        class='col-span-12 px-3 text-[13px] py-4 text-left font-bold text-md capitalize border-2 rounded-none border-gray-100 pb-2'
-      >
+              
+      @for(page of resourcePagesActions(); track page._id)
+      {
         <div 
-          class="w-full flex justify-between items-center p-2 border-2 border-gray-200 rounded-lg"
+          key={index}
+          class='col-span-12 px-3 text-[13px] py-4 text-left font-bold text-md capitalize border-2 rounded-none border-gray-100 pb-2'
         >
-          {{ 'resource.name' }}
+          <div 
+            class="w-full flex justify-between items-center p-2 border-2 border-gray-200 capitalize rounded-lg"
+          >
+            {{ page?.name }}
+            <!-- @if(page.aktions?.length > 0)
+            {
+              <app-check
+                (ChoosenTick)="toCheck($event)"
+              >
+              </app-check>
+            } -->
+          </div>
 
-          <app-check></app-check>
+          <div 
+            class="w-full d-flex gap-10 mb-3 pt-2 pb-4"
+          >
+            @if(page.aktions?.length > 0)
+            {
+              <div 
+                class="w-full mb-2"
+              >
+                <app-switch 
+                  [label]="'All'"
+                  [action]="page?.aktions"
+                  [page]="page?._id"
+                  (isOnChange)="pointTo($event)"
+                  [status]="true"
+                >
+                </app-switch>
+              </div>
+
+              <div 
+                class="w-full flex gap-20"
+              >
+                @for(action of page.aktions; track action._id)
+                {
+                  <app-switch 
+                    [label]="action?.name"
+                    [action]="action?._id"
+                    [page]="page?._id"
+                    [status]="action?.status"
+                    (isOnChange)="pointTo($event)"
+                  >
+                  </app-switch> 
+                }  
+              </div>
+            } @else {
+
+              <div 
+                class="w-full flex justify-center items-center p-10 lowercase"
+              >
+                 <span 
+                    class="capitalize text-red-700 mr-1"
+                 > 
+                   {{ page?.name }} 
+                 </span>  
+                 page has no action 
+              </div>
+
+            }     
+          </div>
         </div>
-
-        <div 
-          class="w-full mb-3"
-        >
-          <app-switch [label]="'All'" (changeState)="changeStatus($event)" [switchState]="switchState" [switchingState]="switchingState"></app-switch>
-        </div> 
-      </div>
+      }
+            
    </div>
 }

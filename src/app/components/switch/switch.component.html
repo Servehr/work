@@ -1,21 +1,20 @@
 <div 
-    [ngClass]="label"
+  class="w-fit p-2"
 >
-    <div 
-        class="flex flex-col"
-    >        
-        <span 
-            class='text-gray-800 m-3 font-bold text-[5]'
-        >
-            {{label}}
-        </span>
-        <div 
-            [class]="switchState" 
-            (click)="onSwitchChanged()"
-        >
-            <span 
-                [class]="switchingState">
-            </span>
-        </div>
-    </div>
+  <div 
+    class="w-full flex justify-center items-center mb-1"
+  >
+    {{ label() }}
+  </div>
+  <div 
+    class="flex d-flex toggle-switch" 
+    [class.active]="status()" 
+    (click)="toggle()"
+  >
+    <span 
+      class="label"
+    >
+      {{ status() ? 'ON' : 'OFF' }}
+    </span>
+  </div>
 </div>

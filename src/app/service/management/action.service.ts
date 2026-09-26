@@ -33,5 +33,10 @@ export class AktionService {
     remove(page: string, action: string) : Observable<any> 
     {
       return this._http.put<any>(`${environment.url}action/remove`, { page: page, action: action })
+    }
+    
+    permission(role: string, rexource: string, page: string, action: any, status: boolean) : Observable<any> 
+    {
+      return this._http.put<any>(`${environment.url}action/permission`, { role: role, rexource: rexource, page: page, action: action, status: status })
     } 
 }

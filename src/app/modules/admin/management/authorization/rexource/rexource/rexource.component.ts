@@ -49,7 +49,6 @@ export class RexourceComponent
   removeData = signal<any>(null)
   rxcPages = signal<any>([])
   thePages: boolean = false
-
    
   isModalOpen: boolean = false
   title: string = ''
@@ -71,6 +70,8 @@ export class RexourceComponent
   linkCss: string = "text-black border-2 bg-gray-200 hover:bg-[#3e4095] hover:text-white"
   unLinkCss: string = "text-black border-2 bg-yellow-200 hover:bg-gray-600 hover:text-white"
   boteeName: string = 'Link'   
+
+  data = signal<any>([])
 
   constructor(private store: Store<AppState>){} 
 
@@ -99,8 +100,6 @@ export class RexourceComponent
       this.hasNextPage.set(rexrc?.rexources?.pagination?.hasNextPage)
     })    
   }
-
-  data = signal<any>([])
 
   columns: ColumnDef<any>[] = [
     {

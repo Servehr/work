@@ -34,10 +34,10 @@ export class SkillSearchComponent {
     'padding': '20px'
   }
 
-  options:{ id: string, name: string }[] = 
+  options:{ _id: string, name: string }[] = 
    [
-      { id: 'user-location', name:'Use My Location' },
-      { id: 'select-location', name:'Choose Location' }
+      { _id: 'user-location', name:'Use My Location' },
+      { _id: 'select-location', name:'Choose Location' }
    ]
   
   errorMessages = 

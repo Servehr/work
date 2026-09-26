@@ -1,11 +1,20 @@
 <a 
    (click)="'/home'"
 >
-   <app-image
-      [src]="src"
-      [alt]="alt"
-      [height]="height"
-      [width]="width"
+   <!-- <app-image
+     [src]="src"
+     [alt]="alt"
+     class="cursor-none"
+     [objectFit]="'scale-down'"
+     [fullWidth]="false"
+     [fullHeight]="false"
    >
-   </app-image>
+   </app-image> -->
+   <app-image
+     [src]="src"
+     [alt]="alt"
+     [customClass]="customClass()"
+     objectFit="contain"
+   >
+   </app-image>   
 </a>

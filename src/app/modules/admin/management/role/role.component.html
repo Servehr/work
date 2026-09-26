@@ -136,7 +136,7 @@
   (closeModal)="writeRole = false"
 >
   <app-write-role 
-    [title]="title" 
+    [title]="title()" 
     [buttonName]="buttonName" 
     (close)="writeRole = false"
     [dataToUpdate]="dataToUpdate()"
@@ -147,18 +147,20 @@
 </app-modal>
 
 
-@if(openLinkResource())
+@if(openLinkRoleResource())
 {
   <app-modal 
-    [isOpen]="openRoleResource()" 
+    [isOpen]="openLinkRoleResource()" 
     title="title" 
-    [modalWidth]="modalWidth"
-    (closeModal)="closeOpenRoleResorce()"
+    [modalWidth]="modalWidthWide"
+    (closeModal)="closeOpenLinkRoleResource()"
   >
     <app-role-resource-linking 
-      [roleName]="roleName"
-      (close)="closeOpenRoleResorce()"
+      [roleName]="roleName()"
+      (close)="closeOpenLinkRoleResource()"
       [roleId]="roleId()"
+      [roleResourceTitle]="roleResourceTitle()"
+      [theRoleResources]="theRoleResources()"
     >
     </app-role-resource-linking>
   </app-modal>
@@ -168,14 +170,15 @@
 {
   <app-modal 
     [isOpen]="openRoleResource()" 
-    title="title" 
+    title="title()" 
     [modalWidth]="modalWidth"
     (closeModal)="closeOpenRoleResorce()"
   >
     <app-role-resource 
-      [roleName]="roleName"
+      [roleName]="roleName()"
       (close)="closeOpenRoleResorce()"
       [resources]="resources()"
+      [title]="title()" 
     >
     </app-role-resource>
   </app-modal>

@@ -184,22 +184,22 @@ export class RegisterComponent
    base64NinImage: string | ArrayBuffer | null = null
    base64PassportImage: string | ArrayBuffer | null = null
     
-   categories:{ id: string, name: string }[] = 
+   categories:{ _id: string, name: string }[] = 
    [
-      { id: 'technician', name:'Technician' },
-      { id: 'apprenticeship', name:'TVet appretenship' },
-      { id: 'vendor', name:'Vendor' },
-      { id: 'agent', name:'Agent' },
-      { id: 'partner', name:'Partners' }
+      { _id: 'technician', name:'Technician' },
+      { _id: 'apprenticeship', name:'TVet appretenship' },
+      { _id: 'vendor', name:'Vendor' },
+      { _id: 'agent', name:'Agent' },
+      { _id: 'partner', name:'Partners' }
    ]
     
-   plans:{ id: string, name: string }[] = 
+   plans:{ _id: string, name: string }[] = 
    [
-      { id: 'free', name:'Free' },
-      { id: 'Basic', name:'Basic' },
-      { id: 'Plus', name:'Plus' },
-      { id: 'premium', name:'Premium' },
-      { id: 'gold', name:'Gold' }
+      { _id: 'free', name:'Free' },
+      { _id: 'Basic', name:'Basic' },
+      { _id: 'Plus', name:'Plus' },
+      { _id: 'premium', name:'Premium' },
+      { _id: 'gold', name:'Gold' }
    ] 
 
    errorMessages = 

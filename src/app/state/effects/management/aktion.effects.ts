@@ -8,7 +8,7 @@ import AppState from "../../app.state";
 import { SetErrorMessage, SetLoadingStatus } from "../../actions/spinner.action";
 import { ToastrService } from "ngx-toastr";
 import { AKTION_START_SUCCESS, PAGE_SUCCESS, START_PAGE_AKTION } from "../../actions/management/page.actions";
-import { CREATE_AKTION, PAGE_AKTION_SUCCESS, REMOVE_AKTION, START_AKTION, UPDATE_AKTION } from "../../actions/management/aktion.actions";
+import { CREATE_AKTION, PAGE_AKTION_SUCCESS, PERMISSION, REMOVE_AKTION, START_AKTION, UPDATE_AKTION } from "../../actions/management/aktion.actions";
 import { AktionService } from "../../../service/management/action.service";
 
 
@@ -158,6 +158,37 @@ export class AktionEffect {
                       this.toastr.success(data?.message)
                       this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200, page: 'remove-action'  } }))
                       this.store.dispatch(START_PAGE_AKTION({ page: action?.page }))
+                    },
+                    error: (err) => { 
+                      this.toastr.error( err?.error?.message, 'Error deleting')
+                    },
+                    complete: () => {
+                    
+                    },
+                  }
+                )
+              )
+           }
+        )
+      )
+    }, { dispatch: false, functional: true })  
+
+
+    permission$ = createEffect(() => {
+      return this.actions$.pipe(
+        ofType(PERMISSION),
+          switchMap((action) => 
+           {
+            return this.aktionService.permission(action.role, action.rexource, action.page, action.action, action?.status)
+             .pipe(
+                tap(
+                  {
+                    next: (data) => 
+                    { 
+                      console.log(data)
+                      // this.toastr.success(data?.message)
+                      this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200, page: 'remove-action'  } }))
+                      // this.store.dispatch(START_PAGE_AKTION({ page: action?.page }))
                     },
                     error: (err) => { 
                       this.toastr.error( err?.error?.message, 'Error deleting')

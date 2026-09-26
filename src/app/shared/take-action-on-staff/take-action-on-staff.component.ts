@@ -43,12 +43,12 @@ export class TakeActionOnStaffComponent implements OnInit {
    @Input() buttonName: string = ''
    @Output() close: EventEmitter<void> = new EventEmitter()
     
-   actions:{ id: string, name: string }[] = 
+   actions:{ _id: string, name: string }[] = 
    [
-      { id: 'suspend', name:'Suspend' },
-      { id: 'exit', name: 'Exit' },
-      { id: 'sack', name:'Sack' },
-      { id: 'relieve', name:'relieve' },
+      { _id: 'suspend', name:'Suspend' },
+      { _id: 'exit', name: 'Exit' },
+      { _id: 'sack', name:'Sack' },
+      { _id: 'relieve', name:'relieve' },
    ]
     
    pageTitle: string = ''

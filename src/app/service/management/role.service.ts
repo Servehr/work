@@ -33,5 +33,21 @@ export class RoleService {
     remove(value: string) : Observable<any> 
     {
       return this._http.put<any>(`${environment.url}role/remove`, { role: value })
+    } 
+    
+    connectResourceToRole(role: string, rexource: string) : Observable<any> 
+    {
+      return this._http.put<any>(`${environment.url}role/resource-link`, { role, rexource })
+    }  
+    
+    disconnectResourceFromRole(role: string, rexource: string) : Observable<any> 
+    {
+      return this._http.put<any>(`${environment.url}role/resource-unlink`, { role, rexource })
+    }  
+    
+    roleResources(role: string) : Observable<any> 
+    {
+      return this._http.get<any>(`${environment.url}role/resources?role=${role}`)
     }    
+    
 }

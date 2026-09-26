@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, input, signal } from '@angular/core';
 
 @Component({
   selector: 'app-role-resource',
@@ -9,7 +9,8 @@ import { Component, signal } from '@angular/core';
 })
 export class RoleResourceComponent {
 
-  roleName = signal<string>('')
-  resources = signal<any>([])
+  title = input<string>('')
+  roleName = input<string>('')
+  resources = input<any>([])
 
 }

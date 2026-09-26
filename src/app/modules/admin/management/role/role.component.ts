@@ -25,6 +25,8 @@ import { RemoveRoleComponent } from './remove-role/remove-role.component';
 import { ArrowRightComponent } from '../../../../util/icons/arrow-right/arrow-right.component';
 import { BoteenComponent } from '../../../../util/icons/boteen/boteen.component';
 import { AddRemoveComponent } from '../../../../util/icons/add-remove/add-remove.component';
+import { RoleResourceComponent } from './role-resource/role-resource.component';
+import { RoleResourceLinkingComponent } from './role-resource-linking/role-resource-linking.component';
 
 // 1. Define your data structure
 type Person = { name: string; description: string; };
@@ -37,7 +39,7 @@ const columnHelper = createColumnHelper<any>();
   imports: [
              FlexRenderDirective, NgIcon, 
              ModalComponent, 
-             WriteRoleComponent, RemoveRoleComponent, LoaderComponent, PaginationComponent
+             WriteRoleComponent, RemoveRoleComponent, LoaderComponent, PaginationComponent, RoleResourceComponent, RoleResourceLinkingComponent
            ],
   templateUrl: './role.component.html',
   styleUrl: './role.component.scss'
@@ -53,14 +55,17 @@ export class RoleComponent {
   dataToUpdate = signal<any>(null)
   removeData = signal<any>(null)
 
-  openLinkResource = signal<boolean>(false)
-  roleId = signal<string>('')
+  openLinkRoleResource = signal<boolean>(false)
+  theRoleResources = signal<any>([])
+  title = signal<string>('')
+  roleResourceTitle = signal<string>('')
+  roleId = signal<string>('')  
   roleName = signal<string>('')
   resources = signal<any>([])
 
   isModalOpen: boolean = false
-  title: string = ''
   modalWidth: string = 'w-[700px]'
+  modalWidthWide: string = 'w-[880px]'
 
   // pagination
   currentPage = signal<number>(1)
@@ -119,7 +124,7 @@ export class RoleComponent {
 
   ToggleWithTitle = (status: string) => 
   {
-    this.title = status
+    this.title.set(status)
     this.buttonName = 'Save'
     this.writeRole = true
   } 
@@ -137,8 +142,11 @@ export class RoleComponent {
        accessorKey: 'role',
        header: 'Add/Remove',
        cell: (context) => {
-         const roleId = context.getValue<number>()
-        const roleName = ''
+        
+        const rexources = context.row.original.rexources
+        const resourceIds = rexources.map((rexource: any) => {
+          return rexource?._id
+        })
 
         return flexRenderComponent(
            AddRemoveComponent, {
@@ -146,7 +154,7 @@ export class RoleComponent {
                value: context.getValue<{ count: number, data: any, roleName: string }>(),
              },
              outputs: {
-               clickEvent: (value) => this.connectResourceToRole(value)
+               clickEvent: (value) => this.connectResourceToRole(value, rexources, resourceIds)
              }
            }
          )
@@ -158,6 +166,8 @@ export class RoleComponent {
       cell: (context) => {
 
         const rexources = context.row.original.rexources
+        const roleName = context.row.original.name
+
         return flexRenderComponent(
            BoteenComponent, {
              inputs: {
@@ -167,7 +177,7 @@ export class RoleComponent {
                boteenCssClass: this.unLinkCss,
              },
              outputs: {
-               clickEvent: (value) => this.roleResource(value, rexources)
+               clickEvent: (value) => this.roleResource(rexources, roleName)
              }
            }
          )
@@ -232,9 +242,9 @@ export class RoleComponent {
   {
      if(action === 'update')
      {
-        this.title = 'Update Department'
+        this.title.set('Update Department')
         this.buttonName = 'Update'
-        this.ToggleWithTitle(this.title)
+        this.ToggleWithTitle(this.title())
      } else {
         this.isModalOpen = true
      }
@@ -248,7 +258,7 @@ export class RoleComponent {
 
   change(cellData: any): void 
   {
-    this.title = 'Update Category'
+    this.title.set('Update Category')
     this.buttonName = 'Update'
     // this.writeCategory.set(true)
     console.log(cellData)
@@ -270,31 +280,38 @@ export class RoleComponent {
     this.store.dispatch(START_ROLE({ page: Number(this.currentPage()), limit: Number(this.perPage()) }))
   }
 
-  connectResourceToRole(role: { count: number, data: any, roleName: string }): void
+  connectResourceToRole(role: { count: number, data: any, roleName: string }, rexources: any, resourceIds: string[]): void
   {
-    // this.title = 'connect Page To Resource'
-    // this.buttonName.set('Save')
-    // this.selectedPage.set({ id: resourceId, resourceName: resourceName, pageId: pageId })
-    // console.log(this.selectedPage())
-    // this.connectPage = true 
-    console.log(role)
+    this.roleId.set(role?.data)
+    const theTitle: string = `All selected rescoure(s) will be associated with ${role?.roleName}`
+    this.roleResourceTitle.set(theTitle)
+    this.theRoleResources.set(resourceIds)
+    this.openLinkRoleResource.set(true)
   }
 
-  roleResource(role: { count: number, data: any, roleName: string }, rexources: any): void
+  roleResource(rexources: any, roleName: string): void
   {
-    this.roleName.set(role?.roleName)
+    this.title.set(`All resources under ${roleName}`)
+    this.roleName.set(roleName)
     this.resources.set(rexources)
     this.openRoleResource.set(true)
   }  
 
   closeOpenRoleResorce()
   {
+    this.recall()
     this.openRoleResource.set(false)
   }
 
-  closeOpenLinkResource()
+  closeOpenLinkRoleResource()
   {
-    this.openLinkResource.set(false)
+    this.recall()
+    this.openLinkRoleResource.set(false)
+  }
+
+  recall()
+  {
+    this.store.dispatch(START_ROLE({ page: Number(this.currentPage()), limit: Number(this.perPage()) }))
   }
 
 }
