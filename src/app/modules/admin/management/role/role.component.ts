@@ -13,17 +13,20 @@ import { ModalComponent } from '../../../../components/modal/modal.component';
 import { bootstrapPlusCircleFill } from '@ng-icons/bootstrap-icons';
 import { WriteRoleComponent } from './write-role/write-role.component';
 import { NgIcon } from '@ng-icons/core';
-import { RemoveComponent } from '../../../../shared/remove/remove.component';
 import { LoaderComponent } from '../../../../components/loader/loader.component';
 import { sleepWait } from '../../../../util/sleep';
 import { START_ROLE } from '../../../../state/actions/management/role.actions';
 import { Store } from '@ngrx/store';
 import AppState from '../../../../state/app.state';
 import { getSpinnerStatus } from '../../../../state/selectors/spinner.selector';
-import { getAllDepartment } from '../../../../state/selectors/admin/management/department.selector';
 import { PaginationComponent } from '../../../../components/pagination/pagination.component';
 import { getAllRole } from '../../../../state/selectors/admin/management/role.selector';
 import { RemoveRoleComponent } from './remove-role/remove-role.component';
+import { ArrowRightComponent } from '../../../../util/icons/arrow-right/arrow-right.component';
+import { BoteenComponent } from '../../../../util/icons/boteen/boteen.component';
+import { AddRemoveComponent } from '../../../../util/icons/add-remove/add-remove.component';
+import { RoleResourceComponent } from './role-resource/role-resource.component';
+import { RoleResourceLinkingComponent } from './role-resource-linking/role-resource-linking.component';
 
 // 1. Define your data structure
 type Person = { name: string; description: string; };
@@ -36,7 +39,7 @@ const columnHelper = createColumnHelper<any>();
   imports: [
              FlexRenderDirective, NgIcon, 
              ModalComponent, 
-             WriteRoleComponent, RemoveRoleComponent, LoaderComponent, PaginationComponent
+             WriteRoleComponent, RemoveRoleComponent, LoaderComponent, PaginationComponent, RoleResourceComponent, RoleResourceLinkingComponent
            ],
   templateUrl: './role.component.html',
   styleUrl: './role.component.scss'
@@ -46,14 +49,23 @@ export class RoleComponent {
   PageTitle: string = 'Roles'
   buttonName: string = ''
   writeRole: boolean = false
+  openRoleResource = signal<boolean>(false)
   addIcon: any = bootstrapPlusCircleFill
   isLoading = signal<boolean>(false)
   dataToUpdate = signal<any>(null)
   removeData = signal<any>(null)
 
+  openLinkRoleResource = signal<boolean>(false)
+  theRoleResources = signal<any>([])
+  title = signal<string>('')
+  roleResourceTitle = signal<string>('')
+  roleId = signal<string>('')  
+  roleName = signal<string>('')
+  resources = signal<any>([])
+
   isModalOpen: boolean = false
-  title: string = ''
   modalWidth: string = 'w-[700px]'
+  modalWidthWide: string = 'w-[880px]'
 
   // pagination
   currentPage = signal<number>(1)
@@ -62,6 +74,15 @@ export class RoleComponent {
   totalDocs =  signal<number>(10)
   hasNextPage =  signal<boolean>(true)
   hasPrevPage =  signal<boolean>(true)
+
+  boteenStyle: any = {
+    'color': 'black',
+    'border': '2px solid #3e4095',
+    'border-radius': '10px'
+  }
+  linkCss: string = "text-black border-2 bg-gray-200 hover:bg-[#3e4095] hover:text-white"
+  unLinkCss: string = "text-black border-2 bg-yellow-200 hover:bg-gray-600 hover:text-white"
+  boteeName: string = 'Link'
 
   // 2. Define data
   data = signal<any>([])
@@ -101,14 +122,9 @@ export class RoleComponent {
     })    
   }  
 
-  onConfirm = () => 
-  {
-     
-  }
-
   ToggleWithTitle = (status: string) => 
   {
-    this.title = status
+    this.title.set(status)
     this.buttonName = 'Save'
     this.writeRole = true
   } 
@@ -122,6 +138,51 @@ export class RoleComponent {
        accessorKey: 'description',
        header: 'About Department'
     },
+    {
+       accessorKey: 'role',
+       header: 'Add/Remove',
+       cell: (context) => {
+        
+        const rexources = context.row.original.rexources
+        const resourceIds = rexources.map((rexource: any) => {
+          return rexource?._id
+        })
+
+        return flexRenderComponent(
+           AddRemoveComponent, {
+             inputs: {
+               value: context.getValue<{ count: number, data: any, roleName: string }>(),
+             },
+             outputs: {
+               clickEvent: (value) => this.connectResourceToRole(value, rexources, resourceIds)
+             }
+           }
+         )
+       }       
+    }, 
+    {
+      accessorKey: 'resources',
+      header: 'Resources Under Role',
+      cell: (context) => {
+
+        const rexources = context.row.original.rexources
+        const roleName = context.row.original.name
+
+        return flexRenderComponent(
+           BoteenComponent, {
+             inputs: {
+               value: context.getValue<{ count: number, data: any }>(),
+               boteenStyle: this.boteenStyle,
+               boteeName: 0,
+               boteenCssClass: this.unLinkCss,
+             },
+             outputs: {
+               clickEvent: (value) => this.roleResource(rexources, roleName)
+             }
+           }
+         )
+      }       
+    },       
     {
        accessorKey: 'change',
        header: '',
@@ -181,9 +242,9 @@ export class RoleComponent {
   {
      if(action === 'update')
      {
-        this.title = 'Update Department'
+        this.title.set('Update Department')
         this.buttonName = 'Update'
-        this.ToggleWithTitle(this.title)
+        this.ToggleWithTitle(this.title())
      } else {
         this.isModalOpen = true
      }
@@ -197,7 +258,7 @@ export class RoleComponent {
 
   change(cellData: any): void 
   {
-    this.title = 'Update Category'
+    this.title.set('Update Category')
     this.buttonName = 'Update'
     // this.writeCategory.set(true)
     console.log(cellData)
@@ -216,6 +277,40 @@ export class RoleComponent {
     this.currentPage.set(Number(event.page))
     this.isLoading.set(true)  
     await sleepWait(500)
+    this.store.dispatch(START_ROLE({ page: Number(this.currentPage()), limit: Number(this.perPage()) }))
+  }
+
+  connectResourceToRole(role: { count: number, data: any, roleName: string }, rexources: any, resourceIds: string[]): void
+  {
+    this.roleId.set(role?.data)
+    const theTitle: string = `All selected rescoure(s) will be associated with ${role?.roleName}`
+    this.roleResourceTitle.set(theTitle)
+    this.theRoleResources.set(resourceIds)
+    this.openLinkRoleResource.set(true)
+  }
+
+  roleResource(rexources: any, roleName: string): void
+  {
+    this.title.set(`All resources under ${roleName}`)
+    this.roleName.set(roleName)
+    this.resources.set(rexources)
+    this.openRoleResource.set(true)
+  }  
+
+  closeOpenRoleResorce()
+  {
+    this.recall()
+    this.openRoleResource.set(false)
+  }
+
+  closeOpenLinkRoleResource()
+  {
+    this.recall()
+    this.openLinkRoleResource.set(false)
+  }
+
+  recall()
+  {
     this.store.dispatch(START_ROLE({ page: Number(this.currentPage()), limit: Number(this.perPage()) }))
   }
 

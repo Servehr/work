@@ -48,13 +48,13 @@ export class WriteStateComponent implements OnInit {
      'padding': '20px'
    }
     
-   countries:{ id: string, name: string }[] = 
+   countries:{ _id: string, name: string }[] = 
    [
-      { id: 'nigeria', name:'Nigeria' },
-      { id: 'russia', name:'Russia' },
-      { id: 'china', name:'China' },
-      { id: 'Iran', name:'Iran' },
-      { id: 'north-korea', name:'North Korea' }
+      { _id: 'nigeria', name:'Nigeria' },
+      { _id: 'russia', name:'Russia' },
+      { _id: 'china', name:'China' },
+      { _id: 'Iran', name:'Iran' },
+      { _id: 'north-korea', name:'North Korea' }
    ]
   
    errorMessages = 

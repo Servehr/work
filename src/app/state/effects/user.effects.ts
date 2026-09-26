@@ -101,7 +101,7 @@ export class UserEffect {
                     next: (data) => { this.toastr.success(data?.message) },
                     error: (err) => { 
                       this.toastr.error( err?.error?.message, 'Error subscribing'),
-                      this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 400  } }))
+                      this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 400, page: 'letter-for-user'  } }))
                     },
                     complete: () => { 
                         this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200 } })) 
@@ -131,7 +131,7 @@ export class UserEffect {
                     next: (data) => { this.toastr.success(data?.message) },
                     error: (err) => { 
                       this.toastr.error( err?.error?.message, 'Message failed'),
-                      this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 400  } }))
+                      this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 400, page: 'fast-response'  } }))
                     },
                     complete: () => { 
                         this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200 } })) 

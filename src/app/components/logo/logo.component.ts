@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ImageComponent } from '../controls/image/image.component';
 
 @Component({
@@ -13,7 +13,8 @@ export class LogoComponent {
   height: number = 10
   width: number = 180
   alt: string = 'image-here'
-  src: string = '../../../../../Technicians Logo.png'
+  src: string = '../../../../../technicianswoork.jpeg'
+  customClass = signal<string>('w-[160px]')
   
 }
 

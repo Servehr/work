@@ -39,6 +39,8 @@ import { UserDetailComponent } from './modules/admin/user-search/user-detail/use
 import { UserSearchComponent } from './modules/admin/user-search/user-search.component';
 import { PlanComponent } from './modules/anonymous/plan/plan.component';
 import { EventDetailComponent } from './modules/anonymous/events/event-detail/event-detail.component';
+import { MarketPlaceComponent } from './modules/anonymous/market-place/market-place.component';
+
 
 export const routes: Routes = [
    { 
@@ -60,6 +62,7 @@ export const routes: Routes = [
         { path: 'training', component: TrainingComponent  },
         { path: 'jobs', component: JobsComponent  },
         { path: 'community', component: CommunityComponent  },
+        { path: 'market-place', component: MarketPlaceComponent  },
         { path: 'blog', component: BlogComponent  },
         { path: 'partner', component: PartnerComponent   },
         { path: 'faq', component: FaqComponent  },

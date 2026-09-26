@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, exhaustMap, map, switchMap, tap } from "rxjs/operators";
-import { of } from "rxjs";
+import { of, Subject } from "rxjs";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import AppState from "../../app.state";
@@ -9,6 +9,8 @@ import { SetErrorMessage, SetLoadingStatus } from "../../actions/spinner.action"
 import { ToastrService } from "ngx-toastr";
 import { CREATE_ROLE, REMOVE_ROLE, ROLE_SUCCESS, START_ROLE, UPDATE_ROLE } from "../../actions/management/role.actions";
 import { RoleService } from "../../../service/management/role.service";
+import { CONNECT_REXOURCE, DISCONNECT_REXOURCE, ROLE_RESOURCES, START_REXOURCE } from "../../actions/management/rexource.actions";
+import { AdministrationService } from "../../../notifications/administration";
 
 
 @Injectable({
@@ -21,6 +23,7 @@ export class RoleEffect {
     private roleService = inject(RoleService);
     private store = inject(Store<AppState>);
     private router = inject(Router)
+    private administraion = inject(AdministrationService)
 
     constructor(private toastr: ToastrService){} 
 
@@ -38,7 +41,10 @@ export class RoleEffect {
                   const transformed = data?.data?.data?.map((item: any) => ({
                     ...item,
                     change: item?._id,
-                    remove: item?._id
+                    remove: item?._id,
+                    rexources: item?.rexources,
+                    role: { count: item?.rexources?.length === undefined ? 0 : item?.rexources?.length, data: item?._id, roleName: item?.name },
+                    resources: { count: item?.rexources?.length === undefined ? 0 : item?.rexources?.length, data: item?._id, roleName: item?.name },
                   }))
                   transformed.pagination = 
                   {
@@ -48,6 +54,7 @@ export class RoleEffect {
                     hasNextPage: data?.data?.hasNextPage,
                     hasPrevPage: data?.data?.hasPrevPage
                   }
+                  console.log(transformed)
                   this.store.dispatch(SetErrorMessage({ msg: "successful", statusCode: 200, operation: "all-category"  }))
                   this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200 }}))
                   return ROLE_SUCCESS({ role: transformed });
@@ -160,6 +167,95 @@ export class RoleEffect {
            }
         )
       )
-    }, { dispatch: false, functional: true })     
+    }, { dispatch: false, functional: true }) 
+    
+    
+    connectResource$ = createEffect(() => {
+      return this.actions$.pipe(
+        ofType(CONNECT_REXOURCE),
+          switchMap((action) => 
+           {
+            return this.roleService.connectResourceToRole(action.role, action.rexource)
+             .pipe(
+                tap(
+                  {
+                    next: (data) => { 
+                      this.toastr.success(data?.message)
+                      this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200  } }))
+                      this.store.dispatch(START_REXOURCE({ page: Number(1), limit: Number(100) }))
+                      },
+                    error: (err) => { 
+                      this.toastr.error( err?.error?.message, 'Error connecting resource to role')
+                      // this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 400  } }))
+                    },
+                    complete: () => {
+                    
+                    },
+                  }
+                )
+              )
+           }
+        )
+      )
+    }, { dispatch: false, functional: true })
+
+    disconnectResource$ = createEffect(() => {
+      return this.actions$.pipe(
+        ofType(DISCONNECT_REXOURCE),
+          switchMap((action) => 
+           {
+            return this.roleService.disconnectResourceFromRole(action.role, action.rexource)
+             .pipe(
+                tap(
+                  {
+                    next: (data) => { 
+                      this.toastr.success(data?.message)
+                      this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200  } }))
+                      this.store.dispatch(START_REXOURCE({ page: Number(1), limit: Number(100) }))
+                      },
+                    error: (err) => { 
+                      this.toastr.error( err?.error?.message, 'Error connecting resource to role')
+                      // this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 400  } }))
+                    },
+                    complete: () => {
+                    
+                    },
+                  }
+                )
+              )
+           }
+        )
+      )
+    }, { dispatch: false, functional: true })
+
+    roleResources$ = createEffect(() => {
+      return this.actions$.pipe(
+        ofType(ROLE_RESOURCES),
+          switchMap((action) => 
+           {
+            return this.roleService.roleResources(action.role)
+             .pipe(
+                tap(
+                  {
+                    next: (data) => 
+                    {                    
+                      this.administraion.emitData(data?.data, 'roles')
+                      this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200  } }))
+                    },
+                    error: (err) => { 
+                      this.toastr.error( err?.error?.message, 'Error connecting resource to role')
+                      // this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 400  } }))
+                    },
+                    complete: () => {
+                    
+                    },
+                  }
+                )
+              )
+           }
+        )
+      )
+    }, { dispatch: false, functional: true })
+  
 
 }

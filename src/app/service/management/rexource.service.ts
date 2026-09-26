@@ -29,5 +29,10 @@ export class RexourceService {
     remove(value: string) : Observable<any> 
     {
       return this._http.put<any>(`${environment.url}rexource/remove`, { rexource: value })
+    } 
+    
+    pagesActions(role: string, rexource: string) : Observable<any> 
+    {
+      return this._http.get<any>(`${environment.url}rexource/pages-actions?role=${role}&resource=${rexource}`)
     }    
 }

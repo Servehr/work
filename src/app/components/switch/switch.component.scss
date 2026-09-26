@@ -1,0 +1,25 @@
+.toggle-switch 
+{
+  width: 60px;
+  height: 30px;
+  background-color: #ccc;
+  cursor: pointer;
+  border-radius: 15px;
+  position: relative;
+  transition: background-color 0.3s;
+}
+
+.toggle-switch.active 
+{
+  background-color: #4CAF50;
+}
+
+.label 
+{
+  color: white;
+  font-weight: bold;
+  position: absolute;
+  top: 5px;
+  left: 18px;
+  font-size: 12px;
+}

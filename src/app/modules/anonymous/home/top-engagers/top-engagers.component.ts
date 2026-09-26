@@ -14,9 +14,10 @@ import { ImageComponent } from '../../../../components/controls/image/image.comp
 export class TopEngagersComponent {
 
   threeDot: any = bootstrapThreeDotsVertical  
-  rating: any = bootstrapStarFill      
-  width = signal<number>(300)
-  height = signal<number>(300)
+  rating: any = bootstrapStarFill   
+
+  width = input<number>(300)
+  height = input<number>(300)
   
   isHamburgOver: boolean = false
 

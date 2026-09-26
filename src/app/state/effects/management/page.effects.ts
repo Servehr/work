@@ -8,8 +8,7 @@ import AppState from "../../app.state";
 import { SetErrorMessage, SetLoadingStatus } from "../../actions/spinner.action";
 import { ToastrService } from "ngx-toastr";
 import { PageService } from "../../../service/management/page.service";
-import { CONNECT_PAGE_TO_RESOURCE, CREATE_PAGE, PAGE_SUCCESS, REMOVE_PAGE, START_PAGE, UPDATE_PAGE } from "../../actions/management/page.actions";
-import { PAGE_TO_RESOURCE } from "../../constants/management/page";
+import { AKTION_START_SUCCESS, CONNECT_PAGE_TO_RESOURCE, CREATE_PAGE, DISCONNECT_PAGE_FROM_RESOURCE, PAGE_SUCCESS, REMOVE_PAGE, START_PAGE, START_PAGE_AKTION, UPDATE_PAGE } from "../../actions/management/page.actions";
 import { START_REXOURCE } from "../../actions/management/rexource.actions";
 
 
@@ -40,10 +39,12 @@ export class PageEffect {
                 {
                   const transformed = data?.data?.data?.map((item: any) => ({
                     ...item,
+                    rexource: item?.rexource?._id,
+                    rexourceName: item?.rexource?.name,
                     connect: item?._id,
                     disconnect: item?._id,
                     action: item?._id,
-                    modify: { count: 0, data: item?.aktions },
+                    modify: { page: item?._id, count: item?.aktions?.length, data: item?.aktions },
                     change: item?._id,
                     remove: item?._id
                   }))
@@ -55,9 +56,49 @@ export class PageEffect {
                     hasNextPage: data?.data?.hasNextPage,
                     hasPrevPage: data?.data?.hasPrevPage
                   }
+                  console.log(transformed)
                   this.store.dispatch(SetErrorMessage({ msg: "successful", statusCode: 200, operation: "all-page"  }))
-                  this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200, page: 'page' }}))
+                  this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200, page: 'all-page' }}))
                   return PAGE_SUCCESS({ pages: transformed });
+                }
+              ),
+              catchError((errMsg: any) => 
+                {
+                  this.store.dispatch(SetErrorMessage({ msg: errMsg?.error?.message?.message, statusCode: errMsg?.error?.message?.statusCode, operation: "resource-list"  }))
+                  this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 400 }}))
+                  return of();
+                }
+              )
+            )
+          })
+      )
+    })
+
+      
+    pageActions$ = createEffect(() => {
+      return this.actions$.pipe(
+        ofType(START_PAGE_AKTION),
+          switchMap((action) => 
+           {
+            return this.pageService.pagesActions(action?.page)
+             .pipe(
+                map((data) => 
+                {
+                  console.log(data)
+                  const transformed = data?.data?.aktions.map((item: any) => ({
+                    ...item
+                  }))
+                  transformed.fromPlace = 
+                  {
+                    location: 'pageAction'
+                  }
+                  console.log("*****************************************")
+                  console.log(transformed)
+                  console.log(transformed?.fromPlace?.location)
+                  console.log("*****************************************")
+                  this.store.dispatch(SetErrorMessage({ msg: "successful", statusCode: 200, operation: "page-actions"  }))
+                  this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200, page: "page-actions" }}))
+                  return AKTION_START_SUCCESS({ page_actions: transformed });
                 }
               ),
               catchError((errMsg: any) => 
@@ -94,7 +135,7 @@ export class PageEffect {
                     next: (data) => 
                     { 
                       this.toastr.success(data?.message),                      
-                      this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200, page: 'rexource' } })) 
+                      this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200, page: 'new-page' } })) 
                       this.store.dispatch(START_PAGE({ page: action.page, limit: action.perPage }))
                     },
                     error: (err) => { 
@@ -127,7 +168,8 @@ export class PageEffect {
                       this.store.dispatch(START_PAGE({ page: action.page, limit: action.perPage }))
                     },
                     error: (err) => { 
-                      this.toastr.error( err?.error?.message, 'Error updating resource'),
+                      console.log("Wrong")
+                      this.toastr.error( err?.error?.message, 'Error updating page'),
                       this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 400  } }))
                     },
                     complete: () => { 
@@ -179,13 +221,14 @@ export class PageEffect {
                 tap(
                   {
                     next: (data) => { 
+                      // console.log(data)
                       this.toastr.success(data?.message)
                       this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200  } }))
                       // this.store.dispatch(START_PAGE({ page: action.page, limit: action.limit }))
                       this.store.dispatch(START_REXOURCE({ page: action.page, limit: action.limit }))
                       },
                     error: (err) => { 
-                      console.log(err)
+                      // console.log(err)
                       this.toastr.error( err?.error?.message, 'Error deleting')
                     },
                     complete: () => {
@@ -198,4 +241,37 @@ export class PageEffect {
         )
       )
     }, { dispatch: false, functional: true }) 
+    
+  
+    disconnectPageToResource$ = createEffect(() => {
+      return this.actions$.pipe(
+        ofType(DISCONNECT_PAGE_FROM_RESOURCE),
+          switchMap((action) => 
+           {
+            return this.pageService.disconnectPageFromResource(action?.resource, action?.pagee)
+             .pipe(
+                tap(
+                  {
+                    next: (data) => { 
+                      // console.log(data)
+                      this.toastr.success(data?.message)
+                      this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200  } }))
+                      // this.store.dispatch(START_PAGE({ page: action.page, limit: action.limit }))
+                      console.log("Completed")
+                      this.store.dispatch(START_REXOURCE({ page: action.page, limit: action.limit }))
+                     },
+                    error: (err) => { 
+                      // console.log(err)
+                      this.toastr.error( err?.error?.message, 'Error deleting')
+                    },
+                    complete: () => {
+                    
+                    },
+                  }
+                )
+              )
+           }
+        )
+      )
+    }, { dispatch: false, functional: true })     
 }

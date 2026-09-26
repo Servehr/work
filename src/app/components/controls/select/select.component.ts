@@ -39,7 +39,7 @@ export class SelectComponent<T> extends SelectOptionValueAccessorDirective<T> {
     name: string = ""
 
     @Input()
-    options: { id: string, name: string }[] = []
+    options: { _id: string, name: string }[] = []
     // options: string = ""
 
     @Input()

@@ -12,8 +12,8 @@ import { JsonPipe, AsyncPipe } from '@angular/common';
 })
 export class EventsComponent {
 
-    height: number = 100
-    width: number = 1531
+    height = signal<any>(100)
+    width = signal<any>(1351)
     alt: string = 'image-here'
     // eventBanner = signal<string>('../../../../../Technicians Logo.png')
     eventBanner = signal<string>('../../../../../upcomingevent.png')

@@ -127,11 +127,15 @@ export class HomeComponent implements OnInit
      }
    ])
 
+   // sliders = signal([
+   //   "https://ps.w.org/ml-slider/assets/banner-1544x500.png?rev=2907610",
+   //   "https://cdn2.mageplaza.com/media/general2/H4BvhSS.jpg"
+   // ])
+   
    sliders = signal([
-     "https://ps.w.org/ml-slider/assets/banner-1544x500.png?rev=2907610",
-     "https://cdn2.mageplaza.com/media/general2/H4BvhSS.jpg"
+     "../../../../../banner-1544x500.png",
+     "../../../../../H4BvhSS.jpg"
    ])
-
 
    constructor(private store: Store<AppState>, private router: Router, private dbService: DatabaseService) 
    { 

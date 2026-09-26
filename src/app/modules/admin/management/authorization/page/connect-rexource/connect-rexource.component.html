@@ -22,7 +22,7 @@
           <p
             class="mb-5 text-md text-gray-600 pl-4"
           >
-              Connect Page To Resource - {{ selectedPage().id }}
+              Connect Page To Resource
           </p>
           <p
             class="mb-5 text-md text-gray-600 pl-4"
@@ -41,6 +41,7 @@
                 <div 
                   class="col-span-3 bg-white"
                 >
+                
                     <div 
                         class="p-4 transition-shadow border rounded-lg shadow-sm hover:shadow-lg"
                     >
@@ -56,35 +57,30 @@
                                     {{rexource?.name}} 
                                 </span>
                             </div>
-                            <!-- @if(box == 'false')
-                            { -->
-                            @if(selectedRexourceId() === rexource?._id && selectedPage().id === pageIds())
+                            
+                            @if(selectedPage().id === rexource?._id)
                             {
                               <button 
-                                (click)="connectPageToResource(rexource?._id, selectedPage().id)"
+                                (click)="disconnectPageFromRexource(rexource?._id, selectedPage().id)"
                                 class="p-2 rounded-md bg-red-600 cursor-pointer z-5 text-sm font-bold text-white"
                               >
                                 Remove
                               </button>
                             }
-                            @else 
+                            @else
                             {
                               <button 
                                 (click)="connectPageToResource(rexource?._id, selectedPage().id)"
-                                class="p-2 rounded-md bg-green-600 cursor-pointer z-5 text-sm font-bold text-white"
-                                [disabled]="selectedRexourceId() "
+                                class="p-2 rounded-md z-5 text-sm font-bold text-white"
+                                [class]="selectedPage().id ? 'bg-gray-600' : 'bg-green-600 cursor-pointer'"
+                                [disabled]="selectedPage().id"
                               >
                                 Add
                               </button>
                             }
-
-                            <!-- } -->
                             
                         </div>
-                        <!-- <div class="flex flex-row col-span-12 justify-start">
-                            <span class="col-span-6 w-full inline-block text-sm text-black bg-green-00 rounded text-left">14%</span>
-                            <span class="col-span-6 w-full text-sm text-right">from 2019</span>
-                        </div> -->
+                        
                     </div>
                 </div>
               }

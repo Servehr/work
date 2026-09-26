@@ -29,15 +29,15 @@ export class SkillSearchComponent {
   causeChanges = signal<string>('')
 
   style: any = {
-    'background-color' : '#be9d18',
+    'background-color' : '#F86E37',
     'color': 'black',
     'padding': '20px'
   }
 
-  options:{ id: string, name: string }[] = 
+  options:{ _id: string, name: string }[] = 
    [
-      { id: 'user-location', name:'Use My Location' },
-      { id: 'select-location', name:'Choose Location' }
+      { _id: 'user-location', name:'Use My Location' },
+      { _id: 'select-location', name:'Choose Location' }
    ]
   
   errorMessages = 
@@ -61,7 +61,7 @@ export class SkillSearchComponent {
    ChangeOnButtonHoverIn()
    {
       this.style = {
-        'background-color' : '#776005',
+        'background-color' : '#bb6417',
         'color': 'white',
         'padding': '20px'     
       }
@@ -70,8 +70,8 @@ export class SkillSearchComponent {
    ChangeOnButtonHoverOut()
    {
       this.style = {
-         'background-color' : '#be9d18',
-         'color': 'black',
+         'background-color' : '#F86E37',
+         'color': 'white',
          'padding': '20px'   
       } 
    }  

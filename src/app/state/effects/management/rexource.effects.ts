@@ -8,7 +8,8 @@ import AppState from "../../app.state";
 import { SetErrorMessage, SetLoadingStatus } from "../../actions/spinner.action";
 import { ToastrService } from "ngx-toastr";
 import { RexourceService } from "../../../service/management/rexource.service";
-import { CREATE_REXOURCE, REMOVE_REXOURCE, REXOURCE_SUCCESS, START_REXOURCE, UPDATE_REXOURCE } from "../../actions/management/rexource.actions";
+import { CREATE_REXOURCE, REMOVE_REXOURCE, REXOURCE_SUCCESS, START_REXOURCE, START_REXOURCE_PAGES_ACTIONS, UPDATE_REXOURCE } from "../../actions/management/rexource.actions";
+import { AdministrationService } from "../../../notifications/administration";
 
 
 @Injectable({
@@ -17,6 +18,9 @@ import { CREATE_REXOURCE, REMOVE_REXOURCE, REXOURCE_SUCCESS, START_REXOURCE, UPD
 
 export class RexourceEffect {
 
+    
+    private administraion = inject(AdministrationService)
+    
     private actions$ = inject(Actions);
     private rexorceService = inject(RexourceService);
     private store = inject(Store<AppState>);
@@ -39,7 +43,8 @@ export class RexourceEffect {
                     ...item,
                     rexourcePages: { count: item?.pages?.length, data: null },
                     change: item?._id,
-                    remove: item?._id
+                    remove: item?._id,
+                    connect: item?._id
                   }))
                   transformed.pagination = 
                   {
@@ -50,6 +55,7 @@ export class RexourceEffect {
                     hasPrevPage: data?.data?.hasPrevPage
                   }
                   console.log(transformed)
+                  console.log("Bravery")
                   this.store.dispatch(SetErrorMessage({ msg: "successful", statusCode: 200, operation: "all-resource"  }))
                   this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200, page: 'rexource' }}))
                   return REXOURCE_SUCCESS({ rexources: transformed });
@@ -148,6 +154,44 @@ export class RexourceEffect {
                       this.toastr.success(data?.message)
                       this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200  } }))
                       this.store.dispatch(START_REXOURCE({ page: action.page, limit: action.limit }))
+                      },
+                    error: (err) => { 
+                      this.toastr.error( err?.error?.message, 'Error deleting')
+                    },
+                    complete: () => {
+                    
+                    },
+                  }
+                )
+              )
+           }
+        )
+      )
+    }, { dispatch: false, functional: true })  
+    
+    pagesActions$ = createEffect(() => {
+      return this.actions$.pipe(
+        ofType(START_REXOURCE_PAGES_ACTIONS),
+          switchMap((action) => 
+           {
+            return this.rexorceService.pagesActions(action.role, action.rexource)
+             .pipe(
+                tap(
+                  {
+                    next: (data) => { 
+                      
+                      const transformed = data?.data?.data?.map((item: any) => ({
+                        ...item,
+                        rexourcePages: { count: item?.pages?.length, data: null },
+                        change: item?._id,
+                        remove: item?._id,
+                        connect: item?._id
+                      }))
+
+                      console.log(data?.data[0])
+                      this.administraion.emitData(data?.data, 'pages-actions')
+                      this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200  } }))
+                      
                       },
                     error: (err) => { 
                       this.toastr.error( err?.error?.message, 'Error deleting')

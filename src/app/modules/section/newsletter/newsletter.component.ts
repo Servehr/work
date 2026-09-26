@@ -81,8 +81,11 @@ export class NewsletterComponent {
       this.isLoading.set(false)
       this.store.select(getSpinnerStatus).subscribe((data: any) => 
       {
-        this.isLoading.set(data?.loader?.loading)
-        this.statusCode.set(data?.loader?.statusCode)
+         if(data?.loader?.page === 'letter-for-user')
+         {
+            this.isLoading.set(data?.loader?.loading)
+            this.statusCode.set(data?.loader?.statusCode)
+         }
       }) 
     }
 

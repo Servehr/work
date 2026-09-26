@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, input, Input, OnInit, Output } from '@angular/core';
 import { SelectComponent } from '../../components/controls/select/select.component';
 import { BotinComponent } from '../../components/controls/botin/botin.component';
 import { Store } from '@ngrx/store';
@@ -24,11 +24,14 @@ export class TakeActionOnStaffComponent implements OnInit {
     'border-radius' : '20%'
   }
 
-  @Input()
-  height: number = 400
+  height = input<any>(40)
+  width = input<any>(40)
+  
+  // @Input()
+  // height: number = 400
 
-  @Input()
-  width: number = 400
+  // @Input()
+  // width: number = 400
   
   @Input()
   alt: string = 'company-logo'
@@ -40,12 +43,12 @@ export class TakeActionOnStaffComponent implements OnInit {
    @Input() buttonName: string = ''
    @Output() close: EventEmitter<void> = new EventEmitter()
     
-   actions:{ id: string, name: string }[] = 
+   actions:{ _id: string, name: string }[] = 
    [
-      { id: 'suspend', name:'Suspend' },
-      { id: 'exit', name: 'Exit' },
-      { id: 'sack', name:'Sack' },
-      { id: 'relieve', name:'relieve' },
+      { _id: 'suspend', name:'Suspend' },
+      { _id: 'exit', name: 'Exit' },
+      { _id: 'sack', name:'Sack' },
+      { _id: 'relieve', name:'relieve' },
    ]
     
    pageTitle: string = ''

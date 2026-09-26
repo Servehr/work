@@ -38,7 +38,7 @@
               [cols]="cols"
               formControlName="pageDescription"
               [customErrorMessages]="errorMessages"
-              [value]="dataToUpdate()?.data?.description"
+              [value]="'Beautiful'"
             >
             </app-text-area>
           </div>
@@ -55,9 +55,8 @@
             <app-botin
               (ChangeOnButtonHoverIn)="ChangeOnButtonHoverIn()" 
               (ChangeOnButtonHoverOut)="ChangeOnButtonHoverOut()"
-              (sendData)="writePage()"
+              (sendData)="write()"
               [style]="style"
-              (click)="write()"
             >
               <div
                 class="flex flex-col space-y-1 items-center justify-between"

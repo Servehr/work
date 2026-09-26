@@ -1,10 +1,33 @@
 <div 
-   class='container mx-auto pb-30 mt-1 md:mt-1 mb-7 shadow-md'
+   class='container mx-auto pb-30 mt-1 md:mt-1 mb-7'
 >
-   <div 
-     class="w-12/12 md:w-12/12 border-2 h-[800px] p-3"
+   <p 
+     class="w-full pl-1 pt-4 pb-10 text-[40px] text-[#918d88]"
    >
-     <p>Partners</p>
+     Partners
+   </p>
+
+   <div 
+      class="flex w-full md:gap-20 px-2 md:px-5 md:p-3 mb-5"
+    >
+
+      @for(partner of partners(); track partner.logo)
+      {
+         <div 
+            class="w-6/12 md:w-2/12"
+          >
+            <app-image
+              [src]="partner.logo"
+              [alt]="partner.alt"
+              class="cursor-none"
+              [objectFit]="'scale-down'"
+              [fullWidth]="false"
+              [fullHeight]="false"
+            >
+            </app-image>
+         </div>
+      }
 
    </div>
+
 </div>

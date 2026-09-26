@@ -120,7 +120,6 @@
   title="title" 
   [modalWidth]="modalWidth"
   (closeModal)="isModalOpen = false"
-  (close)="onConfirm()"
 >
   <app-remove-role
     (close)="isModalOpen = false"
@@ -135,10 +134,9 @@
   title="title" 
   [modalWidth]="modalWidth"
   (closeModal)="writeRole = false"
-  (confirmAction)="onConfirm()"
 >
   <app-write-role 
-    [title]="title" 
+    [title]="title()" 
     [buttonName]="buttonName" 
     (close)="writeRole = false"
     [dataToUpdate]="dataToUpdate()"
@@ -147,3 +145,41 @@
   >
   </app-write-role>
 </app-modal>
+
+
+@if(openLinkRoleResource())
+{
+  <app-modal 
+    [isOpen]="openLinkRoleResource()" 
+    title="title" 
+    [modalWidth]="modalWidthWide"
+    (closeModal)="closeOpenLinkRoleResource()"
+  >
+    <app-role-resource-linking 
+      [roleName]="roleName()"
+      (close)="closeOpenLinkRoleResource()"
+      [roleId]="roleId()"
+      [roleResourceTitle]="roleResourceTitle()"
+      [theRoleResources]="theRoleResources()"
+    >
+    </app-role-resource-linking>
+  </app-modal>
+}
+
+@if(openRoleResource())
+{
+  <app-modal 
+    [isOpen]="openRoleResource()" 
+    title="title()" 
+    [modalWidth]="modalWidth"
+    (closeModal)="closeOpenRoleResorce()"
+  >
+    <app-role-resource 
+      [roleName]="roleName()"
+      (close)="closeOpenRoleResorce()"
+      [resources]="resources()"
+      [title]="title()" 
+    >
+    </app-role-resource>
+  </app-modal>
+}

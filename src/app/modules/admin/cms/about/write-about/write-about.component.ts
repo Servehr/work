@@ -81,29 +81,45 @@ export class WriteAboutComponent {
     })       
           
     effect(() => 
-    {
+    {console.log("Hello")
       if(this.dataToUpdate())
-      {
+      {console.log("May be")
         this.aboutForm.get('writeHeader')?.setValue(this.dataToUpdate()?.data?.title)
         this.aboutForm.get('writeSomething')?.setValue(this.dataToUpdate()?.data?.aboutus)
       } else {
          this.aboutForm.get('writeHeader')?.setValue("")
-         this.aboutForm.get('writeSomething')?.setValue("")
+         this.aboutForm.get('writeSomething')?.setValue("")   
+         this.aboutForm.patchValue({
+            writeSomething: ''
+         });      
+         this.dataToUpdate.set(null)
+         console.log("Wisdom")
       }
     }, { allowSignalWrites: true })
  } 
 
   async ngOnInit()
   {    
+    console.log("Got here")
     this.store.select(getSpinnerStatus).subscribe((data: any) => 
     {
        if(data?.loader?.page === 'write-about')
        {
-         this.aboutForm.get('writeHeader')?.setValue("")
-         this.aboutForm.get('writeSomething')?.setValue("")
+         this.aboutForm.get('writeHeader')?.setValue(null)
+         this.aboutForm.get('writeSomething')?.setValue(null)   
+         this.aboutForm.patchValue({
+            writeSomething: ''
+         });   
+        //  this.aboutForm.get('writeHeader')?.setValue("")
+        //  this.aboutForm.get('writeSomething')?.setValue("")
+        // Clears all fields and validation flags
          this.dataToUpdate.set(null)
+         this.aboutForm.reset();
+         this.aboutForm.markAsPristine()
+         this.isLoading.set(false)
          this.closeWriteAbout.emit(false)
        }
+       console.log("Talk to me")
     }) 
   } 
 
@@ -116,23 +132,24 @@ export class WriteAboutComponent {
    {
      if(changes['dataToUpdate'])
      {
-       console.log(this.dataToUpdate()?.data?._id)
+       console.log("Wetin")
        this.about.set(this.dataToUpdate()?.data?._id)
      } else {
          this.aboutForm.get('writeHeader')?.setValue("")
          this.aboutForm.get('writeSomething')?.setValue("")
          this.dataToUpdate.set(null)
+         console.log("Greatness")
      }
   }   
 
   Write = () => 
   {
      this.store.dispatch(SetLoadingStatus({ loader: { loading: true, statusCode: 0 }}))
-      console.log(this.aboutForm.valid)
      if(this.aboutForm.valid)
      {
+       this.isLoading.set(true)
        of(this.aboutForm.value)
-       .pipe(delay(1000))
+       .pipe(delay(2000))
        .subscribe((aboutUs: any) => 
          {   
             this.title.set(aboutUs['writeHeader'])
@@ -145,14 +162,16 @@ export class WriteAboutComponent {
             } else {
               this.store.dispatch(UPDATE_ABOUT({ about: this.about(), title: this.title(), aboutus: this.aboutus(),  images: aboutImage }))
             }
+            // this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 0 }}))
          }
        )
      } else {
+        this.isLoading.set(false)
         console.log(this.aboutForm.value)
         this.aboutForm.markAllAsTouched()
         this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 0 }}))
         this.message.set("Attend to all fields")
-        this.store.dispatch(SetErrorMessage({ msg: this.message(), statusCode: 400, operation: "user-onboarding"  }))
+        // this.store.dispatch(SetErrorMessage({ msg: this.message(), statusCode: 400, operation: "user-onboarding"  }))
      } 
   }
 

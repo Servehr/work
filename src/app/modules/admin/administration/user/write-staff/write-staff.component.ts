@@ -28,12 +28,12 @@ export class WriteStaffComponent implements OnInit {
    @Input() buttonName: string = ''
    @Output() close: EventEmitter<void> = new EventEmitter()
     
-   departments:{ id: string, name: string }[] = 
+   departments:{ _id: string, name: string }[] = 
    [
-      { id: 'Human Resource', name:'Hr' },
-      { id: 'Sales', name: 'Sales' },
-      { id: 'Finance', name:'finance' },
-      { id: 'agent', name:'agent' },
+      { _id: 'Human Resource', name:'Hr' },
+      { _id: 'Sales', name: 'Sales' },
+      { _id: 'Finance', name:'finance' },
+      { _id: 'agent', name:'agent' },
    ]
     
    pageTitle: string = ''
