@@ -20,6 +20,6 @@ export class SwitchComponent {
   toggle() 
   {
     this.isOn = !this.isOn;
-    this.isOnChange.emit({ action: this.action(), page: this.page(), status: this.isOn });
+    this.isOnChange.emit({ action: this.action(), page: this.page(), status: !this.status() });
   }
 }

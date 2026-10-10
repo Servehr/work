@@ -10,6 +10,8 @@ import { ToastrService } from "ngx-toastr";
 import { AKTION_START_SUCCESS, PAGE_SUCCESS, START_PAGE_AKTION } from "../../actions/management/page.actions";
 import { CREATE_AKTION, PAGE_AKTION_SUCCESS, PERMISSION, REMOVE_AKTION, START_AKTION, UPDATE_AKTION } from "../../actions/management/aktion.actions";
 import { AktionService } from "../../../service/management/action.service";
+import { AdministrationService } from "../../../notifications/administration";
+import { START_REXOURCE_PAGES_ACTIONS } from "../../actions/management/rexource.actions";
 
 
 
@@ -23,6 +25,7 @@ export class AktionEffect {
     private aktionService = inject(AktionService);
     private store = inject(Store<AppState>);
     private router = inject(Router)
+    private administration = inject(AdministrationService)
 
     constructor(private toastr: ToastrService){} 
 
@@ -185,8 +188,10 @@ export class AktionEffect {
                   {
                     next: (data) => 
                     { 
-                      console.log(data)
                       // this.toastr.success(data?.message)
+                      console.log(data?.data[0])
+                      // this.administration.emitData(data?.data[0], 'pages-actions')
+                      this.store.dispatch(START_REXOURCE_PAGES_ACTIONS({ role: action.role, rexource: action.rexource }))
                       this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 200, page: 'remove-action'  } }))
                       // this.store.dispatch(START_PAGE_AKTION({ page: action?.page }))
                     },

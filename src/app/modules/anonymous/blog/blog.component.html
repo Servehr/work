@@ -1,10 +1,95 @@
-<div 
-   class='container mx-auto pb-30 mt-1 md:mt-1 mb-7 shadow-md'
->
-   <div 
-     class="w-12/12 md:w-12/12 border-2 h-[800px] p-3"
-   >
-     <p>Blog</p>
 
-   </div>
-</div>
+    <!-- Main Layout Container -->
+    <main class="container main-layout">
+        
+        <!-- Blog Posts Grid Area -->
+        <section class="blog-listing">
+            <h1 class="section-title">Latest Stories</h1>
+            
+            <div class="posts-grid">
+                <!-- Blog Post 1 -->
+                <article class="post-card">
+                    <div class="post-image">
+                        <img src="https://picsum.photos" alt="Post Thumbnail">
+                        <!-- <span class="category">Technology</span> -->
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">October 10, 2026 • 5 min read</div>
+                        <h2 class="post-title"><a href="#">Mastering the Art of Modern Web Design</a></h2>
+                        <p class="post-excerpt">Discover the core principles behind crafting beautiful, accessible, and high-performance websites that captivate users...</p>
+                        <a href="#" class="read-more">Read Full Article &rarr;</a>
+                    </div>
+                </article>
+
+                <!-- Blog Post 2 -->
+                <article class="post-card">
+                    <div class="post-image">
+                        <img src="https://picsum.photos" alt="Post Thumbnail">
+                        <!-- <span class="category">Lifestyle</span> -->
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">October 08, 2026 • 4 min read</div>
+                        <h2 class="post-title"><a href="#">Finding Balance in a Digital-First World</a></h2>
+                        <p class="post-excerpt">Unplugging safely. Practical strategies for escaping screen fatigue and recovering creative focus in a busy era...</p>
+                        <a href="#" class="read-more">Read Full Article &rarr;</a>
+                    </div>
+                </article>
+
+                <!-- Blog Post 3 -->
+                <article class="post-card">
+                    <div class="post-image">
+                        <img src="https://picsum.photos" alt="Post Thumbnail">
+                        <!-- <span class="category">Productivity</span> -->
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">October 05, 2026 • 7 min read</div>
+                        <h2 class="post-title"><a href="#">10 Tools to Optimize Daily Engineering Tasks</a></h2>
+                        <p class="post-excerpt">Streamline your production workflow. An evaluation of terminal extensions, testing suites, and text processing utilities...</p>
+                        <a href="#" class="read-more">Read Full Article &rarr;</a>
+                    </div>
+                </article>
+
+                <!-- Blog Post 4 -->
+                <article class="post-card">
+                    <div class="post-image">
+                        <img src="https://picsum.photos" alt="Post Thumbnail">
+                        <!-- <span class="category">Design</span> -->
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">September 29, 2026 • 6 min read</div>
+                        <h2 class="post-title"><a href="#">The Subtle Power of Perfect Typography</a></h2>
+                        <p class="post-excerpt">Explore why font pairings, visual hierarchy, and precise letter-spacing make or break a digital editorial presentation...</p>
+                        <a href="#" class="read-more">Read Full Article &rarr;</a>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Pagination Links -->
+            <div class="pagination">
+                <a href="#" class="page-btn disabled">&larr; Prev</a>
+                <a href="#" class="page-number active">1</a>
+                <a href="#" class="page-number">2</a>
+                <a href="#" class="page-number">3</a>
+                <a href="#" class="page-btn">Next &rarr;</a>
+                </div>
+        </section>
+
+        <!-- Sidebar Section -->
+        <aside class="sidebar">
+            <div class="widget about-widget">
+                <h3>About The Blog</h3>
+                <p>Welcome to our repository of digital thought. We cover modern engineering, creative UI frameworks, and product productivity habits weekly.</p>
+            </div>
+
+            <div class="widget newsletter-widget">
+                <h3>Newsletter</h3>
+                <p>Join over 12,000 developers receiving zero-fluff text directly in their inbox.</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Your email address" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </aside>
+
+    </main>
+

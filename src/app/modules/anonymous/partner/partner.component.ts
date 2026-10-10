@@ -10,6 +10,8 @@ import { ImageComponent } from '../../../components/controls/image/image.compone
 })
 export class PartnerComponent implements OnInit {
 
+  customClass = signal<string>('w-[160px]')
+
   partners =  signal([
     {
       logo: '../../../../../logo/iphone-logo-png_seeklogo-363420.png',

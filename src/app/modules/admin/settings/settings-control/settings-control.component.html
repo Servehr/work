@@ -44,10 +44,10 @@
       {
         <div 
           key={index}
-          class='col-span-12 px-3 text-[13px] py-4 text-left font-bold text-md capitalize border-2 rounded-none border-gray-100 pb-2'
+          class='col-span-12 px-3 bg-gray-100 text-[13px] py-4 mb-1 text-left font-bold text-md capitalize border-2 rounded-none border-gray-100 pb-2'
         >
           <div 
-            class="w-full flex justify-between items-center p-2 border-2 border-gray-200 capitalize rounded-lg"
+            class="w-full flex justify-between items-center p-2 border-2 border-gray-300 capitalize rounded-lg"
           >
             {{ page?.name }}
             <!-- @if(page.aktions?.length > 0)
@@ -72,7 +72,7 @@
                   [action]="page?.aktions"
                   [page]="page?._id"
                   (isOnChange)="pointTo($event)"
-                  [status]="true"
+                  [status]="page?.all === page?.actionLength"
                 >
                 </app-switch>
               </div>

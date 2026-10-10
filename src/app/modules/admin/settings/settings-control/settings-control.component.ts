@@ -7,6 +7,7 @@ import { Store } from '@ngrx/store';
 import AppState from '../../../../state/app.state';
 import { PERMISSION } from '../../../../state/actions/management/aktion.actions';
 
+
 @Component({
   selector: 'app-settings-control',
   standalone: true,
@@ -48,11 +49,16 @@ export class SettingsControlComponent implements OnInit, OnDestroy {
       {
         if(data?.condition === 'pages-actions')
         {
-
-          this.selectedResourceName.set(data?.data[0]?.name)
+          console.log(data?.data[0])
+          this.selectedResourceName.set(data?.name)
           this.resourcePagesActions.set(data?.data[0]?.pages)
         }         
       })
+   }
+
+   pageReload = () =>
+   {
+
    }
 
    pointTo(data: { action: any, page: string, status: boolean })
@@ -62,10 +68,12 @@ export class SettingsControlComponent implements OnInit, OnDestroy {
          const Ids = data?.action?.map((onlyId: { _id: string, name: string }) => {
             return onlyId?._id
          })        
-         console.log("An Array")
+         // console.log("An Array")
+         console.log({ role: this.selectedRole(), rexource: this.selectedResource(), page: data?.page, action: Ids, status: data?.status })
          this.store.dispatch(PERMISSION({ role: this.selectedRole(), rexource: this.selectedResource(), page: data?.page, action: Ids, status: data?.status }))
       } else {
-         console.log("Single")
+         // console.log("Single")
+         console.log({ role: this.selectedRole(), rexource: this.selectedResource(), page: data?.page, action: data?.action, status: data?.status })
          this.store.dispatch(PERMISSION({ role: this.selectedRole(), rexource: this.selectedResource(), page: data?.page, action: data?.action, status: data?.status }))
       }
    }

@@ -36,7 +36,7 @@
           
           <!-- Hidden by default, shown on parent hover -->
           <ul 
-            class="hidden z-500 group-hover:block absolute bg-white border w-[110px] text-[12px] -ml-20"
+            class="hidden z-99999 group-hover:block absolute bg-white border w-[110px] text-[12px] -ml-20"
           >
             <li 
               class="px-2 py-1 hover:bg-[#f6e7a0] border-b-2 border-gray-200 cursor-pointer"
@@ -61,37 +61,41 @@
           </ul>
         </div>        
       
-          <app-image
-            [src]="user.image"
-            [alt]="user.alt"
-            [height]="height()"
-            [width]="width()"
-            class="cursor-none"
-          >
-          </app-image>   
+        <app-image
+          [src]="user.image"
+          [alt]="user.alt"
+          [height]="height()"
+          [width]="width()"
+        >
+        </app-image>
+          
+        <div 
+          class="w-full flex justify-between items-center text-[12px] px-2 py-2"
+        >
+          <p>Temitope Ugochukwu</p>
           <div 
-            class="w-full flex justify-between items-center text-[12px] px-2 py-2"
+            class="flex justify-center items-center gap-1"
           >
-            <p>Temitope Ugochukwu</p>
-            <div 
-              class="flex justify-center items-center gap-1"
-            >
-              <p>Rating:</p>
-              <p class="text-yellow-700 mt-1">
-                <ng-icon 
-                  [svg]="rating" 
-                  [size]="'14'" 
-                  [color]="'yellow'" 
-                  [ngClass]="{'circle-over' : isHamburgOver}"
-                  (mouseover)="overBurger()"
-                  class="z-50 cursor-pointer ml-1"
-                />
-              </p>
-            </div>
+            <p>Rating:</p>
+            <p class="text-yellow-700 mt-1">
+              <ng-icon 
+                [svg]="rating" 
+                [size]="'14'" 
+                [color]="'yellow'" 
+                [ngClass]="{'circle-over' : isHamburgOver}"
+                (mouseover)="overBurger()"
+                class="z-50 cursor-pointer ml-1"
+              />
+            </p>
           </div>
+         </div>
         </div>
       }
    } @else {
-       <h1>No user present</h1>
+      <div 
+        class="w-full flex justify-center items-center p-8 py-40"
+      >
+        <h1>No user present</h1>
+      </div>
    }
 </div>
