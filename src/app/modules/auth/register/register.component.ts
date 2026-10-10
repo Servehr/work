@@ -322,9 +322,8 @@ export class RegisterComponent
             const ninImage: string = this.base64NinImage?.toString()!
             const passportImage: string = this.base64PassportImage?.toString()!
             console.log("Done")
-            // this.store.dispatch(START_REGISTER({ firstname, surname, phone, email, category, password, cPassword, ninImage, passportImage }))
-            
-            this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 0 }}))
+            this.store.dispatch(START_REGISTER({ firstname, surname, phone, email, category, password, cPassword, ninImage, passportImage }))            
+            // this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 0 }}))
 
          }
        )
