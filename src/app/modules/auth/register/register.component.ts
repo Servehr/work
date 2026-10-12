@@ -112,6 +112,8 @@ export function fileValidator(location: string, maxSizeInBytes: number, allowedE
 {
   return (control: AbstractControl): ValidationErrors | null => {
    const file = control.value as File;
+
+   console.log(file)
    
 
    const formControl = control as FormControl;
@@ -129,6 +131,7 @@ export function fileValidator(location: string, maxSizeInBytes: number, allowedE
    }
 
    // Validate File Size
+   console.log(file.size)
    if (file.size > maxSizeInBytes) 
    {
      // return { fileSizeExceeded: { max: maxSizeInBytes, actual: file.size } };
@@ -137,6 +140,7 @@ export function fileValidator(location: string, maxSizeInBytes: number, allowedE
 
    // Validate File Extension
    const fileType = file.type
+   console.log(fileType)
    const extension = fileType.split("/")
    if (!allowedExtensions.includes(extension[1])) 
    {
@@ -303,6 +307,9 @@ export class RegisterComponent
        const ninDocument: File = this.registerForm.value.ninImage;
        const nin = await this.toBase64(ninDocument)
 
+       console.log(passport)
+       console.log(nin)
+
        of(this.registerForm.value)
        .pipe(delay(1000))
        .subscribe(UserDetail => 
@@ -319,18 +326,17 @@ export class RegisterComponent
             const password: string  = UserDetail['password']!
             const cPassword: string  = UserDetail['cPassword']!
             const category: string  = UserDetail['category']!
-            const ninImage: string = this.base64NinImage?.toString()!
-            const passportImage: string = this.base64PassportImage?.toString()!
+            const ninImage: string = UserDetail['nin']
+            const passportImage: string = UserDetail['passport']
             console.log("Done")
-            this.store.dispatch(START_REGISTER({ firstname, surname, phone, email, category, password, cPassword, ninImage, passportImage }))            
+            // this.store.dispatch(START_REGISTER({ firstname, surname, phone, email, category, password, cPassword, ninImage, passportImage }))            
             // this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 0 }}))
-
          }
        )
      } else {
         console.log(this.registerForm.errors)
         console.log("********")
-        console.log(this.registerForm.value)
+        console.log(this.registerForm.value) 
         this.registerForm.markAllAsTouched()
         this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 0 }}))
         //   setTimeout(() => {           

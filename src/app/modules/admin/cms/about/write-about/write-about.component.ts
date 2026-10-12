@@ -81,9 +81,9 @@ export class WriteAboutComponent {
     })       
           
     effect(() => 
-    {console.log("Hello")
+    {
       if(this.dataToUpdate())
-      {console.log("May be")
+      {
         this.aboutForm.get('writeHeader')?.setValue(this.dataToUpdate()?.data?.title)
         this.aboutForm.get('writeSomething')?.setValue(this.dataToUpdate()?.data?.aboutus)
       } else {
@@ -93,14 +93,12 @@ export class WriteAboutComponent {
             writeSomething: ''
          });      
          this.dataToUpdate.set(null)
-         console.log("Wisdom")
       }
     }, { allowSignalWrites: true })
  } 
 
   async ngOnInit()
   {    
-    console.log("Got here")
     this.store.select(getSpinnerStatus).subscribe((data: any) => 
     {
        if(data?.loader?.page === 'write-about')
@@ -119,7 +117,6 @@ export class WriteAboutComponent {
          this.isLoading.set(false)
          this.closeWriteAbout.emit(false)
        }
-       console.log("Talk to me")
     }) 
   } 
 
@@ -132,13 +129,11 @@ export class WriteAboutComponent {
    {
      if(changes['dataToUpdate'])
      {
-       console.log("Wetin")
        this.about.set(this.dataToUpdate()?.data?._id)
      } else {
          this.aboutForm.get('writeHeader')?.setValue("")
          this.aboutForm.get('writeSomething')?.setValue("")
          this.dataToUpdate.set(null)
-         console.log("Greatness")
      }
   }   
 
@@ -167,7 +162,6 @@ export class WriteAboutComponent {
        )
      } else {
         this.isLoading.set(false)
-        console.log(this.aboutForm.value)
         this.aboutForm.markAllAsTouched()
         this.store.dispatch(SetLoadingStatus({ loader: { loading: false, statusCode: 0 }}))
         this.message.set("Attend to all fields")

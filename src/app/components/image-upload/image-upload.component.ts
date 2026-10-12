@@ -52,6 +52,7 @@ export class ImageUploadComponent<T> extends InputFileValueAcessorDirective<T> {
       const now: Date = new Date();
       const isoString: string = now.toISOString();
       const file = await this.base64ToFileUsingFetch(String(this.previewUrl), isoString)
+      console.log
       this.onChange(file)
       // const SafeUrlToFileObject = await this.safeUrlToFile(upload?.url, 'uploadImage')
       // const base64 = await this.toBase64(SafeUrlToFileObject);
@@ -75,12 +76,12 @@ export class ImageUploadComponent<T> extends InputFileValueAcessorDirective<T> {
       // })
   }
 
-  toBase64 = (file: any) => new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-  })
+  // toBase64 = (file: any) => new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => resolve(reader.result);
+  //     reader.onerror = (error) => reject(error);
+  // })
 
   private convertFileToBase64(file: File): Promise<string | ArrayBuffer | null> 
    {

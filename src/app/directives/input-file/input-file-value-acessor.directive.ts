@@ -1,5 +1,7 @@
-import { Directive, Inject, Injector, OnInit } from '@angular/core';
+import { Directive, inject, Inject, Injector, OnInit } from '@angular/core';
 import { ControlValueAccessor, FormControl, FormControlDirective, FormControlName, FormGroupDirective, NgControl, Validators } from '@angular/forms';
+import { reduceImageSize } from '../../util/image';
+
 
 @Directive({
   selector: '[appInputFileValueAcessor]',
@@ -63,20 +65,21 @@ export class InputFileValueAcessorDirective<T> implements ControlValueAccessor, 
    //   }
 
   writeValue(value: File | string | null): void 
-  {
+  {console.log("rrrrrrrrrrrrrrrrrrrrr")
+    console.log(value)
     if (!value) 
     {
       this.previewUrl = null;
       return;
     }
     if (typeof value === 'string') 
-    {
+    {console.log("Hellooo")
       console.log(this.control)
       this.onChange(null);
       this.previewUrl = value;
     } 
      else if (value instanceof File) 
-    {
+    {console.log("WhatsUp")
       this.createPreview(value);
       console.log(this.control)
     }
@@ -134,6 +137,7 @@ export class InputFileValueAcessorDirective<T> implements ControlValueAccessor, 
  onFileSelected(event: Event): void 
  {
    const input = event.target as HTMLInputElement;
+   console.log(input.files)
    if (input.files && input.files.length > 0) 
    {
      const fileType = input.files[0].type
@@ -144,18 +148,27 @@ export class InputFileValueAcessorDirective<T> implements ControlValueAccessor, 
    }
  }
 
- private processFile(file: File): void 
+ private processFile = async (file: File) =>
  {
    this.createPreview(file);
-   this.onChange(file);
-   this.onTouched();
+   const toBase64Version: any = this.toBase64(file)
+   const reducedImage: any = await reduceImageSize(toBase64Version)
+  //  this.onTouched();
  }
+
+ toBase64 = (file: any) => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+ })
 
  private createPreview(file: File): void 
  {
    const reader = new FileReader();
    reader.onload = () => {
-     console.log(reader.result)
+     this.onTouched();
+     this.onChange(file)
      this.previewUrl = reader.result as string;
    };
    reader.readAsDataURL(file);
