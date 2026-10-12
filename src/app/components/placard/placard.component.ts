@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, Input, signal } from '@angular/core';
 import { ImageComponent } from '../controls/image/image.component';
 import { NgClass } from '@angular/common';
 
@@ -16,6 +16,7 @@ export class PlacardComponent {
   alt: string = 'image-here'
   src: string = '../../../../../man.jpg'
   imageClass: string = 'rounded-full'
+  showText = input<boolean>(false)
 
   @Input()
   imageStyle: any = {

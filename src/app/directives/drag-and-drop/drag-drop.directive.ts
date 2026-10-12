@@ -87,7 +87,7 @@ export class DragDropDirective {
      } 
      
      if(this.uploadType === 'single')
-     {
+     {console.log("Single")
        const file = event?.dataTransfer?.files[0]!
 
       //  const uploadFileName: string = file?.name

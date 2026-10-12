@@ -30,9 +30,6 @@ export class InputFileValidationComponent<T> extends InputFileValueAcessorDirect
            ...this.errorMessages, ...customErrorMessages.currentValue
          }
        }
-       console.log(this.errors)
-       console.log(this.previewUrl)
-       console.log(this.errorMessages)
     }
 
 

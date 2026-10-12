@@ -1,9 +1,9 @@
 <div 
-    class="w-full flex h-2/12 px-5 py-4 flex shadow-lg justify-start items-center content-evenly space-x-2 border-3 border-slate-500 bg-gray-200"
+    class="w-full flex h-2/12 px-5 py-4 flex shadow-lg justify-center items-center content-evenly space-x-2 border-3 border-slate-500"
 > 
 <!-- bg-[#e0985d] #ffca0a -->
   <div 
-    class="w-10/12 flex gap-5"
+    class="w-8/12 flex-col gap-5 rounded-md"
   > 
     <app-image
       [src]="src"
@@ -16,11 +16,14 @@
    >
    </app-image>
 
+   @if(showText())
+   {
+
     <div 
-      class="flex flex-col -mt-3 -mb-2 pl-1"
+      class="flex -mb-2 pl-1"
     >
       <p 
-         class="w-full text-md mt-5 text-black"
+         class="w-full text-md mt-5 text-black border-2"
       >
         {{ fullname }}
       </p> 
@@ -31,12 +34,17 @@
         
       </p>                
     </div>
+
+    <div 
+      class="w-2/12 text-black hover:text-yellow-400 cursor-pointer"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-7 hover:border-white">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9" />
+      </svg>
+    </div> 
+  }
   </div> 
-  <div 
-    class="w-2/12 text-black hover:text-yellow-400 cursor-pointer"
-  >
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-7 hover:border-white">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9" />
-    </svg>
-  </div> 
+
+
+
 </div>
