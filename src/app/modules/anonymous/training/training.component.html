@@ -15,7 +15,7 @@
       class="container mx-auto pt-10 pb-6"
     >
        <p 
-         class="text-[26px] flex justify-center items-center text-gray-600"
+         class="text-[26px] flex justify-center items-center text-black"
        >
          Technicianswork offers training and certification program that empower individual to industry standard
        </p>
@@ -102,9 +102,9 @@
                  {{ course.content }}
               </p>
             </div>
-            <a 
-              href="#" 
-              class="border-t border-grey-light w-full p-4 rounded-lg text-center bg-green-800 text-xs text-white hover:text-red uppercase no-underline tracking-wide" 
+            <a  
+              class="border-t border-grey-light w-full cursor-pointer p-4 rounded-lg text-center bg-orange-700 hover:bg-orange-500 text-xs text-white hover:text-red uppercase no-underline tracking-wide" 
+              (click)="CourseDetail()"
             >
               Enroll Now
             </a>

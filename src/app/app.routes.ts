@@ -40,6 +40,7 @@ import { UserSearchComponent } from './modules/admin/user-search/user-search.com
 import { PlanComponent } from './modules/anonymous/plan/plan.component';
 import { EventDetailComponent } from './modules/anonymous/events/event-detail/event-detail.component';
 import { MarketPlaceComponent } from './modules/anonymous/market-place/market-place.component';
+import { CourseDetailComponent } from './modules/anonymous/training/course-detail/course-detail.component';
 
 
 export const routes: Routes = [
@@ -60,6 +61,7 @@ export const routes: Routes = [
         },
         { path: 'events-details', component: EventDetailComponent },
         { path: 'training', component: TrainingComponent  },
+        { path: 'course-detail', component: CourseDetailComponent  },
         { path: 'jobs', component: JobsComponent  },
         { path: 'community', component: CommunityComponent  },
         { path: 'market-place', component: MarketPlaceComponent  },
