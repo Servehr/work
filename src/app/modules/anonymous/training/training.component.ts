@@ -1,6 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { VirtualSlidesComponent } from '../home/virtual-slides/virtual-slides.component';
 import { ImageComponent } from '../../../components/controls/image/image.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-training',
@@ -10,6 +11,8 @@ import { ImageComponent } from '../../../components/controls/image/image.compone
   styleUrl: './training.component.scss'
 })
 export class TrainingComponent {
+
+  private router = inject(Router)
 
   bckImg: string = '../../../../../training/menwork.png'
 
@@ -71,5 +74,10 @@ export class TrainingComponent {
       content: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi, tempore sapiente eveniet quibusdam ab ea, quaerat placeat numquam aspernatur, accusamus magnam neque.'
     }
   ])
+
+  CourseDetail = () => 
+  {
+     this.router.navigate(['course-detail'])
+  }
 
 }
