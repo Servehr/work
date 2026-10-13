@@ -1,0 +1,18 @@
+<div class="slider-wrapper">
+  <!-- Enable virtual slides natively using the HTML attribute -->
+  <swiper-container 
+    virtual="true" 
+    slides-per-view="3" 
+    space-between="30" 
+    navigation="true" 
+    pagination="true">
+    
+    @for (slide of virtualSlides; track slide) {
+      <swiper-slide>
+        <div class="slide-content">
+          <h3>{{ slide }}</h3>
+        </div>
+      </swiper-slide>
+    }
+  </swiper-container>
+</div>

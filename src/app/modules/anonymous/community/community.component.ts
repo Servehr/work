@@ -1,14 +1,24 @@
 import { Component } from '@angular/core';
 import { PlacardComponent } from '../../../components/placard/placard.component';
+import { MakePostComponent } from './make-post/make-post.component';
+import { ModalComponent } from '../../../components/modal/modal.component';
+import { WysiwygComponent } from '../../../library/wysiwyg/wysiwyg.component';
 
 @Component({
   selector: 'app-community',
   standalone: true,
-  imports: [PlacardComponent],
+  imports: [PlacardComponent, MakePostComponent, ModalComponent, WysiwygComponent],
   templateUrl: './community.component.html',
   styleUrl: './community.component.scss'
 })
 export class CommunityComponent {
+
+  newPost: boolean = false
+  title: string = 'Create New Post'
+  modalWidth: string = 'width-[900px]'
+  height: { height: string } = { height: '100px' }
+
+  content: any = 'write plan'
 
   imageStyle: any = {
     'border-radius' : '20%'
@@ -42,6 +52,11 @@ export class CommunityComponent {
     { fullname: 'Billy Vasquez', path: '/user/upload-passport', profession: 'News anchor', icon: '' },
     { fullname: 'Carolyn Ortiz', path: '/user/upload-passport', profession: 'News anchor', icon: '' },
   ]
+
+  onConfirm = () =>
+  {
+
+  }
 
 
 }

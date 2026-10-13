@@ -13,6 +13,7 @@ import Quill from 'quill';
 export class WysiwygComponent {
 
   placeHolder: string = 'Type your content here...'
+  @Input() height: { height: string } = { height: '300px' }
   @Input() content: any = ''
   @Output() inputedData: EventEmitter<string> = new EventEmitter()
 

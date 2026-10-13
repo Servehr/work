@@ -26,6 +26,7 @@ export class MultipleImageUploadComponent {
   markMainImage: number = -1
   mainImagePosition: number = -1
   uploadType: string = 'multiple'
+  customClass = signal<string>('w-[160px]')
 
   isLoading = signal(false)
   ChangeOnHover: boolean = false

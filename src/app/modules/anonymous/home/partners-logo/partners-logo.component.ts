@@ -72,6 +72,6 @@ export class PartnersLogoComponent {
           name: '9:00am',
           alt: ''
         }
-      ])
+    ])
 
 }
