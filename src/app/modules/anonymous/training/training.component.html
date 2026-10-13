@@ -1,18 +1,119 @@
 <div 
-  class='container mx-auto p-3 py-4 md:p-10 flex-cols justify-center items-center'
+   class='d-flex h-fit'
 >
 
-  <main 
-     class="max-w-6xl mx-auto pt-4 pb-20 px-8"
+    <!-- <app-virtual-slides></app-virtual-slides> -->
+
+    <!-- <app-image
+      [src]="bckImg"
+      [alt]="'alt'"
+      objectFit="fill"
+    >
+    </app-image> -->
+
+    <div 
+      class="container mx-auto pt-10 pb-6"
+    >
+       <p 
+         class="text-[26px] flex justify-center items-center text-gray-600"
+       >
+         Technicianswork offers training and certification program that empower individual to industry standard
+       </p>
+       <h2 
+         class="text-[16px] text-blue-900 font-semibold mt-10 mb-4 flex justify-center items-center"
+       >
+         In Partnership with:-
+       </h2>
+
+    </div>
+</div>
+
+
+<div 
+  class="p-6 max-w-[1530px] mx-auto"
+>
+  
+  <!-- Container: 1 col on mobile, 3 cols on medium screens+ -->
+  <div 
+    class="grid grid-cols-2 md:grid-cols-6 gap-4 -mt-8"
   >
   
-    <div 
-       class="max-w-md mx-auto mb-14 text-center"
-    >
-      <h1 class="text-4xl font-semibold mb-6 lg:text-5xl"><span class="text-indigo-600">Flexible</span> Plans</h1>
-      <p class="text-xl text-gray-500 font-medium">Choose a plan that works best for you and your team.</p>
-    </div>
-  
-  </main>
+    @for(partner of partners(); track partner.logo)
+    {
+        <div 
+          class="flex justify-center items-center border-2 border-gray-200 rounded-xl"
+        >
+          <app-image
+            [src]="partner.logo"
+            [alt]="partner.alt"
+            objectFit="fill"
+            [customClass]="customClass()"
+          >
+          </app-image>
 
+        </div>
+        <!-- </div> -->
+    }
+    
+  </div>
+</div>
+
+<div 
+  class="container flex mx-auto p-2 mt-10"
+>
+  <span 
+    class="text-[18px] w-full flex justify-center items-center mb-6"
+  >
+     Browse our list of programs
+  </span>
+</div>
+
+
+<div 
+  class="container mx-auto mb-28"
+>
+  <div 
+    class="flex flex-wrap -m-3"
+  > 
+
+    @for(course of Courses(); track course.logo)
+    { 
+      <div 
+        class="w-full sm:w-1/2 md:w-1/4 flex flex-col p-3"
+      >
+        <div 
+          class="bg-white rounded-lg shadow-lg overflow-hidden flex-1 flex flex-col hover:shadow-md hover:border-2 hover:border-green-700"
+        >
+          <div 
+            class="bg-cover h-48 bg-center"
+            [style.backgroundImage]="'url(' + course.logo + ')'"
+          >
+          </div>
+          <div class="p-4 flex-1 flex flex-col">
+            <h3 
+              class="mb-4 text-2xl"
+            >
+              {{ course.heading }}
+            </h3>
+            <div 
+              class="mb-4 text-grey-darker text-sm flex-1"
+            >
+              <p>
+                 {{ course.content }}
+              </p>
+            </div>
+            <a 
+              href="#" 
+              class="border-t border-grey-light w-full p-4 rounded-lg text-center bg-green-800 text-xs text-white hover:text-red uppercase no-underline tracking-wide" 
+            >
+              Enroll Now
+            </a>
+          </div>
+
+        </div>  
+      </div>
+    }
+
+    
+  </div>
 </div>

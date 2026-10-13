@@ -2,12 +2,12 @@
   class="flex md:flex-cols gap-5 md:gap-0 md:justify-between"
 >
   <div 
-    class="w-full flex-col mb-3 gap-5"
+    class="w-full flex-col mb-3 gap-5 p-4"
   >
     <ng-content></ng-content>
 
     <div 
-      class="relative border-2 flex-col border-2 w-full rounded-lg shadow-lg bg-cover bg-top object-cover object-fit mt-1 justify-center items-center cursor-pointer hover:text-green-300 uploader"
+      class="relative border-2 flex-col border-2 w-full rounded-lg shadow-lg bg-cover bg-top object-cover object-fit -mt-10 justify-center items-center cursor-pointer hover:text-green-300 uploader"
     >  
        <div 
          appDragDrop
@@ -48,24 +48,35 @@
       </div>
 
       <div 
-          class="grid md:grid-cols-12 gap-5 pt-3 mt-10"
+          class="grid md:grid-cols-12 gap-5 max-h-[600px] overflow-y-auto drop-shadow-xl scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-red-400 hover:scrollbar-thumb-blue-400"
         >
           @if(multiplePreview.length > 0)
           {
              @for(imagePreveiw of multiplePreview; track imagePreveiw; let position = $index)
              {
                 <div 
-                  class="relative col-span-4 md:col-span-6"
+                  class="relative w-fit"
                   [ngClass]="(position === mainImagePosition) ? 'col-span-3 z-30 border border-4 p-1 h-23 relative border-green bg-green-400' : 'col-span-3  z-30 border border-2 h-23 relative'"
                 >
-                  <app-image
+                  <!-- <app-image
                    [src]="imagePreveiw"
                    [alt]="'alt'"
                    [width]="800"
                    [height]="800"
                    [style]="imageStyle"
+                   [customClass]="customClass()"
+                  >
+                  </app-image> -->
+
+                  <app-image
+                    [src]="imagePreveiw"
+                    [alt]="'alt'"
+                    [width]="85"
+                    [height]="85"
+                    objectFit="contain"
                   >
                   </app-image>
+
                   <div 
                     class="absolute flex justify-between bottom-0 w-full"
                   >
@@ -92,7 +103,7 @@
                    </div>
                 </div>
              } 
-          } 
+          }
         </div>
     </div>
 </div>          
