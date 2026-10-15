@@ -207,14 +207,14 @@
         class="bg-blue-50 hidden md:block"
     >
       <div 
-        class='container mx-auto p-3 flex justify-between item-center'
+        class='container mx-auto p-3 flex sm:flex-none justify-between item-center overflow-x-auto whitespace-nowrap sm:gap-10'
       >
         <ng-container>
             @for (name of header; track $index) 
             {
-                <ul 
-                class="text-white flex gap-2"
-                >                     
+             <ul 
+               class="text-white flex"
+             >                     
                 <li 
                   [routerLink]="[name.route]"
                   class="flex justify-center whitespace-nowrap items-center font-bold text-[12px] lg:text-md text-[#3e4095] cursor-pointer p-2 hover:text-[#bb6417]"
@@ -223,7 +223,7 @@
                 >
                     {{ name?.page?.toUpperCase() }}
                 </li>
-                </ul>  
+             </ul>  
             }
             </ng-container>        
         </div>

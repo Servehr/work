@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
 @Component({
   selector: 'app-course-detail',
@@ -8,5 +8,11 @@ import { Component } from '@angular/core';
   styleUrl: './course-detail.component.scss'
 })
 export class CourseDetailComponent {
+
+  courseOutline: string = '../../../../../training/bannner.jpg'
+
+  courseCover: string = './../../../../../training/welding.jpg'
+
+  theImg = signal<string>('./../../../../../training/welding.jpg')
 
 }
